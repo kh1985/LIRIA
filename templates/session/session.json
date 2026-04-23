@@ -1,0 +1,13 @@
+{
+  "session_name": "__SESSION_NAME__",
+  "scenario_id": "__SCENARIO_ID__",
+  "created_at": "__CREATED_AT__",
+  "layout_version": 2,
+  "source_of_truth": {
+    "current": "current/",
+    "cast": "cast/",
+    "design": "design/",
+    "indexes": "indexes/",
+    "archive": "archive/"
+  }
+}

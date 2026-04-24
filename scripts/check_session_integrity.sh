@@ -96,6 +96,7 @@ check_session_scaffold() {
   done
 
   [[ -f "${base}/session.json" ]] || warn "missing session metadata: ${base}/session.json"
+  [[ -f "${base}/design/initial_answers.md" ]] || error "missing initial answers source of truth: ${base}/design/initial_answers.md"
 
   local player_phase gm_phase hotset_phase
   player_phase="$(first_phase "${base}/current/player.md")"

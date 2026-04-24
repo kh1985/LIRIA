@@ -6,7 +6,13 @@
 ## Q1: Life Base
 - 拠点
 - 職業/生活手段
+- 収入源
+- 仕事規模
+- 信用
+- 資産/後ろ盾
+- 主な支出/負担
 - 生活ランク/事業状態
+- 拠点の自然さ
 
 ## Q2: Inner
 - 惹かれるもの
@@ -45,6 +51,9 @@
 - `inner summary`
 - `world seed`
 - `life base summary`
+- `work profile`
+- `life rank`
+- `base plausibility`
 - `romance bias`
 - `ability/action point summary`
 - `incident seed`

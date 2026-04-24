@@ -35,6 +35,19 @@
 | Index Layer | archive 参照用の軽量索引 | `saves/session_XXX/indexes/*` |
 | Archive Layer | 章、イベント、生ログ | `saves/session_XXX/archive/*` |
 
+## Style Layer
+
+Style Layer は、`style/rules.md`、`style/reference.md`、`style/defaults/*` から成る描写品質レイヤである。
+
+- Style Layer は adult 専用ではない
+- 日常、生活、恋愛、事件、危機、コメディ、シリアス、親密シーンを含む全体の文体、温度感、描写密度、会話の間、余韻、視点を支える
+- `prompt/runtime.md`、`prompt/romance.md`、`prompt/combat.md`、`prompt/villain_engine.md` は必要に応じて Style Layer を参照する
+- 参照は本文模倣ではなく、構造、温度、リズム、余白、視点、描写密度の抽出として扱う
+- 参照は常に LIRIA のキャラ、舞台、関係性へ変換して使う
+- Style Layer は描写品質を支えるレイヤであり、旧ハーレム攻略ロジックや旧ゲーム目的とは分離して保護する
+
+旧要件整理で見直すべきなのは、`女を堕とす`、`ハーレム攻略主目的`、`攻略報酬`、`AFFINITY到達ボーナス`、`魔王討伐標準`、`装備スロット`、`G通貨 / 拠点投資` のような旧目的語と旧システム前提である。Style Layer 自体は削除対象にしない。
+
 ## Target Layout
 
 ```text

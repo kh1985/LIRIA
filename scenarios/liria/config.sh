@@ -6,6 +6,7 @@ SCENARIO_ROOT="."
 NEW_SYSTEM_PROMPT_FILES=(
   "GALGE.md"
   "prompt/core.md"
+  "prompt/gm_policy.md"
   "prompt/core_newgame.md"
   "prompt/runtime.md"
   "prompt/combat.md"
@@ -17,6 +18,7 @@ NEW_SYSTEM_PROMPT_FILES=(
 RESUME_SYSTEM_PROMPT_FILES=(
   "GALGE.md"
   "prompt/core.md"
+  "prompt/gm_policy.md"
   "prompt/runtime.md"
   "prompt/combat.md"
   "prompt/villain_engine.md"

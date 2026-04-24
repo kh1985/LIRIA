@@ -117,6 +117,8 @@
 
 ```bash
 git diff --check
+bash -n scripts/run_pi_player_smoke.sh
+python3 -m py_compile scripts/run_pi_player_smoke.py
 bash -n scripts/create_manga_export.sh
 bash -n scripts/check_session_integrity.sh
 bash -n scripts/pre_compress_check.sh
@@ -136,6 +138,15 @@ bash scripts/check_session_integrity.sh "$SMOKE_SESSION"
 bash scripts/create_manga_export.sh "$SMOKE_SESSION" heroine-teaser pi-smoke
 bash scripts/pre_compress_check.sh "$SMOKE_SESSION"
 ```
+
+仮想プレイヤー人格込みで `new -> 1 turn save -> resume -> pre_compress` をまとめて確認する場合:
+
+```bash
+bash scripts/run_pi_player_smoke.sh
+```
+
+デフォルトでは `/Users/kenjihachiya/Desktop/work/development/marketing/character/output/gal-sim-testers/01_ishikawa_ryota.yaml` を読む。
+存在しない環境では `prompt/pi_player.md` の Default Persona 相当へ fallback する。
 
 ## Smoke Log
 

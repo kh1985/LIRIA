@@ -44,7 +44,7 @@ Notes:
   - Auto numbering starts at session_002 to avoid the legacy first slot.
   - `resume` without session_name selects the latest numbered session and prints it.
   - This launcher supports Claude CLI and Codex CLI.
-  - `ENGINE=auto` prefers Claude when available, then falls back to Codex.
+  - `ENGINE=auto` prefers Codex when available, then falls back to Claude.
   - Force an engine with `ENGINE=claude` or `ENGINE=codex`.
   - Claude bare mode is opt-in. Set `CLAUDE_BARE=1` to enable `--bare`.
   - `--prompt-only` creates the session and generated prompt files, then exits before launching Claude/Codex.
@@ -464,10 +464,10 @@ print_prompt_only_summary() {
 resolve_engine_command() {
   case "${ENGINE}" in
     auto)
-      if command -v claude >/dev/null 2>&1; then
-        ENGINE_COMMAND="claude"
-      elif command -v codex >/dev/null 2>&1; then
+      if command -v codex >/dev/null 2>&1; then
         ENGINE_COMMAND="codex"
+      elif command -v claude >/dev/null 2>&1; then
+        ENGINE_COMMAND="claude"
       else
         echo "neither claude nor codex command was found"
         exit 1

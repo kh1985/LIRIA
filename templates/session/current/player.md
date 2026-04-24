@@ -3,6 +3,9 @@
 > ここは `design/initial_answers.md` から反映された運用用の current state。プレイ中に更新する。初期Q&Aの原文正本ではない。
 
 ## Profile
+- 名前:
+- 性格:
+- 口癖:
 
 ## Appearance Profile
 - 身長:
@@ -15,7 +18,7 @@
 
 ## Inner
 
-## Ability / Action Point
+## Ability Constraint Profile
 - 概要:
 - output scale:
 - trigger condition:
@@ -37,7 +40,36 @@
 - 現在の関係性リスク:
 
 ## Life Base
+- 生活ランク:
+- 拠点自然性:
+- 同居 / 通勤 / 日常動線:
+- 生活上の制約:
 
 ## Work Profile
+- 仕事:
+- 収入:
+- 職場 / 取引先:
+- 今効いている職務リスク:
+
+## Equipment / Tools
+> 攻撃力/防御力ではなく、行動選択肢、リスク、痕跡、関係リスクとして管理する。
+
+- 名称:
+  - 行動選択肢:
+  - リスク:
+  - 痕跡:
+  - 関係リスク:
 
 ## Current Status
+- 現在フェーズ:
+- 現在HP:
+- 最大HP:
+- 能力使用残回数:
+- cooldown:
+- 主なコンディション:
+- 直近の無理:
+
+## Current Hooks
+- 1:
+- 2:
+- 3:

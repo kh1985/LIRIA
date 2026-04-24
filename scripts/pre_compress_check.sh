@@ -31,6 +31,7 @@ resolve_session() {
 SESSION="$(resolve_session "${1:-}")"
 CURRENT="${ROOT_DIR}/saves/${SESSION}/current"
 INDEXES="${ROOT_DIR}/saves/${SESSION}/indexes"
+DESIGN="${ROOT_DIR}/saves/${SESSION}/design"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -94,6 +95,15 @@ check "現在HP" "${CURRENT}/player.md" "現在HP"
 check "能力使用残回数" "${CURRENT}/player.md" "能力使用残回数"
 check "現在フェーズ" "${CURRENT}/player.md" "現在フェーズ"
 check "コンディション" "${CURRENT}/player.md" "コンディション"
+check "Appearance Profile" "${CURRENT}/player.md" "Appearance Profile"
+check "Ability Constraint Profile" "${CURRENT}/player.md" "Ability Constraint Profile"
+check "output scale" "${CURRENT}/player.md" "output scale"
+check "uses / cooldown" "${CURRENT}/player.md" "uses.*cooldown"
+check "trace" "${CURRENT}/player.md" "trace"
+check "relationship risk" "${CURRENT}/player.md" "relationship risk"
+check "Work Profile" "${CURRENT}/player.md" "Work Profile"
+check "Life Base" "${CURRENT}/player.md" "Life Base"
+warn_check "Equipment / Tools" "${CURRENT}/player.md" "Equipment"
 echo ""
 
 # --- gm.md ---
@@ -104,6 +114,9 @@ check "勢力クロック" "${CURRENT}/gm.md" "勢力クロック"
 warn_check "直近の後遺症" "${CURRENT}/gm.md" "直近の後遺症"
 warn_check "知識スコープ" "${CURRENT}/gm.md" "知識スコープ"
 warn_check "自動セーブ管理" "${CURRENT}/gm.md" "自動セーブ管理"
+warn_check "Anti-Meta Dialogue" "${CURRENT}/gm.md" "Anti-Meta"
+warn_check "Knowledge Boundary" "${CURRENT}/gm.md" "Knowledge Boundary"
+warn_check "Anti-Leading" "${CURRENT}/gm.md" "Anti-Leading"
 echo ""
 
 # --- harem.md ---
@@ -112,6 +125,7 @@ check "AFFINITY" "${CURRENT}/harem.md" "AFFINITY"
 check "bond" "${CURRENT}/harem.md" "bond"
 warn_check "hidden 深化ベクトル" "${CURRENT}/harem.md" "hidden 深化ベクトル"
 warn_check "約束体系" "${CURRENT}/harem.md" "約束体系"
+warn_check "Heroine Crisis Role" "${CURRENT}/harem.md" "Heroine Crisis Role"
 echo ""
 
 # --- hotset.md ---
@@ -119,6 +133,15 @@ echo "■ hotset.md（再開キャッシュ）"
 check "現在フェーズ" "${CURRENT}/hotset.md" "現在フェーズ"
 check "再開アンカー" "${CURRENT}/hotset.md" "再開アンカー"
 check "能力" "${CURRENT}/hotset.md" "能力"
+warn_check "Appearance Profile 抜粋" "${CURRENT}/hotset.md" "Appearance Profile"
+warn_check "Organization Doctrine 抜粋" "${CURRENT}/hotset.md" "Organization Doctrine"
+echo ""
+
+# --- design ---
+echo "■ design（長期設計）"
+warn_check "Organization Doctrine" "${DESIGN}/villain_design.md" "Organization Doctrine"
+warn_check "contact surface" "${DESIGN}/villain_design.md" "contact surface"
+warn_check "弱い継ぎ目" "${DESIGN}/villain_design.md" "弱い継ぎ目"
 echo ""
 
 # --- indexes ---

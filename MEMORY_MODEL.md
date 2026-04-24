@@ -119,6 +119,26 @@ cast には「何が変わったか」だけを短く残す。本文や長い経
 | `design/*` | 長期設計 |
 | `archive/*` | historical fixed の本文と生ログ |
 
+## LIRIA v1 追加情報の保存先
+
+`Appearance Profile`、`Ability Constraint Profile`、生活・仕事・組織圧は、圧縮時に落ちると再開後の行動可能性と台詞境界が変わる。次の責務分担を守る。
+
+| 情報 | 正本 | 圧縮時の扱い |
+|---|---|---|
+| `Appearance Profile` | `current/player.md` | 身長、体型、基本服装、髪型、顔つき、雰囲気、現在差分は残す |
+| `Ability Constraint Profile` | `current/player.md` | output scale、trigger condition、range / target、uses / cooldown、cost、trace、collateral、social risk、relationship risk、escalation rule は残す |
+| `Ability Runtime` | `current/player.md` | 残回数、cooldown、直近の trace、巻き添え、現在の社会/関係リスクは volatile として残す |
+| `Work Profile` | `current/player.md` | 仕事、収入、職場/取引先、職務リスクだけ残す。細かい経済シミュレーションへ広げない |
+| `Life Base` | `current/player.md` | 生活ランク、拠点自然性、同居/通勤/日常動線、生活制約を残す |
+| `Equipment / Tools` | `current/player.md` | 行動選択肢、リスク、痕跡、関係リスクとして残す。攻撃力/防御力スロットにしない |
+| `Organization Doctrine Layer` | `design/villain_design.md` | 組織理念、目的、規模、主要人物、接触面、弱い継ぎ目、内部矛盾、外部レバレッジを長期設計として残す |
+| `Organization current pressure` | `current/gm.md`, `current/hotset.md` | 今接触している面、今動く外圧、勢力クロックへ落ちた要素だけ抜粋する |
+| `Heroine Crisis Role` | `current/harem.md` | frontline / support / civilian / wildcard と危機時の行動傾向を残す |
+| `Anti-Meta Dialogue` | `current/gm.md` | NPC/ヒロインが GM、シナリオ、フラグ、イベント、好感度、判定を台詞に出さないための運用メモとして残す |
+| `Knowledge Boundary / Anti-Leading` | `current/gm.md`, 補助で `current/harem.md` | known / suspected / unknown と、こちらから誘導してはいけない未発見情報を残す |
+
+`current/hotset.md` は正本ではないが、再開1ターン目に影響する `Appearance Profile`、能力制約、仕事/生活、Equipment、Organization Doctrine、Heroine Crisis Role、Knowledge Boundary は短く抜粋してよい。
+
 ## 知識スコープの扱い
 
 誰が何を知っているかは、cast file の固定人格ではなく、**current layer の運用情報**として扱う。
@@ -139,6 +159,8 @@ cast には「何が変わったか」だけを短く残す。本文や長い経
 - 会議、告白、報告、共同作戦で共有されたら `known` に上げてよい
 - 「誰に秘密を明かしたか」という出来事そのものは `historical fixed` や archive に残してよい
 - 現在の知識範囲そのものは current 側で更新し続ける
+- `Anti-Leading` は、NPC/ヒロインが未発見情報へ不自然に誘導しないための境界として `current/gm.md` に置く
+- `Anti-Meta Dialogue` は、作中人物の台詞に GM、シナリオ、フラグ、イベント、好感度、判定などを出さないための実行ガードとして扱う
 
 ## 年齢の扱い
 
@@ -225,6 +247,9 @@ cast には「何が変わったか」だけを短く残す。本文や長い経
 - cast ファイルには「何が変わったか」だけ要約で残す
 - old echo は current 側で消すか archive に送る
 - volatile を cast ファイルへ持ち込まない
+- `Appearance Profile`、`Ability Constraint Profile`、`Work Profile`、`Life Base`、`Equipment / Tools` の現行値を圧縮で落とさない
+- `Organization Doctrine Layer` は `design/villain_design.md` に畳み、current には今効く接触面と圧だけを残す
+- Equipment は数値装備ではなく、行動選択肢、リスク、痕跡、関係リスクとして要約する
 - session をまたいで cast をコピーする時は、初期テンプレとして扱い、その session の current 事実を混ぜない
 
 ## 再昇格ルール

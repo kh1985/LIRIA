@@ -12,6 +12,30 @@
 - 能力と身体:
 - 現在の事業 / 世界 / 生活状況:
 
+## 主人公の再開スナップショット
+- Appearance Profile:
+- Ability Constraint Profile:
+  - output scale:
+  - uses / cooldown:
+  - trace:
+  - relationship risk:
+- Work Profile:
+- Life Base:
+- Equipment / Tools:
+
+## 組織・外圧スナップショット
+- Organization Doctrine:
+- contact surface:
+- 今動いている外圧:
+- 弱い継ぎ目:
+
+## ヒロイン危機役割
+- Heroine Crisis Role:
+
+## 台詞境界
+- Anti-Meta:
+- Knowledge Boundary:
+
 ## 今動いている圧
 -
 

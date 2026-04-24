@@ -29,6 +29,8 @@
 
 対応時は、プレイヤーにCLIを案内しない。
 GM/Codex側で候補整理、参照確認、package設計、必要なファイル作成を進める。
+必要なら GM/Codex は内部補助として `bash scripts/create_manga_export.sh <session_name> <type> <slug>` を使ってよい。
+これは実装側の scaffold 作成手順であり、プレイヤーに覚えさせるコマンドではない。
 
 ## First Response
 
@@ -74,6 +76,22 @@ exports/<session_name>/manga/<timestamp>_<type>_<slug>/
 
 今回の標準機能は、この package に入れるファイル / prompt を作るところまで。
 画像ファイル生成やアップロードは標準処理に含めない。
+
+補助スクリプトで雛形を作る場合も、ここで定義した path と package 構成を守る。
+スクリプトは `saves/*` の実データを読まず、必要な正本参照先を package 内の TODO として残すだけでよい。
+
+## Character Identity Source Of Truth
+
+漫画化や画像生成準備でのキャラID、関係性、秘密、内面の正本は次だけに置く。
+
+- 主人公: `current/player.md`
+- ヒロイン: `cast/heroine/[名前].md`
+
+画像、立ち絵、model sheet、seed、URL、生成ファイルは `generated asset references` として扱う。
+これらは同一人物性の補助参照であり、キャラIDや関係性、秘密、内面を決める正本ではない。
+
+画像だけを見て「誰か」「どんな関係か」「何を隠しているか」「内面で何を思っているか」を確定しない。
+画像と cast file が矛盾する場合、cast file / current file を正本にし、画像側は continuity issue として記録する。
 
 ## Package Structure
 
@@ -123,11 +141,13 @@ publish_notes.md
 
 - protagonist: `current/player.md` の `Visual Character Sheet`
 - heroine: `cast/heroine/[名前].md` の `Visual Character Sheet`
+- character ID source of truth: `current/player.md` / `cast/heroine/[名前].md`
 - model sheet status
 - image prompt anchor
 - continuity locks
 - negative prompt / avoid
 - current appearance deltas needed for this scene
+- generated asset references: 生成済み画像、立ち絵、seed、URL。補助参照であり正本ではない
 
 モブ、名前付きNPC、cast NPC、重要NPCには Visual Character Sheet を作らない。
 必要な場合も、場面上の外見メモに留める。

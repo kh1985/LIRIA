@@ -130,6 +130,7 @@ cast には「何が変わったか」だけを短く残す。本文や長い経
 | `Appearance Profile` | `current/player.md` | 身長、体型、基本服装、髪型、顔つき、雰囲気、現在差分は残す |
 | 主人公の `Visual Character Sheet` | `current/player.md` | 画像/漫画生成用の固定資料。model sheet status、front / side / back notes、image prompt anchor、negative prompt / avoid を残す |
 | ヒロインの `Visual Character Sheet` | `cast/heroine/*.md` | ヒロインだけに持たせる。text-only / prompt-ready / image-generated の状態と、generated asset references を残す |
+| キャラID / 関係性 / 秘密 / 内面 | `current/player.md`, `cast/heroine/*.md`, current の知識スコープ | 画像、立ち絵、model sheet、seed、URL から確定しない |
 | `Ability Constraint Profile` | `current/player.md` | output scale、trigger condition、range / target、uses / cooldown、cost、trace、collateral、social risk、relationship risk、escalation rule は残す |
 | `Ability Runtime` | `current/player.md` | 残回数、cooldown、直近の trace、巻き添え、現在の社会/関係リスクは volatile として残す |
 | `Work Profile` | `current/player.md` | 仕事、収入、職場/取引先、職務リスクだけ残す。細かい経済シミュレーションへ広げない |
@@ -158,6 +159,8 @@ Visual Character Sheet は、画像/漫画生成用の固定資料だ。
 - 三面図/turnaround は必須ではない。image gen skill を使う段階で必要なら生成する
 - `model sheet status` は `none` / `text-only` / `prompt-ready` / `image-generated` のどれかにする
 - `Appearance Profile` は現在状態、Visual Character Sheet は固定資料として分ける
+- `generated asset references` は生成済み画像や seed の補助参照であり、キャラID、関係性、秘密、内面の正本ではない
+- 画像だけで人物や関係を確定せず、主人公は `current/player.md`、ヒロインは `cast/heroine/*.md` を正本にする
 
 ## Manga Export の扱い
 
@@ -168,6 +171,8 @@ Visual Character Sheet は、画像/漫画生成用の固定資料だ。
 - export type は `model-sheet` / `heroine-teaser` / `scene-card` / `one-page`
 - 出力先は `exports/<session_name>/manga/<timestamp>_<type>_<slug>/`
 - package は `source.md`、`brief.md`、`character_refs.md`、`name.md`、`panel_prompts.md`、`image_gen_tasks.md`、`publish_notes.md` で構成する
+- GM/Codex は必要なら `scripts/create_manga_export.sh` を内部補助として使って package 雛形を作る。これはプレイヤーに覚えさせる CLI 導線ではない
+- `character_refs.md` では、キャラID正本と generated asset references を分ける
 - image gen skill / tool へ渡す前に、主人公と対象ヒロインの Visual Character Sheet を `prompt-ready` 点検する
 - 実際の画像生成は、`image_gen_tasks.md` まで分解し、プレイヤーが確認した後だけ行う
 - 公開 / 集客用 package では、成人向け表現を削除せず分離・制御する

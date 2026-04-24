@@ -82,6 +82,9 @@ saves/
 - 生ログ保存: `bash scripts/save_rawlog.sh session_002`
 - 事前チェック: `bash scripts/pre_compress_check.sh session_002`
 - session 整合確認: `bash scripts/check_session_integrity.sh session_002`
+- GM/Codex 内部用 manga export 雛形作成: `bash scripts/create_manga_export.sh session_002 heroine-teaser mizuki-smile`
+
+漫画化、ヒロインPV、三面図、立ち絵、キャラシートの自然文依頼では、プレイヤーに CLI を覚えさせず、GM/Codex 側が必要に応じて内部補助スクリプトを使います。生成される `exports/<session>/manga/*` は Git 管理外の prompt package であり、実画像生成はプレイヤー確認後だけ行います。
 
 ## 関連ドキュメント
 

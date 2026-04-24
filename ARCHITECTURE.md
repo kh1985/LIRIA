@@ -34,6 +34,7 @@
 | Design Layer | 世界や敵の補助設計 | `saves/session_XXX/design/*` |
 | Index Layer | archive 参照用の軽量索引 | `saves/session_XXX/indexes/*` |
 | Archive Layer | 章、イベント、生ログ | `saves/session_XXX/archive/*` |
+| Export Layer | Git 管理外の漫画化 prompt package | `exports/session_XXX/manga/*` |
 
 ## Style Layer
 
@@ -79,7 +80,7 @@ LIRIA/
 │           ├── chapters/
 │           ├── events/
 │           └── logs/
-└── saves/
+├── saves/
     └── session_XXX/
         ├── session.json
         ├── current/
@@ -87,6 +88,10 @@ LIRIA/
         ├── design/
         ├── indexes/
         └── archive/
+└── exports/
+    └── session_XXX/
+        └── manga/
+            └── YYYYMMDD_HHMMSS_<type>_<slug>/
 ```
 
 ## Runtime Relationship
@@ -128,16 +133,19 @@ flowchart TD
 | Knowledge Boundary / Anti-Leading / Anti-Meta Dialogue Guard | `saves/<session_name>/current/gm.md` |
 | Appearance Profile / Ability Constraint Profile / Work Profile / Life Base | `saves/<session_name>/current/player.md` |
 | 主人公の Visual Character Sheet | `saves/<session_name>/current/player.md` |
+| 主人公のキャラID / 関係性 / 秘密 / 内面 | `saves/<session_name>/current/player.md` |
 | プレイヤー能力の現在仕様 / HP / 残回数 / Equipment / Tools | `saves/<session_name>/current/player.md` |
 | ハーレム全体状態 / 嫉妬 / 関係フック | `saves/<session_name>/current/harem.md` |
 | Heroine Crisis Role | `saves/<session_name>/current/harem.md` |
 | AFFINITY / bond の current value | `saves/<session_name>/current/harem.md` |
 | ヒロイン個別の tone / Layer / fixed memory / 呼称 / Visual Character Sheet | `saves/<session_name>/cast/heroine/*.md` |
+| ヒロインのキャラID / 関係性 / 秘密 / 内面 | `saves/<session_name>/cast/heroine/*.md` と current の知識スコープ |
 | NPC 個別の tone / role / fixed memory | `saves/<session_name>/cast/npc/*.md` |
 | 関係組織 / 外圧 / Organization Doctrine Layer | `saves/<session_name>/design/villain_design.md` |
 | image gen skill 連携方針 / visual pipeline | `saves/<session_name>/design/visual_pipeline.md` |
 | 自然文漫画化 / manga export pipeline | `saves/<session_name>/design/manga_pipeline.md` |
 | manga export package / prompt package | `exports/<session_name>/manga/*` |
+| 画像、立ち絵、model sheet、seed、URL | Visual Character Sheet の `generated asset references`。補助参照でありキャラID正本ではない |
 | 章履歴 / イベント履歴 / 生ログ | `saves/<session_name>/archive/*` |
 | archive 参照索引 | `saves/<session_name>/indexes/*` |
 | 再開1ターン目の軽量入口 | `saves/<session_name>/current/hotset.md` |
@@ -201,6 +209,8 @@ flowchart TD
 - `Appearance Profile`、`Ability Constraint Profile`、`Work Profile`、`Life Base`、`Equipment / Tools` を圧縮で落とさない
 - `Organization Doctrine Layer` は design を正本にし、current には今効く接触面と外圧だけを置く
 - NPC/ヒロインの台詞に GM、シナリオ、フラグ、イベント、好感度、判定などのメタ語を出さない
+- 画像だけでキャラID、関係性、秘密、内面を確定しない。`current/player.md` と `cast/heroine/*.md` を正本にする
+- manga export package は `scripts/create_manga_export.sh` で雛形を作ってよいが、プレイヤーに CLI を覚えさせる導線にはしない
 - `CORE.md`、`README.md`、architecture docs に live session state を置かない
 - 既存の個人セッションは repo 外の legacy asset として扱い、本体の固定参照にしない
 - `bash scripts/check_session_integrity.sh <session_name>` で軽量チェックを回す

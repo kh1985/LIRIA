@@ -68,6 +68,18 @@ Visual Character Sheet は `model sheet status` を必ず持つ。
 `prompt-ready` に上げるのは、画像生成や漫画化の直前に、矛盾や未確定情報を点検してからにする。
 `image-generated` へ上げるのは、実際に画像を生成し、参照先を保存した後だけ。
 
+## キャラIDと generated asset references
+
+Visual Character Sheet は外見固定の補助資料であり、キャラIDそのものの正本ではない。
+キャラID、関係性、秘密、内面の正本は次に置く。
+
+- 主人公: `current/player.md`
+- ヒロイン: `cast/heroine/[名前].md`
+
+`generated asset references` には、生成済み画像、立ち絵、model sheet、URL、seed、生成メモを置く。
+これらは同一人物性を保つための補助参照であり、画像だけでキャラID、関係性、秘密、内面を確定しない。
+画像と正本が矛盾する場合、正本を優先し、画像側は continuity issue として記録する。
+
 ## Visual Character Sheet 項目
 
 以下の項目を同じ順番で持たせる。
@@ -195,4 +207,3 @@ image gen skill に渡す prompt でも、LIRIA の物語ルールを守る。
 - `negative prompt / avoid` に別人化、過剰な露出、未確定秘密の可視化禁止がある
 - ヒロインの場合、`cast/heroine/[名前].md` の tone、Layer 5、forbidden、現在関係と矛盾していない
 - 公開 / PV / 集客向けの場合、成人向け表現を通常 prompt から分離できる
-

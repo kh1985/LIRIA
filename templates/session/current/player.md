@@ -16,6 +16,23 @@
 - 雰囲気 / visual keywords:
 - 現在の見た目差分:
 
+## Visual Character Sheet
+- model sheet status: none
+- front view notes:
+- side view notes:
+- back view notes:
+- height / body type:
+- hairstyle:
+- face impression:
+- default outfit:
+- color palette:
+- signature gestures:
+- expression set:
+- continuity locks:
+- image prompt anchor:
+- negative prompt / avoid:
+- generated asset references:
+
 ## Inner
 
 ## Ability Constraint Profile

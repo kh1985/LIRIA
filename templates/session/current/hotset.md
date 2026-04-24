@@ -14,6 +14,8 @@
 
 ## 主人公の再開スナップショット
 - Appearance Profile:
+- Visual Character Sheet:
+  - model sheet status:
 - Ability Constraint Profile:
   - output scale:
   - uses / cooldown:

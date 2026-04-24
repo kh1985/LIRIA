@@ -55,7 +55,8 @@ saves/
     │   ├── heroine/
     │   └── npc/
     ├── design/
-    │   └── villain_design.md
+    │   ├── villain_design.md
+    │   └── visual_pipeline.md
     ├── indexes/
     │   ├── cast_index.md
     │   ├── decision_index.md
@@ -66,7 +67,7 @@ saves/
         └── logs/
 ```
 
-`current/*` が現在状態、`cast/*` が session ごとの人物設定、`design/*` が長期設計、`indexes/*` が索引、`archive/*` が履歴です。`hotset.md` は再開用の軽量 cache であり、正本ではありません。
+`current/*` が現在状態、`cast/*` が session ごとの人物設定、`design/*` が長期設計と画像生成連携方針、`indexes/*` が索引、`archive/*` が履歴です。`hotset.md` は再開用の軽量 cache であり、正本ではありません。
 
 ## テンプレートとローカルデータ
 

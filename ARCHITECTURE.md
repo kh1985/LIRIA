@@ -125,13 +125,15 @@ flowchart TD
 | 知識スコープ / 誰が何を知っているか | `saves/<session_name>/current/gm.md` |
 | Knowledge Boundary / Anti-Leading / Anti-Meta Dialogue Guard | `saves/<session_name>/current/gm.md` |
 | Appearance Profile / Ability Constraint Profile / Work Profile / Life Base | `saves/<session_name>/current/player.md` |
+| 主人公の Visual Character Sheet | `saves/<session_name>/current/player.md` |
 | プレイヤー能力の現在仕様 / HP / 残回数 / Equipment / Tools | `saves/<session_name>/current/player.md` |
 | ハーレム全体状態 / 嫉妬 / 関係フック | `saves/<session_name>/current/harem.md` |
 | Heroine Crisis Role | `saves/<session_name>/current/harem.md` |
 | AFFINITY / bond の current value | `saves/<session_name>/current/harem.md` |
-| ヒロイン個別の tone / Layer / fixed memory / 呼称 | `saves/<session_name>/cast/heroine/*.md` |
+| ヒロイン個別の tone / Layer / fixed memory / 呼称 / Visual Character Sheet | `saves/<session_name>/cast/heroine/*.md` |
 | NPC 個別の tone / role / fixed memory | `saves/<session_name>/cast/npc/*.md` |
 | 関係組織 / 外圧 / Organization Doctrine Layer | `saves/<session_name>/design/villain_design.md` |
+| image gen skill 連携方針 / visual pipeline | `saves/<session_name>/design/visual_pipeline.md` |
 | 章履歴 / イベント履歴 / 生ログ | `saves/<session_name>/archive/*` |
 | archive 参照索引 | `saves/<session_name>/indexes/*` |
 | 再開1ターン目の軽量入口 | `saves/<session_name>/current/hotset.md` |

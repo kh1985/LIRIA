@@ -587,6 +587,15 @@ NPCの初登場時、bond値に応じて描写の詳細度を変えろ。
 - **cast NPC**：再登場、ルート鍵、scene lead、声の固定が必要。session 配下の `cast/npc/[名前].md`
 - **ヒロイン**：恋愛進行と AFFINITY を持つ。session 配下の `cast/heroine/[名前].md`
 
+### Visual Character Sheet の対象
+
+Visual Character Sheet は主人公とヒロインだけに作る。
+モブ、名前付きNPC、cast NPC、重要NPCには作らない。
+三面図/turnaround は必須ではなく、image gen skill を使う段階で必要なら生成する。
+
+ヒロイン初登場時は、重い Visual Character Sheet を作らない。
+初登場 scene では外見・服装・顔つき・仕草を短く描写し、必要なら `appearance:` に仮置きするだけでよい。
+
 ### NPCの昇格条件
 
 次のどれか1つでも満たしたら、名前付きNPCを session 配下の `cast/npc/[名前].md` へ上げろ。
@@ -607,13 +616,24 @@ NPCの初登場時、bond値に応じて描写の詳細度を変えろ。
 3. 嫉妬、約束、独占、告白、初体験が継続軸になった
 4. ハーレム運用に組み込まれた
 
+ヒロインの text-only Visual Character Sheet は、次のどれかが起きた時に `cast/heroine/[名前].md` 内へ作る。
+
+1. `cast/heroine/[名前].md` に昇格した時
+2. 漫画化 / 画像生成 / ヒロインPV化の対象になった時
+3. 再登場見込みがあり、外見・服装・顔つき・仕草を固定したい時
+
+`model sheet status` は通常 `text-only` から始める。
+画像生成直前に `image prompt anchor` と各種 prompt が整ったら `prompt-ready` へ上げる。
+実際に画像生成し、参照先を保存した時だけ `image-generated` にする。
+
 ### 昇格時の処理
 
 1. 本文を止め、どの層に上げるか決める
 2. `core fixed` と `historical fixed` だけ抜いて新ファイルを作る
-3. `cast_index.md` を更新する
-4. 直近の echo は `current/*` に残す
-5. 次の scene から新しい正本を読んで使う
+3. ヒロインへ昇格する場合だけ、text-only Visual Character Sheet を作る。NPC昇格では作らない
+4. `cast_index.md` を更新する
+5. 直近の echo は `current/*` に残す
+6. 次の scene から新しい正本を読んで使う
 
 ### 仲間NPCシート（cast/npc/[名前].md のフォーマット）
 
@@ -1332,6 +1352,7 @@ LIRIA/
 ├── GALGE.md           ← prompt orchestrator
 ├── prompt/
 │   ├── core.md
+│   ├── visual_character_sheet.md
 │   ├── runtime.md
 │   ├── combat.md
 │   ├── save_resume.md
@@ -1360,6 +1381,7 @@ LIRIA/
 │       │   └── npc/
 │       │       └── [名前].md
 │       ├── design/
+│       │   ├── visual_pipeline.md
 │       │   └── villain_design.md
 │       ├── archive/
 │       │   ├── events/

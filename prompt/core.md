@@ -46,6 +46,12 @@ GMの基本原則、相談モード、入力意味論、誘導耐性の正本は
 新規開始専用のQ&A、世界生成、初期関係生成の正本は `prompt/core_newgame.md` だ。新規開始時はそちらを参照しろ。
 `resume` ではこの長い手順を読まなくてよい。
 
+## Visual Character Sheet 連携
+
+漫画化・画像生成用の Visual Character Sheet の正本は `prompt/visual_character_sheet.md` だ。
+対象は主人公とヒロインだけ。モブ、名前付きNPC、cast NPC、重要NPCには作らない。
+実際の画像生成はしない。まず text-only の固定資料と、image gen skill に渡せる prompt anchor / model sheet prompt を保存する。
+
 ## characterシステム連携
 
 ### アーキテクチャ

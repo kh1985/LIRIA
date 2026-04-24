@@ -126,6 +126,8 @@ cast には「何が変わったか」だけを短く残す。本文や長い経
 | 情報 | 正本 | 圧縮時の扱い |
 |---|---|---|
 | `Appearance Profile` | `current/player.md` | 身長、体型、基本服装、髪型、顔つき、雰囲気、現在差分は残す |
+| 主人公の `Visual Character Sheet` | `current/player.md` | 画像/漫画生成用の固定資料。model sheet status、front / side / back notes、image prompt anchor、negative prompt / avoid を残す |
+| ヒロインの `Visual Character Sheet` | `cast/heroine/*.md` | ヒロインだけに持たせる。text-only / prompt-ready / image-generated の状態と、generated asset references を残す |
 | `Ability Constraint Profile` | `current/player.md` | output scale、trigger condition、range / target、uses / cooldown、cost、trace、collateral、social risk、relationship risk、escalation rule は残す |
 | `Ability Runtime` | `current/player.md` | 残回数、cooldown、直近の trace、巻き添え、現在の社会/関係リスクは volatile として残す |
 | `Work Profile` | `current/player.md` | 仕事、収入、職場/取引先、職務リスクだけ残す。細かい経済シミュレーションへ広げない |
@@ -138,6 +140,19 @@ cast には「何が変わったか」だけを短く残す。本文や長い経
 | `Knowledge Boundary / Anti-Leading` | `current/gm.md`, 補助で `current/harem.md` | known / suspected / unknown と、こちらから誘導してはいけない未発見情報を残す |
 
 `current/hotset.md` は正本ではないが、再開1ターン目に影響する `Appearance Profile`、能力制約、仕事/生活、Equipment、Organization Doctrine、Heroine Crisis Role、Knowledge Boundary は短く抜粋してよい。
+Visual Character Sheet は正本の `current/player.md` または `cast/heroine/*.md` から読む。hotset には必要時だけ `model sheet status` や `image prompt anchor` の短い参照を置いてよい。
+
+## Visual Character Sheet の扱い
+
+Visual Character Sheet は、画像/漫画生成用の固定資料だ。
+対象は主人公とヒロインだけ。
+モブ、名前付きNPC、cast NPC、重要NPCには作らない。
+
+- 主人公: 新規開始時に `Appearance Profile` から `current/player.md` へ text-only で作る
+- ヒロイン: `cast/heroine/[名前].md` へ昇格した時、漫画化 / 画像生成 / ヒロインPV化対象時、または再登場見込みで外見・服装・顔つき・仕草を固定したい時に作る
+- 三面図/turnaround は必須ではない。image gen skill を使う段階で必要なら生成する
+- `model sheet status` は `none` / `text-only` / `prompt-ready` / `image-generated` のどれかにする
+- `Appearance Profile` は現在状態、Visual Character Sheet は固定資料として分ける
 
 ## 知識スコープの扱い
 
@@ -207,6 +222,7 @@ cast には「何が変わったか」だけを短く残す。本文や長い経
 - 嫉妬、呼称変化、二人きりの進行、ハーレム運用に入る
 
 この段階に入ったら `cast/heroine/*.md` を作る。
+同時に text-only の Visual Character Sheet を作り、model sheet status、image prompt anchor、continuity locks、negative prompt / avoid の保存欄を持たせる。
 
 ## 昇格ルール
 
@@ -269,9 +285,10 @@ archive に送った古い出来事でも、次の条件なら再び hotset / cu
 2. `core fixed` を抜く
 3. `historical fixed` を抜く
 4. session 配下に cast file を作る
-5. `indexes/cast_index.md` に追加する
-6. current 側へ反映する
-7. 次の scene から新しい正本を読む
+5. ヒロインへ昇格する場合だけ Visual Character Sheet を作る。NPCには作らない
+6. `indexes/cast_index.md` に追加する
+7. current 側へ反映する
+8. 次の scene から新しい正本を読む
 
 作ったのに読まずに本文へ入らない。
 
@@ -286,6 +303,7 @@ archive に送った古い出来事でも、次の条件なら再び hotset / cu
 - personality / values
 - Layer 構造
 - 恋愛固有の現在段階
+- Visual Character Sheet（model sheet status と image prompt anchor を含む）
 - fixed memory の要約
 
 削りやすいもの:

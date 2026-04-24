@@ -56,7 +56,8 @@ saves/
     │   └── npc/
     ├── design/
     │   ├── villain_design.md
-    │   └── visual_pipeline.md
+    │   ├── visual_pipeline.md
+    │   └── manga_pipeline.md
     ├── indexes/
     │   ├── cast_index.md
     │   ├── decision_index.md
@@ -67,12 +68,12 @@ saves/
         └── logs/
 ```
 
-`current/*` が現在状態、`cast/*` が session ごとの人物設定、`design/*` が長期設計と画像生成連携方針、`indexes/*` が索引、`archive/*` が履歴です。`hotset.md` は再開用の軽量 cache であり、正本ではありません。
+`current/*` が現在状態、`cast/*` が session ごとの人物設定、`design/*` が長期設計と画像生成/漫画化連携方針、`indexes/*` が索引、`archive/*` が履歴です。`hotset.md` は再開用の軽量 cache であり、正本ではありません。
 
 ## テンプレートとローカルデータ
 
 - 追跡対象: `play.sh`, `prompt/`, `style/`, `scenarios/`, `templates/session/`
-- ローカル専用: `saves/*`, `logs/`, `rawlogs/`, `tmp/`, `*.local.md`
+- ローカル専用: `saves/*`, `exports/*`, `logs/`, `rawlogs/`, `tmp/`, `*.local.md`
 
 `scripts/create_session.sh` は `templates/session/` をコピーして新規 session を作ります。テンプレートには個人プレイログを混ぜず、空の汎用雛形だけを置きます。
 

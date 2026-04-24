@@ -13,6 +13,17 @@
 - 2:
 - 3:
 
+## Manga Export Candidates
+> 自然文で漫画化 / ヒロインPV / 三面図 / 立ち絵 / キャラシートを求められた時の候補。作中時間を止め、2-3個だけ提示する。未確定秘密を絵で確定させない。
+
+- candidate:
+  - source:
+  - export type: model-sheet | heroine-teaser | scene-card | one-page
+  - target characters:
+  - appeal:
+  - guardrails:
+  - status: proposed | selected | packaged | generated
+
 ## 脅威クロック / Threat Clocks
 
 ## 勢力クロック / Faction Clocks

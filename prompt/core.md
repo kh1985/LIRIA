@@ -52,6 +52,13 @@ GMの基本原則、相談モード、入力意味論、誘導耐性の正本は
 対象は主人公とヒロインだけ。モブ、名前付きNPC、cast NPC、重要NPCには作らない。
 実際の画像生成はしない。まず text-only の固定資料と、image gen skill に渡せる prompt anchor / model sheet prompt を保存する。
 
+## Manga Export 連携
+
+自然文の漫画化依頼、ヒロインPV、三面図、立ち絵、キャラシート依頼の正本は `prompt/manga_export.md` だ。
+これらは作中行動ではなく GM相談 / メタ命令として扱い、作中時間を止める。
+いきなり画像生成せず、まず `exports/<session_name>/manga/<timestamp>_<type>_<slug>/` 向けの manga export package / prompt package を作る。
+実生成は、`image_gen_tasks.md` まで分解した後、プレイヤーが明示確認した時だけ行う。
+
 ## characterシステム連携
 
 ### アーキテクチャ

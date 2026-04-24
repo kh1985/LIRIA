@@ -68,7 +68,9 @@ LIRIA/
 │       │   ├── heroine/
 │       │   └── npc/
 │       ├── design/
-│       │   └── villain_design.md
+│       │   ├── villain_design.md
+│       │   ├── visual_pipeline.md
+│       │   └── manga_pipeline.md
 │       ├── indexes/
 │       │   ├── cast_index.md
 │       │   ├── decision_index.md
@@ -134,6 +136,8 @@ flowchart TD
 | NPC 個別の tone / role / fixed memory | `saves/<session_name>/cast/npc/*.md` |
 | 関係組織 / 外圧 / Organization Doctrine Layer | `saves/<session_name>/design/villain_design.md` |
 | image gen skill 連携方針 / visual pipeline | `saves/<session_name>/design/visual_pipeline.md` |
+| 自然文漫画化 / manga export pipeline | `saves/<session_name>/design/manga_pipeline.md` |
+| manga export package / prompt package | `exports/<session_name>/manga/*` |
 | 章履歴 / イベント履歴 / 生ログ | `saves/<session_name>/archive/*` |
 | archive 参照索引 | `saves/<session_name>/indexes/*` |
 | 再開1ターン目の軽量入口 | `saves/<session_name>/current/hotset.md` |

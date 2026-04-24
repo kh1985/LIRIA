@@ -9,6 +9,7 @@
 saves/*
 !saves/.gitkeep
 saves/*/archive/logs/*
+exports/
 logs/
 rawlogs/
 tmp/

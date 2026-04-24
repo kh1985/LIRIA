@@ -9,6 +9,7 @@
 ## Goal
 
 - 新規セッション作成
+- 複数ターン試走時の継続性と long-run report の確認
 - Q&A Test Profile の適用
 - `design/initial_answers.md` への保存確認
 - `current/*.md` への分配確認
@@ -148,9 +149,24 @@ bash scripts/run_pi_player_smoke.sh
 デフォルトでは `/Users/kenjihachiya/Desktop/work/development/marketing/character/output/gal-sim-testers/01_ishikawa_ryota.yaml` を読む。
 存在しない環境では `prompt/pi_player.md` の Default Persona 相当へ fallback する。
 
+複数ターン試走では、`--turns N` で本命プレイ前に少し長めの破綻検知を行う。
+
+```bash
+bash scripts/run_pi_player_smoke.sh --turns 8
+```
+
+試走後に自分で作った一時セッションも片付ける場合:
+
+```bash
+bash scripts/run_pi_player_smoke.sh --turns 8 --cleanup
+```
+
+複数ターン試走は本命プレイの代替ではない。目的は、GM応答、保存分配、resume、pre-compress 観点がターンをまたいで破綻しないかを long-run report で人間レビューしやすくすることである。
+
 ## Smoke Log
 
 - `pi_smoke_log.md` から、各ケースを示す短い抜粋を人間レビュー用に要約する
+- 複数ターン試走では、各ターンの入力、観測結果、保存/resume/pre-compress の要点を long-run report として要約する
 - 長い本命プレイには進めない
 - 実プレイログや個人用セーブをこのリポジトリにコミットしない
 

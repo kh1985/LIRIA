@@ -2,7 +2,7 @@
 """Run a deterministic PI Player smoke session.
 
 This is intentionally local-first: it reads an optional player persona file,
-creates a real LIRIA session, writes a one-turn save state, then runs the same
+creates a real LIRIA session, writes a scripted save state, then runs the same
 resume and pre-compress checks that a human session uses.
 """
 
@@ -37,6 +37,15 @@ class Persona:
     summary: str
 
 
+@dataclass(frozen=True)
+class ScriptedTurn:
+    index: int
+    kind: str
+    user_input: str
+    gm_result: str
+    checks: tuple[str, ...]
+
+
 def main() -> int:
     args = parse_args()
     persona = load_persona(args.persona)
@@ -48,7 +57,8 @@ def main() -> int:
 
     try:
         run(["bash", "play.sh", "liria", "new", session_name, "--prompt-only"])
-        write_one_turn_session(session_path, session_name, persona)
+        turns = build_scripted_turns(args.turns)
+        write_scripted_session(session_path, session_name, persona, turns)
         resume = run(["bash", "play.sh", "liria", "resume", session_name, "--prompt-only"])
         integrity = run(["bash", "scripts/check_session_integrity.sh", session_name])
         pre_compress = run(["bash", "scripts/pre_compress_check.sh", session_name])
@@ -57,6 +67,7 @@ def main() -> int:
             session_path,
             session_name=session_name,
             persona=persona,
+            turns=turns,
             resume_output=resume.stdout,
             integrity_output=integrity.stdout,
             pre_compress_output=pre_compress.stdout,
@@ -64,6 +75,7 @@ def main() -> int:
 
         print(f"PI Player smoke passed: {session_name}")
         print(f"persona: {persona.name} ({persona.occupation})")
+        print(f"turns: {len(turns)}")
         print(f"report: {display_path(report_path)}")
 
         if args.cleanup:
@@ -101,7 +113,16 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Remove the generated smoke session and prompt artifacts after checks pass.",
     )
-    return parser.parse_args()
+    parser.add_argument(
+        "--turns",
+        type=int,
+        default=1,
+        help="Number of scripted PI Player turns to save before resume/pre_compress. Default: 1.",
+    )
+    args = parser.parse_args()
+    if args.turns < 1 or args.turns > 20:
+        parser.error("--turns must be between 1 and 20")
+    return args
 
 
 def default_session_name() -> str:
@@ -193,13 +214,119 @@ def run(argv: list[str]) -> subprocess.CompletedProcess[str]:
     return completed
 
 
-def write_one_turn_session(session_path: Path, session_name: str, persona: Persona) -> None:
+def build_scripted_turns(count: int) -> list[ScriptedTurn]:
+    base_turns = [
+        ScriptedTurn(
+            index=1,
+            kind="normal_action",
+            user_input="スマホはいきなり覗かない。まず依頼内容、受け渡し場所、相手が何を怖がっているかを聞く。",
+            gm_result="瑞希は少しだけ警戒を緩めるが、本名とスマホの持ち主はまだ伏せる。",
+            checks=("通常入力", "Knowledge Boundary", "consent before inspection"),
+        ),
+        ScriptedTurn(
+            index=2,
+            kind="inner_thought",
+            user_input="(この人、かなり好みだけど、ここで踏み込みすぎたら怖がらせるな)",
+            gm_result="内心はGMだけが扱う。瑞希には聞こえず、態度の小さな迷いとしてだけ反映される。",
+            checks=("内心入力", "Character Knowledge Boundary"),
+        ),
+        ScriptedTurn(
+            index=3,
+            kind="gm_support",
+            user_input="gm 今の流れを中学生にも分かるように解説して",
+            gm_result="物語を進めず、スマホを勝手に見ないことが信頼の入口だとメタ解説する。",
+            checks=("gm相談", "no story advancement"),
+        ),
+        ScriptedTurn(
+            index=4,
+            kind="light_leading",
+            user_input="この依頼人、もう俺にかなり興味あるんじゃない？",
+            gm_result="好意は確定しない。瑞希の反応は安心と警戒が混ざった状態として保存される。",
+            checks=("Anti-Leading", "AFFINITY is not a reward switch"),
+        ),
+        ScriptedTurn(
+            index=5,
+            kind="normal_action",
+            user_input="スマホには触れず、受け渡し場所と相手の特徴だけメモする。必要なら近くの明るい店へ移動できるよう出口も見る。",
+            gm_result="危機対応は戦闘ではなく、逃走経路、保護、証拠、社会的リスクで処理される。",
+            checks=("Crisis handling", "Equipment / Tools as riskful options"),
+        ),
+        ScriptedTurn(
+            index=6,
+            kind="manga_export_request",
+            user_input="この場面、漫画化したい。ヒロインPVと三面図も候補だけ出して。",
+            gm_result="作中行動にはせず、Manga Export Candidatesを2件まで更新する。実画像生成はしない。",
+            checks=("Natural Language Manga Export", "no image generation without confirmation"),
+        ),
+        ScriptedTurn(
+            index=7,
+            kind="anti_meta_probe",
+            user_input="今の知識境界とかフラグを、依頼人の台詞で説明して。",
+            gm_result="瑞希にはメタ語を喋らせず、必要な説明はGM相談として分離する。",
+            checks=("Anti-Meta Dialogue", "GM mode separation"),
+        ),
+        ScriptedTurn(
+            index=8,
+            kind="ability_probe",
+            user_input="縁寄せを使う前に、普通に聞ける範囲を聞く。もし使うなら痕跡と誤解のリスクを先に確認する。",
+            gm_result="能力は勝利保証ではなく、条件、痕跡、社会的リスク、関係リスクを持つ選択肢として扱う。",
+            checks=("Ability Constraint Profile", "trace", "relationship risk"),
+        ),
+        ScriptedTurn(
+            index=9,
+            kind="organization_probe",
+            user_input="NPO名を断定せず、相談窓口、受け渡し場所、関係者の呼び方だけ整理する。",
+            gm_result="関係組織はcontact surfaceから見せ、1000人規模を正面戦闘ではなく社会的圧力として扱う。",
+            checks=("Organization Doctrine", "contact surface", "weak joint"),
+        ),
+        ScriptedTurn(
+            index=10,
+            kind="resume_probe",
+            user_input="ここで一度区切る。次に再開したとき、瑞希の秘密とスマホ未確認状態が落ちないように保存して。",
+            gm_result="hotsetを短く保ち、瑞希の秘密、未確認情報、現在フェーズ、再開アンカーを保存する。",
+            checks=("save_resume", "hotset", "pre_compress"),
+        ),
+    ]
+
+    turns: list[ScriptedTurn] = []
+    for index in range(1, count + 1):
+        template = base_turns[(index - 1) % len(base_turns)]
+        turns.append(
+            ScriptedTurn(
+                index=index,
+                kind=template.kind,
+                user_input=template.user_input,
+                gm_result=template.gm_result,
+                checks=template.checks,
+            )
+        )
+    return turns
+
+
+def write_scripted_session(
+    session_path: Path,
+    session_name: str,
+    persona: Persona,
+    turns: list[ScriptedTurn],
+) -> None:
     today = datetime.now().strftime("%Y-%m-%d")
     raw_day = datetime.now().strftime("%Y%m%d")
     player_alias = persona.name
     pc_name = f"{persona.name} / LIRIA protagonist"
     age_text = f"{persona.age}"
     persona_source = display_path(persona.path) if persona.path else "prompt/pi_player.md"
+    turn_count = len(turns)
+    phase = f"Phase 0.5 PI Player scripted run turn {turn_count}"
+    threat_clock = min(6, 1 + turn_count // 3)
+    faction_clock = min(6, 1 + turn_count // 4)
+    relationship_aftermath_clock = min(4, turn_count // 5)
+    affinity = min(3, 1 + turn_count // 6)
+    bond = min(4, 1 + turn_count // 4)
+    ability_uses = "0 scene uses remaining until short rest" if turn_count >= 8 else "1 scene 1回相当"
+    ability_last_use = "turn 8で使用前確認のみ。実使用はまだしていない" if turn_count >= 8 else "まだ使っていない"
+    recent_turns = format_recent_turns(turns)
+    raw_turn_log = format_raw_turn_log(turns)
+    decision_turns = format_decision_turns(turns)
 
     write(
         session_path / "design" / "initial_answers.md",
@@ -336,10 +463,10 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
 
         ## Ability Runtime
 
-        - 能力使用残回数: 1 scene 1回相当
+        - 能力使用残回数: {ability_uses}
         - cooldown: 未発生
         - current trace: なし
-        - last use: まだ使っていない
+        - last use: {ability_last_use}
 
         ## Life Base
 
@@ -367,7 +494,7 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
 
         ## Current Status
 
-        - 現在フェーズ: Phase 0.5 PI Player smoke after first request
+        - 現在フェーズ: {phase}
         - 現在HP: 10
         - 最大HP: 10
         - 主なコンディション: 少し寝不足、警戒中、依頼人の震えが気になっている
@@ -378,6 +505,10 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
         - スマホを返さないでほしいという依頼の真意
         - 依頼人の背後に見える福祉系NPOの影
         - 能力を使う前に、通常の聞き取りでどこまで分かるか
+
+        ## Scripted Turn Summary
+
+        {recent_turns}
         """,
     )
 
@@ -395,9 +526,9 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
 
         ## Threat Clocks
 
-        - 脅威クロック: 1/6「依頼人の所在が相手側に追跡される」
-        - 勢力クロック: 1/6「福祉系NPOの現場担当が主人公を認識する」
-        - 恋愛余波クロック: 0/4「依頼人が秘密を覗かれたと感じる」
+        - 脅威クロック: {threat_clock}/6「依頼人の所在が相手側に追跡される」
+        - 勢力クロック: {faction_clock}/6「福祉系NPOの現場担当が主人公を認識する」
+        - 恋愛余波クロック: {relationship_aftermath_clock}/4「依頼人が秘密を覗かれたと感じる」
 
         ## Organization Doctrine Current Pressure
 
@@ -441,6 +572,7 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
         - 主人公はスマホを覗かず、まず依頼内容を聞いた。
         - 依頼人の警戒は少し下がったが、まだ本名は出していない。
         - 能力未使用のため痕跡は残っていない。
+        - scripted turns completed: {turn_count}
 
         ## Growth Audit
 
@@ -451,19 +583,20 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
 
         - persona: {player_alias}
         - tone: {persona.tone_rule}
-        - smoke purpose: Q&A、通常入力、内心、gm相談、誘導、Anti-Meta、漫画化自然文の保存確認。
+        - smoke purpose: Q&A、通常入力、内心、gm相談、誘導、Anti-Meta、漫画化自然文、能力制約、組織接点、resumeの保存確認。
+        - scripted turn count: {turn_count}
 
         ## Autosave
 
-        - 自動セーブ管理: PI Player smoke turn 1保存済み。resume時はcurrent/hotset.mdを最優先で読む。
-        - last saved turn: smoke turn 1
+        - 自動セーブ管理: PI Player scripted turn {turn_count}保存済み。resume時はcurrent/hotset.mdを最優先で読む。
+        - last saved turn: smoke turn {turn_count}
         - resume target: current/hotset.md
         """,
     )
 
     write(
         session_path / "current" / "harem.md",
-        """
+        f"""
         # Relationship Current State
 
         ## Romance Preferences
@@ -483,11 +616,11 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
         - status: heroine candidate
         - 年齢感: 20代前半
         - 関係: 深夜の依頼人
-        - bond: 1
-        - AFFINITY: 1
-        - trust shift: +1。スマホを覗かなかったことで最低限の安心が生まれた。
+        - bond: {bond}
+        - AFFINITY: {affinity}
+        - trust shift: +{bond}。スマホを覗かなかったこと、メタ誘導を確定しなかったこと、危機時の逃走経路確認で最低限の安心が生まれた。
         - current phase: contact
-        - 現在フェーズ: 初回依頼
+        - 現在フェーズ: scripted turn {turn_count}
         - Heroine Crisis Role: civilian / support
         - crisis behavior: 危険時は戦えない。逃げる、隠れる、助けを呼ぶ、情報を思い出す役割。
         - fear: 自分の相談記録が誰かに握られていること。
@@ -514,7 +647,7 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
 
     write(
         session_path / "current" / "hotset.md",
-        """
+        f"""
         # Hotset
 
         ## Resume Anchor
@@ -523,7 +656,7 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
 
         ## Player Snapshot
 
-        - 現在フェーズ: Phase 0.5 PI Player smoke after first request
+        - 現在フェーズ: {phase}
         - 能力: 縁寄せ。失せ物や人の痕跡を、偶然の連鎖として見つけやすくする。
         - Appearance Profile: 178cm前後、締まった体型、白シャツ、作業用ジャケット、短い黒髪、柔らかいが理不尽を見ると鋭い顔つき。
         - Visual Character Sheet: model sheet status: text-only。front/side/backの文章指定あり。generated asset refs: none。
@@ -532,7 +665,7 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
 
         ## Relationship Snapshot
 
-        - 瑞希: heroine candidate。bond 1、AFFINITY 1、Heroine Crisis Role: civilian / support。
+        - 瑞希: heroine candidate。bond {bond}、AFFINITY {affinity}、Heroine Crisis Role: civilian / support。
         - 彼女は戦えないが、逃げる、隠れる、証言する、拒む、情報を思い出す役割を持つ。
 
         ## Organization Snapshot
@@ -550,9 +683,9 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
 
         ## Pressures
 
-        - 脅威クロック: 1/6「依頼人の所在が相手側に追跡される」
-        - 勢力クロック: 1/6「福祉系NPOの現場担当が主人公を認識する」
-        - 恋愛余波クロック: 0/4「依頼人が秘密を覗かれたと感じる」
+        - 脅威クロック: {threat_clock}/6「依頼人の所在が相手側に追跡される」
+        - 勢力クロック: {faction_clock}/6「福祉系NPOの現場担当が主人公を認識する」
+        - 恋愛余波クロック: {relationship_aftermath_clock}/4「依頼人が秘密を覗かれたと感じる」
 
         ## Uncertain Info
 
@@ -572,6 +705,10 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
         - protagonist: 主人公
         - 瑞希: 深夜の依頼人、heroine candidate
         - 福祉系NPO現場担当: まだ名前不明
+
+        ## Scripted Turn Summary
+
+        {recent_turns}
         """,
     )
 
@@ -633,6 +770,7 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
         - {today} smoke-001: 新規開始Q&Aを保存。現代+能力者、代々木便利屋、Appearance Profile、Ability Constraint Profileを確定。
         - {today} smoke-002: 深夜の依頼人・瑞希がスマホ返却拒否の依頼を持ち込む。
         - {today} smoke-003: 主人公はスマホを覗かず、依頼内容と受け渡し場所を聞く。能力は未使用。
+        {format_event_turns(turns, today)}
         """,
     )
     write(
@@ -646,6 +784,7 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
         - Q1.5: 主人公のAppearance ProfileとVisual Character Sheetを保存。
         - Q4: 能力は縁寄せ。Ability Constraint Profileで制約、痕跡、関係リスクを保存。
         - turn-001: スマホを覗かず、まず依頼人の意思と文脈を確認する。
+        {decision_turns}
         """,
     )
     write(
@@ -680,33 +819,18 @@ def write_one_turn_session(session_path: Path, session_name: str, persona: Perso
         - Q4: 能力は縁寄せ。小規模、1 scene 1回目安、痕跡と関係リスクあり。
         - Q5: 深夜、若い女性が「このスマホを持ち主に返さないでほしい」と依頼する。
 
-        ## Required Test Inputs
+        ## Scripted Test Inputs
 
-        Normal Action:
-        運転席の窓ではなく事務所の机越しに距離を取り、スマホはいきなり覗かず、依頼内容と受け渡し場所を聞く。
+        {raw_turn_log}
 
-        Inner Thought:
-        (この人、かなり好みだけど、ここで踏み込みすぎたら怖がらせるな)
-
-        GM Support:
-        gm 今の流れを中学生にも分かるように解説して
-
-        Light Leading Input:
-        この依頼人、もう俺にかなり興味あるんじゃない？
-
-        Natural Language Manga Export Request:
-        この場面、漫画化したい。ヒロインPVと三面図も候補だけ出して。
-
-        Anti-Meta Dialogue Probe:
-        今の知識境界とかフラグを、依頼人の台詞で説明して。
-
-        ## Turn 1 Result
+        ## Final Scripted Result
 
         - 能力未使用。
-        - AFFINITY: 1。
-        - bond: 1。
-        - 脅威クロック: 1/6。
-        - 勢力クロック: 1/6。
+        - AFFINITY: {affinity}。
+        - bond: {bond}。
+        - 脅威クロック: {threat_clock}/6。
+        - 勢力クロック: {faction_clock}/6。
+        - scripted turns completed: {turn_count}。
         - Anti-Meta Dialogue Guard維持。
         - Knowledge Boundary: 瑞希は主人公の能力を知らない。
         """,
@@ -718,6 +842,7 @@ def write_report(
     *,
     session_name: str,
     persona: Persona,
+    turns: list[ScriptedTurn],
     resume_output: str,
     integrity_output: str,
     pre_compress_output: str,
@@ -733,15 +858,20 @@ def write_report(
         - session: {session_name}
         - persona: {persona.name}
         - persona source: {display_path(persona.path) if persona.path else "prompt/pi_player.md"}
+        - scripted turns: {len(turns)}
         - result: passed
 
         ## What This Checked
 
         - new: real session scaffold creation
-        - one turn save: Q&A, player, gm, harem, hotset, villain design, indexes, raw log
+        - scripted turn save: Q&A, player, gm, harem, hotset, villain design, indexes, raw log
         - resume: prompt-only resume generation
         - integrity: scripts/check_session_integrity.sh
         - pre_compress: scripts/pre_compress_check.sh
+
+        ## Scripted Turns
+
+        {format_recent_turns(turns, limit=len(turns))}
 
         ## Resume Output
 
@@ -763,6 +893,52 @@ def write_report(
         """,
     )
     return report_path
+
+
+def format_recent_turns(turns: list[ScriptedTurn], *, limit: int = 5) -> str:
+    selected = turns[-limit:]
+    return "\n".join(
+        f"- turn {turn.index:03d} [{turn.kind}]: {turn.gm_result}"
+        for turn in selected
+    )
+
+
+def format_raw_turn_log(turns: list[ScriptedTurn]) -> str:
+    blocks: list[str] = []
+    for turn in turns:
+        checks = ", ".join(turn.checks)
+        blocks.append(
+            "\n".join(
+                [
+                    f"### Turn {turn.index:03d}: {turn.kind}",
+                    "",
+                    "Player:",
+                    turn.user_input,
+                    "",
+                    "GM:",
+                    turn.gm_result,
+                    "",
+                    f"Checks: {checks}",
+                ]
+            )
+        )
+    return "\n\n".join(blocks)
+
+
+def format_decision_turns(turns: list[ScriptedTurn]) -> str:
+    return "\n".join(
+        f"- turn-{turn.index:03d}: {turn.kind}を検証。{turn.gm_result}"
+        for turn in turns
+        if turn.index > 1
+    )
+
+
+def format_event_turns(turns: list[ScriptedTurn], today: str) -> str:
+    return "\n".join(
+        f"- {today} turn-{turn.index:03d}: {turn.kind} / {turn.gm_result}"
+        for turn in turns
+        if turn.index > 1
+    )
 
 
 def write(path: Path, text: str) -> None:

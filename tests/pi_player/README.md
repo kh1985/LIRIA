@@ -44,6 +44,31 @@ bash scripts/analyze_play_log.sh path/to/raw_log.md
 
 保存分配、resume、pre-compress の確認は PI Player smoke や各チェックコマンドの責務であり、実プレイ生ログ分析器はそれらを置き換えない。
 
+## AI Persona Playtest
+
+AI人格に実プレイ風ログを生成させる場合は、以下を使う。
+
+```bash
+bash scripts/run_ai_persona_playtest.sh --turns 8
+```
+
+これは `play.sh --prompt-only` で作ったLIRIA開始プロンプトと、人格YAMLを Codex CLI に渡して、`archive/logs/raw_*_ai_persona_playtest.md` を生成する。
+生成後は既定で `analyze_play_log.sh` を実行し、`analysis_*_ai_persona_playtest.md` も作る。
+
+安全方針:
+
+- AI人格には保存ファイルを直接編集させない
+- Codex CLI は read-only で実行する
+- 生成物は専用 session の `archive/logs/` に置く
+- 本命プレイの代替ではなく、実プレイ前の試走ログ生成として使う
+- 実保存の整合確認は `check_session_integrity.sh` や `pre_compress_check.sh` が担当する
+
+プロンプトだけ確認する場合:
+
+```bash
+bash scripts/run_ai_persona_playtest.sh --turns 8 --dry-run
+```
+
 ## Auto Smoke Runner
 
 本命プレイ前の試運転は、以下で実行できる。

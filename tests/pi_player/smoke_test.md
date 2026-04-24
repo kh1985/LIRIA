@@ -43,6 +43,17 @@ PI Player smoke は、新規開始、保存分配、resume、pre-compress など
 
 この分析器も本命プレイの代替ではない。長い実プレイや人間レビューを置き換えず、ログから改善点と次の確認観点を拾いやすくするために使う。
 
+## Out of Scope: AI Persona Playtest
+
+AI人格による実プレイ風ログ生成も、PI Player smoke とは別物である。
+
+```bash
+bash scripts/run_ai_persona_playtest.sh --turns 8
+```
+
+このコマンドは、保存分配を検査するためではなく、Codex CLIに実プレイ風の raw log を作らせ、ログ分析器にかけるための導線である。
+AI人格は read-only で動かし、保存ファイルを直接編集しない。
+
 ## Setup
 
 1. テスト専用の session 名を決める。既存の `saves/*` は削除しない

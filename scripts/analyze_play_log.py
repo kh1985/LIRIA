@@ -60,14 +60,15 @@ def parse_args() -> argparse.Namespace:
 
 def analyze_log(text: str, *, log_path: Path) -> str:
     lines = [line.rstrip() for line in text.splitlines()]
-    non_empty = [line for line in lines if line.strip()]
-    player_lines = grep_lines(lines, PLAYER_PATTERNS)
-    gm_lines = grep_lines(lines, GM_PATTERNS)
-    dialogue_lines = grep_lines(lines, DIALOGUE_PATTERNS)
-    quoted_dialogue = grep_lines(lines, [r"「[^」]{2,}」"])
-    findings = build_findings(lines)
-    save_candidates = collect_save_candidates(lines)
-    manga_candidates = collect_manga_candidates(lines)
+    logical_lines = merge_label_lines(lines)
+    non_empty = [line for line in logical_lines if line.strip()]
+    player_lines = grep_lines(logical_lines, PLAYER_PATTERNS)
+    gm_lines = grep_lines(logical_lines, GM_PATTERNS)
+    dialogue_lines = grep_lines(logical_lines, DIALOGUE_PATTERNS)
+    quoted_dialogue = grep_lines(logical_lines, [r"「[^」]{2,}」"])
+    findings = build_findings(logical_lines)
+    save_candidates = collect_save_candidates(logical_lines)
+    manga_candidates = collect_manga_candidates(logical_lines)
     risks = collect_risks(findings)
 
     score = sum(1 for finding in findings if finding.status == "ok")
@@ -173,7 +174,7 @@ def build_findings(lines: list[str]) -> list[Finding]:
         check_presence(
             "Knowledge Boundary",
             lines,
-            [r"知らない|まだ言っていない|伏せる|本名|秘密|共有|聞こえない|内心|推測|Unknown|Known|Suspected"],
+            [r"知らない|まだ言っていない|伏せる|本名|秘密|共有|聞こえない|内心|推測|説明しない|隠して|Unknown|Known|Suspected"],
             "誰が何を知っているかの境界が見えるか。",
         ),
         check_presence(
@@ -215,6 +216,34 @@ def grep_lines(lines: list[str], patterns: list[str], *, limit: int | None = Non
             if limit is not None and len(found) >= limit:
                 break
     return found
+
+
+def merge_label_lines(lines: list[str]) -> list[str]:
+    merged: list[str] = []
+    index = 0
+    label_pattern = re.compile(r"^(Player|User|プレイヤー|GM|Assistant|Narrator|地の文|描写)[:：]\s*$")
+    while index < len(lines):
+        stripped = lines[index].strip()
+        match = label_pattern.match(stripped)
+        if match:
+            next_text = next_nonempty(lines, index + 1)
+            if next_text:
+                merged.append(f"{match.group(1)}: {next_text}")
+            else:
+                merged.append(stripped)
+            index += 1
+            continue
+        merged.append(lines[index])
+        index += 1
+    return merged
+
+
+def next_nonempty(lines: list[str], start: int) -> str:
+    for line in lines[start:]:
+        stripped = line.strip()
+        if stripped:
+            return stripped
+    return ""
 
 
 def collect_save_candidates(lines: list[str]) -> list[str]:

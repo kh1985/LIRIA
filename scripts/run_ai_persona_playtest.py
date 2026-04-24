@@ -1,0 +1,245 @@
+#!/usr/bin/env python3
+"""Let an AI persona produce a real-play-like LIRIA raw log.
+
+This runner is intentionally safer than a full autonomous player. It creates a
+real session scaffold, reuses the LIRIA launch prompt, asks Codex CLI to produce
+a play log only, then optionally analyzes that log. The model must not edit save
+files; save/resume checks remain separate.
+"""
+
+from __future__ import annotations
+
+import argparse
+from datetime import datetime
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_PERSONA = Path(
+    "/Users/kenjihachiya/Desktop/work/development/marketing/character/"
+    "output/gal-sim-testers/01_ishikawa_ryota.yaml"
+)
+
+
+def main() -> int:
+    args = parse_args()
+    session_name = args.session or default_session_name()
+    session_path = ROOT / "saves" / session_name
+    if session_path.exists():
+        raise SystemExit(f"session already exists: {session_path}")
+
+    run(["bash", "play.sh", "liria", "new", session_name, "--prompt-only"])
+
+    persona_text = read_optional(args.persona)
+    generated_prompt = ROOT / ".codex/generated/liria-new.instructions.md"
+    liria_prompt = generated_prompt.read_text(encoding="utf-8")
+    play_prompt = build_play_prompt(
+        session_name=session_name,
+        session_path=session_path,
+        liria_prompt=liria_prompt,
+        persona_path=args.persona,
+        persona_text=persona_text,
+        turns=args.turns,
+    )
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_path = session_path / "archive/logs" / f"raw_{timestamp}_ai_persona_playtest.md"
+    prompt_path = session_path / "archive/logs" / f"prompt_{timestamp}_ai_persona_playtest.md"
+    analysis_path = session_path / "archive/logs" / f"analysis_{timestamp}_ai_persona_playtest.md"
+    prompt_path.parent.mkdir(parents=True, exist_ok=True)
+    prompt_path.write_text(play_prompt, encoding="utf-8")
+
+    if args.dry_run:
+        print(f"dry-run prompt: {display_path(prompt_path)}")
+        print(f"session kept for review: saves/{session_name}")
+        cleanup_generated_prompts()
+        return 0
+
+    run_codex(play_prompt, log_path=log_path, model=args.model)
+    print(f"AI persona play log: {display_path(log_path)}")
+
+    if args.analyze:
+        run(["bash", "scripts/analyze_play_log.sh", str(log_path), "-o", str(analysis_path)])
+        print(f"analysis report: {display_path(analysis_path)}")
+
+    cleanup_generated_prompts()
+    print(f"session kept for review: saves/{session_name}")
+    return 0
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Generate a real-play-like LIRIA raw log with an AI persona via Codex CLI.",
+    )
+    parser.add_argument(
+        "session",
+        nargs="?",
+        help="Session name. Defaults to session_ai_playtest_YYYYMMDD_HHMMSS.",
+    )
+    parser.add_argument(
+        "--persona",
+        type=Path,
+        default=DEFAULT_PERSONA if DEFAULT_PERSONA.exists() else None,
+        help="Persona YAML/text file. Defaults to the marketing tester persona if present.",
+    )
+    parser.add_argument("--turns", type=int, default=8, help="Number of play turns to generate. Default: 8.")
+    parser.add_argument("--model", help="Optional Codex model override.")
+    parser.add_argument("--no-analyze", dest="analyze", action="store_false", help="Skip analyze_play_log after generation.")
+    parser.add_argument("--dry-run", action="store_true", help="Create the session and prompt, but do not call Codex.")
+    parser.set_defaults(analyze=True)
+    args = parser.parse_args()
+    if args.turns < 1 or args.turns > 30:
+        parser.error("--turns must be between 1 and 30")
+    return args
+
+
+def default_session_name() -> str:
+    return "session_ai_playtest_" + datetime.now().strftime("%Y%m%d_%H%M%S")
+
+
+def read_optional(path: Path | None) -> str:
+    if path is None:
+        return "名前: test_player\n方針: 好奇心はあるが、無茶はしすぎない。"
+    return path.read_text(encoding="utf-8")
+
+
+def build_play_prompt(
+    *,
+    session_name: str,
+    session_path: Path,
+    liria_prompt: str,
+    persona_path: Path | None,
+    persona_text: str,
+    turns: int,
+) -> str:
+    persona_source = str(persona_path) if persona_path else "prompt/pi_player.md default persona"
+    return "\n".join(
+        [
+            "# Task",
+            "",
+            "あなたは LIRIA の実プレイ風ログ生成担当です。",
+            "以下の LIRIA system prompt と AIプレイヤー人格を前提に、プレイヤーが実際に遊んだような生ログを生成してください。",
+            "",
+            "重要:",
+            "- ファイル編集、保存ファイル更新、コマンド実行はしない。",
+            "- 出力は raw play log の Markdown だけにする。",
+            "- scripted smoke のように同じ検査パターンを繰り返さない。",
+            "- 1ターンごとに Player 入力と GM 応答を書く。",
+            "- GM応答には、地の文、ヒロイン/NPCの自律反応、生活感、事件の外圧を入れる。",
+            "- 好意、真相、黒幕、身体的親密さをプレイヤー願望だけで確定しない。",
+            "- 能力や装備は便利すぎる解決にせず、条件、痕跡、誤解、関係リスクを残す。",
+            "- NPC/ヒロインの台詞に AFFINITY、フラグ、GM、システム、知識境界などのメタ語を入れない。",
+            "- 漫画化したくなる手元、視線、沈黙、距離、背景、小物を自然に混ぜる。",
+            "- 最後に Save Notes と Manga Candidates を短く付ける。",
+            "",
+            f"session: {session_name}",
+            f"session_path: {display_path(session_path)}",
+            f"turns: {turns}",
+            f"persona_source: {persona_source}",
+            "",
+            "# Output Format",
+            "",
+            "```md",
+            f"# Raw Log: {session_name} AI Persona Playtest",
+            "",
+            "## Persona Summary",
+            "",
+            "## Play Log",
+            "",
+            "### Turn 001",
+            "",
+            "Player:",
+            "...",
+            "",
+            "GM:",
+            "...",
+            "",
+            "## Save Notes",
+            "",
+            "## Manga Candidates",
+            "```",
+            "",
+            "# AI Player Persona",
+            "",
+            persona_text.strip(),
+            "",
+            "# LIRIA Prompt",
+            "",
+            liria_prompt,
+        ]
+    )
+
+
+def run_codex(prompt: str, *, log_path: Path, model: str | None) -> None:
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    argv = [
+        "codex",
+        "exec",
+        "-C",
+        str(ROOT),
+        "-s",
+        "read-only",
+        "--output-last-message",
+        str(log_path),
+        "-",
+    ]
+    if model:
+        argv[2:2] = ["--model", model]
+
+    completed = subprocess.run(
+        argv,
+        cwd=ROOT,
+        input=prompt,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+        timeout=300,
+    )
+    if completed.returncode != 0:
+        sys.stdout.write(completed.stdout)
+        raise SystemExit(f"codex exec failed ({completed.returncode})")
+    if not log_path.exists() or not log_path.read_text(encoding="utf-8", errors="replace").strip():
+        log_path.write_text(completed.stdout, encoding="utf-8")
+
+
+def run(argv: list[str]) -> subprocess.CompletedProcess[str]:
+    completed = subprocess.run(
+        argv,
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    if completed.returncode != 0:
+        sys.stdout.write(completed.stdout)
+        raise SystemExit(f"command failed ({completed.returncode}): {' '.join(argv)}")
+    return completed
+
+
+def cleanup_generated_prompts() -> None:
+    for path in [
+        ROOT / ".codex/generated/liria-new.instructions.md",
+        ROOT / ".claude/generated/liria-new.system-prompt.md",
+    ]:
+        if path.exists():
+            path.unlink()
+
+
+def display_path(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

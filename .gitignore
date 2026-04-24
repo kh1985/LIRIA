@@ -5,6 +5,15 @@
 # Codex generated files
 .codex/generated/
 
+# Local session data
+saves/*
+!saves/.gitkeep
+saves/*/archive/logs/*
+logs/
+rawlogs/
+tmp/
+*.local.md
+
 # macOS
 .DS_Store
 ._*

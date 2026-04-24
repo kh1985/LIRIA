@@ -177,5 +177,5 @@ flowchart TD
 - `current/player.md`、`current/gm.md`、`current/hotset.md` の現在フェーズ / 再開アンカーを揃える
 - `hotset.md` に複数時点の再開アンカーを残さない
 - `CORE.md`、`README.md`、architecture docs に live session state を置かない
-- `session_001` は既存プレイ資産や migration note としてだけ扱う
+- 既存の個人セッションは repo 外の legacy asset として扱い、本体の固定参照にしない
 - `bash scripts/check_session_integrity.sh <session_name>` で軽量チェックを回す

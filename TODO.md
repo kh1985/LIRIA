@@ -26,7 +26,7 @@
 - cast は `saves/<session_name>/cast/heroine` と `saves/<session_name>/cast/npc` に置く
 - `hotset.md` は derived cache であり、正本ではない
 - session 直下 mirror は main path から外し、legacy read-only fallback として扱う
-- 既存プレイ資産の `session_001` は migration example / legacy asset として扱い、新規 session の固定値にしない
+- 既存の個人プレイ資産は repo 外の legacy asset として扱い、新規 session の固定値にしない
 - validation に multi-session regression を追加
 - integrity check を session-scoped layout 前提に更新
 
@@ -34,7 +34,7 @@
 
 - launcher / prompt の session 名動的化
 - `templates/session/` と `scripts/create_session.sh` による session scaffold 生成
-- live cast の `saves/session_001/cast/` への移行
+- live cast の `saves/<session_name>/cast/` への移行
 - session 直下 mirror の削除と read-only fallback 化
 - 既存プレイ資産の current anchor 正規化
 - `CORE.md` の live state 除去
@@ -47,7 +47,7 @@
 | Phase 0: Source of Truth 方針 | 完了 | `current/*`, `cast/*`, `design/*` を正本として固定 |
 | Phase 1: Prompt Layer 分割 | 完了 | 分割 prompt を session-scoped path 前提へ更新 |
 | Phase 2: Multi-session Save Layout | 完了 | 新規 session scaffold と self-contained layout を導入 |
-| Phase 3: Hotset / Resume | 完了 | `session_001` の hotset を単一 cache に正規化 |
+| Phase 3: Hotset / Resume | 完了 | hotset を単一 cache として正規化 |
 | Phase 4: Memory Model / Compression | 完了 | cast 保存先を session-scoped に変更 |
 | Phase 5: Integrity Check | 完了 | lightweight check script を追加し、main path から mirror を外した |
 | Phase 6: Legacy Migration | 完了（archive backfill は任意） | 既存資産を新 layout へ移し、legacy mirror は削除 |
@@ -212,7 +212,7 @@
 - `GALGE.md` に事件後の余韻シーン固定ルールを追加
 
 残件:
-- 真凛 / 怜 / 凪 / 澪 / シルヴィごとに余韻シーンの型を 2 本以上ずつ作る
+- 主要ヒロインごとに余韻シーンの型を 2 本以上ずつ作る
 - `看病 / 帰り道 / 朝の会話 / 夜の弱音` の型を整理する
 
 ### 改善C: 幹部 -> ボス の段階登場
@@ -250,7 +250,7 @@
 
 残件:
 - 各勢力に図星台詞を 3 本以上ずつ作る
-- `kaneco / 真凛 / 怜 / 凪 / 澪 / シルヴィ` それぞれへの刺さり方を台詞化する
+- 主人公と主要ヒロインそれぞれへの刺さり方を台詞化する
 
 ### 改善F: 下っ端の顔
 **優先度: 中**  

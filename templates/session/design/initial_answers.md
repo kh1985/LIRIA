@@ -14,6 +14,15 @@
 - 生活ランク/事業状態
 - 拠点の自然さ
 
+## Q1.5: Appearance Profile
+- 身長
+- 体型
+- 基本服装
+- 髪型
+- 顔つき
+- 雰囲気 / visual keywords
+- お任せの場合のGM補完メモ
+
 ## Q2: Inner
 - 惹かれるもの
 - 怒るもの
@@ -59,6 +68,7 @@
 
 ## Generated Seeds
 - `player profile`
+- `appearance profile`
 - `inner summary`
 - `world seed`
 - `life base summary`

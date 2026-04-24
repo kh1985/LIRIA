@@ -4,6 +4,15 @@
 
 ## Profile
 
+## Appearance Profile
+- 身長:
+- 体型:
+- 基本服装:
+- 髪型:
+- 顔つき:
+- 雰囲気 / visual keywords:
+- 現在の見た目差分:
+
 ## Inner
 
 ## Ability / Action Point

@@ -1,11 +1,9 @@
-# harem
+# Relationship State
 
-## 全ヒロインの現在値
+## Romance Preferences
 
-## 現在の関係フック
+## Active Heroines
 
-## 約束体系
+## Relationship Rules
 
-## hidden 深化ベクトル
-
-## active なヒロイン間ベクトル
+## Heroine Generation Bias

@@ -1,13 +1,11 @@
-# player
+# Player State
 
-## 現在状態
-- 現在フェーズ:
-- 現在HP:
-- 能力使用残回数:
-- 主なコンディション:
-- 直近の無理:
+## Profile
 
-## 現在のフック（プレイヤー視点）
-1.
-2.
-3.
+## Inner
+
+## Ability / Action Point
+
+## Life Base
+
+## Current Status

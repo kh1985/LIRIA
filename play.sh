@@ -41,6 +41,7 @@ Examples:
 Notes:
   - `new` / `resume` without scenario use `liria`.
   - `new` without session_name creates the next session_NNN automatically.
+  - Auto numbering starts at session_002 to avoid the legacy first slot.
   - `resume` without session_name selects the latest numbered session and prints it.
   - This launcher supports Claude CLI and Codex CLI.
   - `ENGINE=auto` prefers Claude when available, then falls back to Codex.
@@ -317,7 +318,9 @@ latest_session_name() {
 
 next_session_name() {
   local save_root="${SCENARIO_WORKDIR}/saves"
-  local max_num=0
+  # The first numbered slot is legacy; automatic new sessions start at session_002
+  # even when saves/ is empty, while existing numbered sessions still use max+1.
+  local max_num=1
   local dir name raw_num num
 
   if [[ -d "${save_root}" ]]; then

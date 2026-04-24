@@ -102,6 +102,7 @@ check_current_specs() {
       fi
     done
 
+    # 攻撃力/防御力ゲームに寄っていないかを、Equipment / Tools の文脈だけで警告する。
     if grep -Eq 'Equipment / Tools|Equipment|Tools' "$player" &&
       grep -Eq '攻撃力|防御力|attack power|defense power|offense|defense' "$player" &&
       ! grep -Eq '行動選択肢|リスク|痕跡|関係リスク|action option|risk|trace|relationship risk' "$player"; then

@@ -4,7 +4,7 @@
 
 - 既定名は `session_pi_smoke`
 - 既に同名のローカル session がある場合は、上書きや削除をせず `session_pi_smoke_YYYYMMDD_HHMMSS` のような一意名を使う
-- `session_001` や本命プレイの `saves/*` は使わない
+- 自動採番の `new` は旧 `session_001` を避けて `session_002` から始まるが、smoke test では明示名を使い、本命プレイの `saves/*` は使わない
 
 ## Goal
 
@@ -147,5 +147,5 @@ bash scripts/pre_compress_check.sh "$SMOKE_SESSION"
 
 1. 検証結果を要約する
 2. 自分で作った `session_pi_smoke_*` だけを対象に片付ける
-3. 既存の `saves/*`、`session_001`、本命プレイ session は削除も上書きもしない
+3. 既存の `saves/*`、自動採番が避ける旧 `session_001`、本命プレイ session は削除も上書きもしない
 4. 実セッションと `exports/*` を Git 管理対象に加えない

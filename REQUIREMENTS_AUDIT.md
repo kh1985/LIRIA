@@ -39,9 +39,9 @@ LIRIA の正本定義:
 
 1. 新規開始Q&A、GM仕様、知識境界、保存分配、session 分離、PI Player テスト基盤は LIRIA v1 の中核として残すべき状態に近い。
 2. `save / resume` と `initial_answers.md` の設計は、旧 inner-galge より明確に改善されている。ここは `KEEP` が多い。
-3. `romance.md`、`runtime.md`、`combat.md` には、旧 inner-galge / 冒険RPG 由来の「ハーレム自由モード」「G 通貨」「拠点投資」「装備スロット」「重い HP 管理」が残っており、LIRIA v1 向けの `ADAPT` が必要。
-4. `villain_engine.md` は「事件 / 外圧」エンジンとして使えるが、勢力類型や上位脅威の扱いは v1 の現代寄り運用に寄せ直す必要がある。
-5. 生ログ保存、integrity check、PI Player テストは有効だが、「ログを漫画脚本化する」までの正式要件は未定義であり、現状は `DEFER` が妥当。
+3. `romance.md`、`runtime.md`、`combat.md` の旧 inner-galge / 冒険RPG 由来要素は、現時点では主に禁止例・変換ルールへ寄せ直し済み。残りは実プレイで重さを確認する。
+4. `villain_engine.md` は「事件 / 外圧」エンジンとして使い、勢力類型や上位脅威は v1 の現代寄り運用へ接続済み。
+5. 生ログ保存、integrity check、PI Player テスト、漫画化自然文導線は有効。ログ資産化は manga export package として運用検証段階に入っている。
 
 ---
 
@@ -106,24 +106,24 @@ LIRIA の正本定義:
 ### ヒロイン生成
 - Classification: ADAPT
 - Priority: High
-- Current: `core_newgame.md` では Q3 を全体のヒロイン生成バイアスとして扱っているが、`romance.md` には旧ハーレム前提の生成文脈が残る。
+- Current: `core_newgame.md` では Q3 を全体のヒロイン生成バイアスとして扱い、`romance.md` は自律したヒロインと Relationship / Heroine Network の運用へ整理済み。
 - LIRIA v1での扱い: 維持するが、「攻略対象の束」ではなく「自律した人物群」の生成へ寄せる必要がある。
-- Risk: `romance.md` の旧前提が強いと、Q3 の好みが「量産型ハーレム選定」へ崩れる。
-- Next Action: `romance.md` の生成導線から `旅先 / ハーレム攻略 / 主人公補助役` 寄りの文言を棚卸しし、現代生活圏ベースへ調整する。
+- Risk: Q3 の好みを強く読みすぎると、ヒロインが自律人物ではなく「好みの型」へ寄りすぎる。
+- Next Action: 実プレイで、好みの反映が量産型ヒロイン生成にならず、現代生活圏ベースで自然に出るか確認する。
 
 ### bond / AFFINITY
 - Classification: ADAPT
 - Priority: High
 - Current: `runtime.md` と `romance.md` で広く使われている。bond は全 NPC、AFFINITY は恋愛深度として運用される。
 - LIRIA v1での扱い: 仕組みは有用なので残すが、数値設計と言葉遣いは見直しが必要。
-- Risk: `AFFINITY 5 = ハーレムの一員として定着` のような旧表現が、現在のコンセプトと正面衝突する。
-- Next Action: AFFINITY の語彙を `攻略 / 陥落 / ハーレム定着` から、`関係変化 / 合意 / 深化` に置き換える要件整理を次フェーズで行う。
+- Risk: `AFFINITY 5 = 報酬天井` のような旧表現に戻ると、現在のコンセプトと正面衝突する。
+- Next Action: AFFINITY の語彙が `関係変化 / 合意 / 深化` として運用され続けるか、smoke と本命プレイで確認する。
 
 ### 深化ベクトル
 - Classification: ADAPT
 - Priority: Medium
 - Current: `romance.md` と `save_resume.md` に `hidden 深化ベクトル` があり、AFFINITY 5 以降の関係変化を扱う。
-- LIRIA v1での扱い: 概念としては有効だが、旧ハーレム終盤運用の残り香を削る必要がある。
+- LIRIA v1での扱い: 概念としては有効だが、旧終盤報酬運用の残り香を削る必要がある。
 - Risk: 深化ベクトルが「特定の到達後のご褒美管理」に見えると、LIRIA v1 の関係変化の連続性を壊す。
 - Next Action: 深化ベクトルを「複数関係の生活・信頼・摩耗管理」として再定義するレビュータスクを立てる。
 
@@ -131,8 +131,8 @@ LIRIA の正本定義:
 - Classification: ADAPT
 - Priority: Medium
 - Current: `runtime.md`、`save_resume.md`、`current/harem.md` で active なヒロイン間ベクトルを扱う前提がある。
-- LIRIA v1での扱い: 維持するが、`ハーレム管理コスト` よりも `共同体 / 嫉妬 / 共有境界 / 利害調整` に寄せる。
-- Risk: 現行の REQUIREMENTS 由来の「ハーレム管理システム」が前面に出ると旧ゲーム性へ戻る。
+- LIRIA v1での扱い: 維持するが、`Relationship / Heroine Network` として `共同体 / 嫉妬 / 共有境界 / 利害調整` に寄せる。
+- Risk: 関係群の管理が目的化すると旧ゲーム性へ戻る。
 - Next Action: ヒロイン間関係を `共同生活 / 知識共有 / 利害衝突` の観点で書き直す候補として整理する。
 
 ### 事件/外圧
@@ -162,7 +162,7 @@ LIRIA の正本定義:
 ### お金/生活/事業
 - Classification: ADAPT
 - Priority: High
-- Current: `core_newgame.md` では生活ランク / 事業状態の簡略運用を推す一方、`runtime.md` には `500G` や拠点投資、施設収入など経営ゲーム寄り要素が残る。
+- Current: `core_newgame.md` と `runtime.md` は生活ランク / 事業状態 / 支払い圧の簡略運用へ整理済み。`500G` や拠点投資、施設収入は標準導線から外した。
 - LIRIA v1での扱い: 生活基盤を動かす要素として残すが、数値経済シミュレーションは弱める。
 - Risk: 現状のままだと現代生活物ではなく、RPG 商売システムへ回帰する。
 - Next Action: v1 の金銭要件を `生活ランク / 余裕 / 事業状態 / 今回の支払い圧` に限定する見直し案を作る。
@@ -170,10 +170,10 @@ LIRIA の正本定義:
 ### 装備/道具
 - Classification: ADAPT
 - Priority: High
-- Current: `romance.md` に武器 / 防具 / アクセサリーの 3 枠装備とプレゼントによる AFFINITY 上昇が残っている。
+- Current: `romance.md` と `combat.md` では、装備を数値スロットではなく `Equipment / Tools` として、行動選択肢、リスク、痕跡、関係リスクで扱う方針へ整理済み。
 - LIRIA v1での扱い: `装備` ではなく `道具 / 仕事道具 / 証拠 / 生活アイテム / 危機対応ギア` として簡略化する。
 - Risk: 3 枠装備や数値ボーナスは旧 RPG 色が強く、恋愛・生活・事件の主軸を食う。
-- Next Action: 装備スロット制を v1 から外し、持ち物タグや状況道具へ落とす要件検討を行う。
+- Next Action: 実プレイで、道具が攻撃力/防御力アップに戻らず、準備・携行・説明責任・痕跡として機能するか確認する。
 
 ### セーブ/再開
 - Classification: KEEP
@@ -342,10 +342,10 @@ LIRIA の正本定義:
 ### 成人向け表現の分離/制御
 - Classification: ADAPT
 - Priority: High
-- Current: 概念文書では抑制方針が入っているが、`romance.md` には `身体的関係の開始`、旧ハーレム終盤運用、成人寄りの深化語彙が残る。
+- Current: 概念文書と `romance.md` には、身体的親密さを信頼・合意・文脈・余波の一部として扱う抑制方針が入っている。
 - LIRIA v1での扱い: adult を増やさず、必要なら関係変化の一部として制御された扱いに留める。
 - Risk: 旧 inner-galge の語彙が残ると、公開用スターターキットとしての輪郭を崩す。
-- Next Action: `romance.md` と関連 style から、v1 と噛み合わない成人寄り・ハーレム攻略寄り語彙を別監査タスクとして切り出す。
+- Next Action: `romance.md` と関連 style が、親密描写を固定報酬や攻略語彙へ戻していないか継続監査する。
 
 ## Legacy Sub-Requirements Marked REMOVE
 
@@ -354,26 +354,26 @@ LIRIA の正本定義:
 ### 旧ハーレム攻略主目的
 - Classification: REMOVE
 - Priority: High
-- Current: `REQUIREMENTS.md` と `romance.md` に、AFFINITY 5 やハーレム管理を中心に据える残滓がある。
+- Current: `REQUIREMENTS.md` と `romance.md` は、AFFINITY 5 を報酬天井ではなく関係の継続管理として扱う方向へ整理済み。
 - LIRIA v1での扱い: 削除する。恋愛は主軸だが、目的を「女を堕とす」「ハーレムを築く」に置かない。
 - Risk: この前提が残ると、LIRIA の正本定義そのものが崩れる。
-- Next Action: `romance.md` と `REQUIREMENTS.md` の旧語彙を明示的に整理する。
+- Next Action: `romance.md` と `REQUIREMENTS.md` が旧語彙へ戻っていないか継続監査する。
 
 ### RPG経営サブシステムの標準化
 - Classification: REMOVE
 - Priority: High
-- Current: `runtime.md` に `500G`、投資施設、定期収入などの強い経営ゲーム要素が残る。
+- Current: `runtime.md` は `生活ランク / 余裕 / 仕事状態 / 支払い圧` に縮約済み。
 - LIRIA v1での扱い: 標準要件から外す。必要でも個別卓の拡張に留める。
 - Risk: 生活基盤が経営ミニゲームに置き換わる。
-- Next Action: v1 本体では `生活ランク / 余裕 / 仕事状態` に縮約する。
+- Next Action: v1 本体では `生活ランク / 余裕 / 仕事状態` の縮約運用を維持する。
 
 ### 3枠装備と装備プレゼント恋愛トリガー
 - Classification: REMOVE
 - Priority: Medium
-- Current: `romance.md` に武器 / 防具 / アクセサリーの 3 枠設計と、プレゼントによる AFFINITY 上昇が残る。
+- Current: `romance.md` は 3枠装備と装備プレゼント恋愛トリガーを標準導線から外し、道具 / 証拠 / 仕事ギア / 生活アイテムへ整理済み。
 - LIRIA v1での扱い: 標準要件から外す。必要なら道具タグやイベント演出に置き換える。
 - Risk: 恋愛が装備スロットと数値上昇の副産物に見える。
-- Next Action: 装備を `道具 / 証拠 / 仕事ギア / 生活アイテム` に再整理する。
+- Next Action: 装備を `道具 / 証拠 / 仕事ギア / 生活アイテム` として運用し続ける。
 
 ---
 
@@ -382,11 +382,11 @@ LIRIA の正本定義:
 次の項目は、LIRIA v1 に合わせるための優先度が特に高い。
 
 1. `prompt/romance.md`
-   - `AFFINITY 5 = ハーレムの一員`
-   - `深化タグ` の旧終盤運用
-   - 装備プレゼントや身体関係開始を前提にした文脈
+   - `AFFINITY 5` が報酬天井に戻っていないか
+   - `深化タグ` が関係変化 / 合意 / 摩耗管理として運用されているか
+   - 装備プレゼントや身体関係開始が固定トリガーに戻っていないか
 2. `prompt/runtime.md`
-   - `500G`、拠点投資、施設収入など、現代生活寄りではなく RPG 経営寄りの要素
+   - 生活ランク / 事業状態 / 支払い圧が、細かい経済ゲームへ戻っていないか
 3. `prompt/combat.md`
    - 危機処理としては使えるが、v1 の軽さに対してやや重い
 4. `prompt/villain_engine.md`
@@ -398,13 +398,13 @@ LIRIA の正本定義:
 
 ## Suggested Next Actions
 
-### Phase 1: 文書整合の修正
-- `REQUIREMENTS.md` の旧 inner-galge 直系の章を、LIRIA v1 向けの監査結果に沿って書き換える
-- 特に `ハーレム管理システム`、`装備 / 投資 / G 通貨`、`AFFINITY 5` 文脈を見直す
+### Phase 1: 文書整合の維持
+- `REQUIREMENTS.md` の旧 inner-galge 直系の章が、LIRIA v1 向けの監査結果から巻き戻っていないか確認する
+- 特に Relationship / Heroine Network、Equipment / Tools、生活ランク、AFFINITY 5 文脈が旧語彙へ戻っていないか見直す
 
 ### Phase 2: prompt 軽量化
-- `romance.md` から v1 とズレる攻略 / ハーレム終盤 / 成人寄り記述を整理する
-- `runtime.md` から RPG 経営 / 世界旅要素を整理する
+- `romance.md` が v1 とズレる攻略 / 報酬到達 / 成人寄り固定イベントへ戻っていないか確認する
+- `runtime.md` が RPG 経営 / 世界旅要素へ戻っていないか確認する
 - `combat.md` を `危機処理コア` と `重戦闘拡張` に分けるか検討する
 
 ### Phase 3: ログ資産化の方針決定
@@ -415,7 +415,7 @@ LIRIA の正本定義:
 
 LIRIA v1 は、起動・新規開始・保存分配・GM仕様・知識境界・session 分離という基盤ではすでに成立しつつある。
 
-一方で、恋愛深化、装備、資金、拠点投資、ハーレム終盤運用、勢力エンジンの一部には旧 inner-galge / 冒険RPG 由来の重さが残っている。
+一方で、恋愛深化、装備、資金、Relationship / Heroine Network、勢力エンジンは長編運用で重くなりやすい。旧 inner-galge / 冒険RPG 由来の重さへ戻らないよう、実プレイで監査を続ける。
 
 したがって、LIRIA v1 の次の整理対象は:
 

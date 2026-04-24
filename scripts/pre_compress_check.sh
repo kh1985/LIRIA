@@ -124,7 +124,7 @@ warn_check "Manga Export Candidates" "${CURRENT}/gm.md" "Manga Export Candidates
 echo ""
 
 # --- harem.md ---
-echo "■ harem.md（ハーレム状態）"
+echo "■ harem.md（Relationship / Heroine Network）"
 check "AFFINITY" "${CURRENT}/harem.md" "AFFINITY"
 check "bond" "${CURRENT}/harem.md" "bond"
 warn_check "hidden 深化ベクトル" "${CURRENT}/harem.md" "hidden 深化ベクトル"

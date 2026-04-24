@@ -245,7 +245,7 @@ current には候補、status、package path だけを残し、長い prompt 本
 
 - 恋愛進行を継続管理する
 - AFFINITY が必要
-- 嫉妬、呼称変化、二人きりの進行、ハーレム運用に入る
+- 嫉妬、呼称変化、二人きりの進行、関係の合意や共同生活/共同作戦の継続管理に入る
 
 この段階に入ったら `cast/heroine/*.md` を作る。
 同時に text-only の Visual Character Sheet を作り、model sheet status、image prompt anchor、continuity locks、negative prompt / avoid の保存欄を持たせる。
@@ -273,7 +273,7 @@ current には候補、status、package path だけを残し、長い prompt 本
 
 - ロマンス進行を current で追う必要が出た
 - AFFINITY 管理が必要になった
-- 嫉妬、約束、独占、初体験、告白などが継続軸になった
+- 嫉妬、約束、独占、決定的な親密/信頼/合意、告白などが継続軸になった
 - プレイヤーと GM の双方が恋愛主役級として扱い始めた
 
 ### 原則

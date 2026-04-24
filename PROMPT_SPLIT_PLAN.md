@@ -48,7 +48,7 @@
 4. `prompt/romance.md`
    - ヒロインシステム
    - 恋愛メカニクス
-   - ハーレム管理
+   - Relationship / Heroine Network
    - 感情演出原則
 
 5. `prompt/save_resume.md`
@@ -99,7 +99,7 @@
 | `## 3本フック運用` `## 脅威クロック` | `prompt/runtime.md` |
 | `## 勢力クロック` `## 勢力浮上システム` `## 敵のデザイン` | `prompt/villain_engine.md` |
 | `## セーブ手順` | `prompt/save_resume.md` |
-| `## ヒロインシステム` `## 恋愛メカニクス` `## ヒロイン心理成長システム` `## ハーレム管理システム` | `prompt/romance.md` |
+| `## ヒロインシステム` `## 恋愛メカニクス` `## ヒロイン心理成長システム` `## Relationship / Heroine Network` | `prompt/romance.md` |
 | `## 依頼＆商売システム` `## 拠点システム` | `prompt/runtime.md` |
 | `## characterシステム連携` | `prompt/core.md` または `prompt/style_bridge.md` |
 

@@ -135,7 +135,7 @@ flowchart TD
 | 主人公の Visual Character Sheet | `saves/<session_name>/current/player.md` |
 | 主人公のキャラID / 関係性 / 秘密 / 内面 | `saves/<session_name>/current/player.md` |
 | プレイヤー能力の現在仕様 / HP / 残回数 / Equipment / Tools | `saves/<session_name>/current/player.md` |
-| ハーレム全体状態 / 嫉妬 / 関係フック | `saves/<session_name>/current/harem.md` |
+| Relationship / Heroine Network 全体状態 / 嫉妬 / 関係フック | `saves/<session_name>/current/harem.md` |
 | Heroine Crisis Role | `saves/<session_name>/current/harem.md` |
 | AFFINITY / bond の current value | `saves/<session_name>/current/harem.md` |
 | ヒロイン個別の tone / Layer / fixed memory / 呼称 / Visual Character Sheet | `saves/<session_name>/cast/heroine/*.md` |

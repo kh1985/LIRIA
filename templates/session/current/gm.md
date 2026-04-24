@@ -10,4 +10,6 @@
 
 ## Active Hooks
 
+## Knowledge Notes
+
 ## Autosave Counter

@@ -8,6 +8,10 @@
 
 > Q3 は全体のヒロイン生成バイアスであり、1 人目だけに限定しない。ただし全ヒロインを同じ型にはしない。
 
+## Shared Channels
+
+## Sensitive Knowledge
+
 ## Active Heroines
 
 ## Relationship Rules

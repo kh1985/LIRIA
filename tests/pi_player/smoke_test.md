@@ -2,7 +2,9 @@
 
 ## Session Name
 
-- `session_pi_smoke` を使う
+- 既定名は `session_pi_smoke`
+- 既に同名のローカル session がある場合は、上書きや削除をせず `session_pi_smoke_YYYYMMDD_HHMMSS` のような一意名を使う
+- `session_001` や本命プレイの `saves/*` は使わない
 
 ## Goal
 
@@ -12,14 +14,19 @@
 - `current/*.md` への分配確認
 - `hotset.md` が短いことの確認
 - GM仕様の入力解釈確認
+- 漫画化、ヒロインPV、三面図などの自然文トリガー確認
+- manga export package scaffold と `exports/` の Git 管理外確認
+- `pre_compress_check.sh` が v1 の新項目を確認することの確認
 
 ## Setup
 
-1. 既存の `saves/session_pi_smoke` があれば削除する
-2. `bash scripts/create_session.sh liria session_pi_smoke .` で新規セッションを作る
-3. `bash scripts/check_session_integrity.sh session_pi_smoke` を実行する
+1. テスト専用の session 名を決める。既存の `saves/*` は削除しない
+2. TTY環境では `bash play.sh liria new "$SMOKE_SESSION"` で新規開始する
+3. session scaffold だけを確認したい場合は `bash scripts/create_session.sh liria "$SMOKE_SESSION" .` を使う
+4. `bash scripts/check_session_integrity.sh "$SMOKE_SESSION"` を実行する
 
-非TTY環境では、`bash play.sh liria new session_pi_smoke --prompt-only` を使うと、engine を起動せずに session 作成と prompt 組み立てだけ確認できる。
+非TTY環境では、`bash play.sh liria new "$SMOKE_SESSION" --prompt-only` を使うと、engine を起動せずに session 作成と prompt 組み立てだけ確認できる。
+`--prompt-only` は物語出力、NPC台詞、保存分配の実結果までは検証しないため、Behavior Checks はTTYまたは人間レビュー可能な実行ログで確認する。
 
 ## Q&A Profile
 
@@ -27,19 +34,42 @@
 
 確認点:
 
-- Q&A結果が `saves/session_pi_smoke/design/initial_answers.md` に入る
+- Q&A結果が `saves/$SMOKE_SESSION/design/initial_answers.md` に入る
+- Q1.5 Appearance Profile が `design/initial_answers.md` と `current/player.md` に保存される
+- 主人公 Visual Character Sheet が `current/player.md` に text-only で初期化される
 - `current/player.md`, `current/gm.md`, `current/harem.md` に要約分配される
 - `current/hotset.md` に Q&A 全文を入れない
 
+## Player State Checks
+
+`current/player.md` で以下を確認する。
+
+- `Appearance Profile` に身長、体型、基本服装、髪型、顔つき、雰囲気、現在差分がある
+- `Visual Character Sheet` は主人公だけにあり、`model sheet status` が text-only 相当で、画像生成済み扱いになっていない
+- `Ability Constraint Profile` に `output scale`, `uses / cooldown`, `trace`, `relationship risk` がある
+- `Equipment / Tools` が攻撃力/防御力ではなく、行動選択肢、リスク、痕跡、関係リスクとして扱われている
+
+## Relationship And Design Checks
+
+進行中またはレビュー可能なログで以下を確認する。
+
+- ヒロイン昇格時、または漫画化対象になった時だけ、ヒロイン Visual Character Sheet が `cast/heroine/[name].md` 側へ入る
+- `Heroine Crisis Role` が `current/harem.md` に残る
+- `Organization Doctrine`, `contact surface`, `weak joint` が `design/villain_design.md` などの design 層に残る
+- current に必要な抜粋だけが `current/gm.md` や `current/hotset.md` に入る
+
 ## Behavior Checks
 
-以下の 5 ケースを最低 1 回ずつ確認する。
+以下の 8 ケースを最低 1 回ずつ確認する。
 
 1. 通常入力
 2. 内心入力
 3. `gm` 相談
 4. 誘導耐性
 5. 知識境界
+6. Anti-Meta Dialogue
+7. Natural Language Manga Export
+8. Manga Export Candidates
 
 確認観点:
 
@@ -48,14 +78,70 @@
 - `gm` 相談は物語を進めず、メタ解説になる
 - 誘導発言は推測として扱われ、好意や真相を即時確定しない
 - Character Knowledge Boundary を破らない
+- NPC/ヒロインが `フラグ`, `知識境界`, `好感度`, `Manga Export Candidates` などのメタ語を台詞で言わない
+- `漫画化したい`, `ヒロインPV作って`, `三面図作って` は作中行動ではなくGM相談/メタ命令として扱われる
+- `Manga Export Candidates` は `current/gm.md` に2〜3件まで出る。長い prompt 本文は current に置かない
+
+## Manga Export Checks
+
+自然文トリガー後、必要なら GM/Codex 内部補助として以下を確認する。
+
+- `bash scripts/create_manga_export.sh "$SMOKE_SESSION" heroine-teaser pi-smoke` で package scaffold が作れる
+- package は `exports/$SMOKE_SESSION/manga/` 配下に作られる
+- `exports/` は Git 管理外である
+- 実画像生成は scaffold 作成だけでは実行されず、プレイヤー確認後にだけ行う
+
+## Pre-Compress Checks
+
+`bash scripts/pre_compress_check.sh "$SMOKE_SESSION"` で、少なくとも以下の項目名が確認対象になっていることを確認する。
+
+- Appearance Profile
+- Visual Character Sheet
+- Ability Constraint Profile
+- Equipment / Tools
+- Manga Export Candidates
+- Heroine Crisis Role
+- Organization Doctrine
+- contact surface
+- weak joint
+- Anti-Meta Dialogue
+- Knowledge Boundary
+- Anti-Leading
+
+新規作成直後や `--prompt-only` だけの環境では、未入力項目に対して警告や失敗が出てもよい。目的は、新項目がチェック対象から落ちていないことを確認すること。
+
+## Executable Commands
+
+リポジトリのみを確認し、`saves/*` に触れないコマンド:
+
+```bash
+git diff --check
+bash -n scripts/create_manga_export.sh
+bash scripts/check_session_integrity.sh --repo-only
+rg -n "Appearance Profile|Visual Character Sheet|Manga Export|create_manga_export|Equipment / Tools|Organization Doctrine|Heroine Crisis Role|Anti-Meta" prompt/pi_player.md tests/pi_player
+rg -n "Appearance Profile|Visual Character Sheet|Ability Constraint Profile|Equipment|Manga Export Candidates|Heroine Crisis Role|Organization Doctrine|contact surface|弱い継ぎ目|Anti-Meta|Knowledge Boundary|Anti-Leading" scripts/pre_compress_check.sh
+git check-ignore -q exports/
+```
+
+実際の smoke session を作る場合のコマンド例:
+
+```bash
+SMOKE_SESSION="session_pi_smoke_$(date +%Y%m%d_%H%M%S)"
+bash play.sh liria new "$SMOKE_SESSION" --prompt-only
+bash scripts/check_session_integrity.sh "$SMOKE_SESSION"
+bash scripts/create_manga_export.sh "$SMOKE_SESSION" heroine-teaser pi-smoke
+bash scripts/pre_compress_check.sh "$SMOKE_SESSION"
+```
 
 ## Smoke Log
 
 - `pi_smoke_log.md` から、各ケースを示す短い抜粋を人間レビュー用に要約する
 - 長い本命プレイには進めない
+- 実プレイログや個人用セーブをこのリポジトリにコミットしない
 
 ## Cleanup
 
 1. 検証結果を要約する
-2. `saves/session_pi_smoke` を削除する
-3. 実セッションを Git 管理対象に加えない
+2. 自分で作った `session_pi_smoke_*` だけを対象に片付ける
+3. 既存の `saves/*`、`session_001`、本命プレイ session は削除も上書きもしない
+4. 実セッションと `exports/*` を Git 管理対象に加えない

@@ -361,9 +361,18 @@ HPが戻っても、秘密、信用、恐怖、義理は勝手に消えない。
 危機で能力を使う時は、以下を確認しろ。
 
 ```text
+Ability Constraint Profile:
+output scale:
 何に作用する能力か:
 どの感情や願望から出る力か:
 今の使い方は本質と合っているか:
+uses / cooldown:
+range / target:
+cost:
+trace:
+collateral:
+social risk:
+relationship risk:
 誰が見ているか:
 何が残るか:
 何を誤解されるか:
@@ -378,10 +387,12 @@ HPが戻っても、秘密、信用、恐怖、義理は勝手に消えない。
 ただし、そのままノーコストで全部解決させるな。
 
 - ショートカットできるのは原則1段まで
+- 使用前に `Ability Constraint Profile` の `output scale`、`uses / cooldown`、`trace`、`collateral`、`social risk`、`relationship risk` を確認する
 - その場は解決しても痕跡を残す
 - 目撃者、監視カメラ、SNS、警察、病院、近隣、依頼人への説明を考える
 - ヒロイン/NPCが見た場合、安心だけでなく恐怖、驚き、疑問、怒りも起こりうる
 - 能力の出力を上げるほど、身体、精神、秘密、関係、社会的注目のどれかを払う
+- `strategic` や `forbidden` の使用は一律禁止しない。選ばれたなら、事件だけでなく生活、恋愛、世論、追跡、罪悪感、逃亡可能性まで場面を広げる
 
 ### 能力使用の結果例
 

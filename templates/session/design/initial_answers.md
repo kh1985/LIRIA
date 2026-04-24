@@ -34,6 +34,17 @@
 - 本質
 - 制約/代償
 - 能力なしの場合の作用点
+- Ability Constraint Profile
+- output scale: daily / scene / crisis / strategic / forbidden
+- trigger condition
+- range / target
+- uses / cooldown
+- cost
+- trace
+- collateral
+- social risk
+- relationship risk
+- escalation rule
 
 ## Q5: Incident Entry Type
 - 事件の入口

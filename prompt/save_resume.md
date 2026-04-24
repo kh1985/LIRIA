@@ -143,7 +143,7 @@ Claude / Codex のどちらで起動していても、GMはセーブカウンタ
 ### player.md に書く内容
 - キャラクター情報（名前、外見、性格、口癖）
 - 能力（プレイヤーが知っている範囲のみ。エロ面は体験済み分のみ）
-- **現在状態**（現在HP/最大HP、能力使用残回数、主なコンディション、直近の無理）
+- **現在状態**（現在HP/最大HP、能力使用残回数、cooldown、直近の能力痕跡、主なコンディション、直近の無理）
 - 身体状態、所持品
 - ハーレムメンバー一覧（名前とbond値のみ）
 - 各ヒロインとの関係の概要（プレイヤー視点で知っていること）
@@ -159,8 +159,22 @@ Claude / Codex のどちらで起動していても、GMはセーブカウンタ
 - 現在フェーズ:
 - 現在HP:
 - 能力使用残回数:
+- cooldown:
+- 直近の能力痕跡:
 - 主なコンディション:
 - 直近の無理:
+
+## Ability Constraint Profile
+- output scale:
+- trigger condition:
+- range / target:
+- uses / cooldown:
+- cost:
+- trace:
+- collateral:
+- social risk:
+- relationship risk:
+- escalation rule:
 
 ## 現在のフック（プレイヤー視点）
 1. 何が起きているか

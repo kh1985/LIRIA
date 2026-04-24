@@ -13,6 +13,15 @@
 - 2:
 - 3:
 
+## Local Expansion Notes
+> 未準備地で生成した接点のうち、再訪/連絡/事件接続/プレイヤー関心が立ったものだけ短く残す。通行人や一度きりの店は保存しない。
+
+- location:
+  - one face:
+  - one bridge:
+  - one cost:
+  - status: named one-shot | recurring contact | dossier candidate
+
 ## Manga Export Candidates
 > 自然文で漫画化 / ヒロインPV / 三面図 / 立ち絵 / キャラシートを求められた時の候補。作中時間を止め、2-3個だけ提示する。未確定秘密を絵で確定させない。
 

@@ -66,6 +66,84 @@ first_phase() {
   sed -nE 's/^[[:space:]-]*現在フェーズ[[:space:]]*[:：][[:space:]]*(.+)$/\1/p' "$file" | head -n 1
 }
 
+section_count() {
+  local file="$1"
+  local heading="$2"
+  local pattern="$3"
+  [[ -f "$file" ]] || {
+    printf '0\n'
+    return
+  }
+  awk -v heading="$heading" -v pattern="$pattern" '
+    $0 ~ "^##[[:space:]]+" heading "([[:space:]]|$)" { in_section=1; next }
+    in_section && $0 ~ "^##[[:space:]]+" { in_section=0 }
+    in_section && $0 ~ pattern { count++ }
+    END { print count + 0 }
+  ' "$file"
+}
+
+check_current_specs() {
+  local base="$1"
+  local player="${base}/current/player.md"
+  local gm="${base}/current/gm.md"
+  local harem="${base}/current/harem.md"
+  local villain="${base}/design/villain_design.md"
+
+  if [[ -f "$player" ]]; then
+    local required_player=(
+      "Appearance Profile"
+      "Visual Character Sheet"
+      "Ability Constraint Profile"
+    )
+    local item
+    for item in "${required_player[@]}"; do
+      if ! grep -Eq "$item" "$player"; then
+        error "player.md missing current spec section: ${item}"
+      fi
+    done
+
+    if grep -Eq 'Equipment / Tools|Equipment|Tools' "$player" &&
+      grep -Eq '攻撃力|防御力|attack power|defense power|offense|defense' "$player" &&
+      ! grep -Eq '行動選択肢|リスク|痕跡|関係リスク|action option|risk|trace|relationship risk' "$player"; then
+      warn "player.md Equipment / Tools looks combat-stat-only; add action options, risk, trace, or relationship risk"
+    fi
+  fi
+
+  if [[ -f "$gm" ]]; then
+    if ! grep -Eq 'Anti-Meta' "$gm"; then
+      warn "gm.md missing Anti-Meta guardrail"
+    fi
+    if ! grep -Eq 'Knowledge Boundary' "$gm"; then
+      warn "gm.md missing Knowledge Boundary guardrail"
+    fi
+
+    local candidate_count
+    candidate_count="$(section_count "$gm" "Manga Export Candidates" '^[[:space:]]*-[[:space:]]*candidate[[:space:]]*:')"
+    if [[ "${candidate_count:-0}" -gt 3 ]]; then
+      warn "gm.md has too many Manga Export Candidates (${candidate_count}); keep current to 2-3 candidates"
+    fi
+
+    local prompt_hint_count
+    prompt_hint_count="$(grep -Eic 'image prompt anchor|long prompt|model sheet prompt|prompt package' "$gm" 2>/dev/null || true)"
+    if [[ "${prompt_hint_count:-0}" -gt 3 ]]; then
+      warn "gm.md appears to contain too much image prompt material in current (${prompt_hint_count} prompt hints)"
+    fi
+  fi
+
+  if [[ -f "$harem" ]] && ! grep -Eq 'Heroine Crisis Role' "$harem"; then
+    warn "harem.md missing Heroine Crisis Role"
+  fi
+
+  if [[ -f "$villain" ]]; then
+    if ! grep -Eq 'Organization Doctrine' "$villain"; then
+      warn "villain_design.md missing Organization Doctrine"
+    fi
+    if ! grep -Eq 'weak joint|弱い継ぎ目' "$villain"; then
+      warn "villain_design.md missing weak joint / 弱い継ぎ目"
+    fi
+  fi
+}
+
 check_session_scaffold() {
   local session="$1"
   local base="saves/${session}"
@@ -120,6 +198,8 @@ check_session_scaffold() {
   else
     warn "missing hotset cache: ${base}/current/hotset.md"
   fi
+
+  check_current_specs "$base"
 
   if [[ "$have_rg" -eq 1 ]]; then
     local explicit_other_sessions

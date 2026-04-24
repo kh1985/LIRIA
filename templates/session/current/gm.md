@@ -35,7 +35,7 @@
   - Organization Doctrine:
   - contact surface:
   - 今動いている外圧:
-  - 弱い継ぎ目:
+  - weak joint / 弱い継ぎ目:
   - 内部矛盾:
   - 外部レバレッジ:
 

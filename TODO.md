@@ -16,9 +16,34 @@
 - `GALGE.md` — 実行正本
 - `README.md` — 起動方法とディレクトリ案内
 
+## Current Phase: 本命プレイ前の整合
+
+直近の実装で、LIRIA v1 は「数値バトル中心」ではなく、
+**危機処理、組織圧、能力制約、装備、外見保存、漫画化導線、長期記憶検証** を同じ運用面に載せる段階まで進んだ。
+
+最近完了:
+
+- combat を、倒す/倒されるではなく、逃げる、守る、交渉、隠す、耐える、助けを呼ぶ、能力使用、代償、余波で扱う危機処理へ更新
+- villain / organization を、Organization Doctrine、contact surface、weak joint で運用する方針へ更新
+- Ability Constraint Profile により、能力の限界、できないこと、代償、痕跡を保存対象化
+- Equipment / Tools により、装備と道具を万能解決ではなく準備・携行・破損・場面制約つきで扱う方針へ更新
+- Appearance Profile と Visual Character Sheet により、外見、服装、表情、持ち物、三面図/PVの土台を保存対象化
+- memory / manga export を、Manga Export Candidates と Natural Language Manga Export の自然文導線へ接続
+- Anti-Meta Dialogue により、メタ説明をキャラの口調と世界内の受け流しへ寄せた
+- PI Player smoke / pre_compress の接続を、本命プレイ前の最低限の破綻検知として更新
+
+次の現実的な残件:
+
+- 実 smoke を回し、new -> 1 turn -> save -> resume -> pre_compress で session-scoped path と保存項目が欠けないか確認する
+- 本命新規プレイを開始し、初期状態、危機処理、組織圧、ヒロイン反応、漫画化導線が自然に出るか見る
+- 長編運用で、Ability Constraint Profile、Equipment / Tools、Appearance Profile、Organization Doctrine がログ置き場化しないよう保持量を調整する
+- Manga Export Candidates が多すぎる/薄すぎる場合の抽出基準をチューニングする
+- `prompt/style_bridge.md` を切るか、adult/Style Layer は現状維持にするか判断する
+
 ## 現在地
 
 この TODO は、複数 session 対応と source-of-truth 整理を前提に更新済み。
+上の Current Phase が最新の読み始め地点で、下のロードマップは履歴と残件確認用。
 
 完了した方針:
 

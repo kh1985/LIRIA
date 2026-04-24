@@ -53,7 +53,7 @@ check() {
     return
   fi
 
-  if grep -q "${pattern}" "${file}" 2>/dev/null; then
+  if grep -Eq "${pattern}" "${file}" 2>/dev/null; then
     echo -e "  ${GREEN}✓ ${label}${NC}"
     ((PASS++))
   else
@@ -73,7 +73,7 @@ warn_check() {
     return
   fi
 
-  if grep -q "${pattern}" "${file}" 2>/dev/null; then
+  if grep -Eq "${pattern}" "${file}" 2>/dev/null; then
     echo -e "  ${GREEN}✓ ${label}${NC}"
     ((PASS++))
   else
@@ -148,14 +148,14 @@ warn_check "Organization Doctrine" "${DESIGN}/villain_design.md" "Organization D
 warn_check "visual_pipeline 存在" "${DESIGN}/visual_pipeline.md" "Visual Character Sheet"
 warn_check "manga_pipeline 存在" "${DESIGN}/manga_pipeline.md" "Manga Pipeline"
 warn_check "contact surface" "${DESIGN}/villain_design.md" "contact surface"
-warn_check "弱い継ぎ目" "${DESIGN}/villain_design.md" "弱い継ぎ目"
+warn_check "weak joint / 弱い継ぎ目" "${DESIGN}/villain_design.md" "weak joint|弱い継ぎ目"
 echo ""
 
 # --- indexes ---
 echo "■ indexes（索引）"
 check "event_index 存在" "${INDEXES}/event_index.md" "event"
 check "decision_index 存在" "${INDEXES}/decision_index.md" "決定"
-warn_check "cast_index 存在" "${INDEXES}/cast_index.md" "cast\|キャスト\|ヒロイン"
+warn_check "cast_index 存在" "${INDEXES}/cast_index.md" "cast|キャスト|ヒロイン"
 echo ""
 
 # --- 生ログ ---

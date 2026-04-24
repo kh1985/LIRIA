@@ -12,6 +12,17 @@
 
 ## 最低限の回帰シナリオ
 
+### 0. LIRIA v1 initial state
+
+確認:
+
+- new session の初期 `current/` が、プレイヤーの内面断定ではなく観測可能な状態から始まる
+- `player.md` に現在フェーズ、コンディション、能力使用残回数、Ability Constraint Profile、Equipment / Tools がある
+- ヒロインが生成または昇格された場合、`cast/heroine/*.md` に Visual Character Sheet と Heroine Crisis Role の入口がある
+- `gm.md` に脅威クロック、Organization Doctrine、contact surface、weak joint の入口がある
+- 初回 resume で、危機、関係、探索の入口が混ざり、一本道の攻略指示になっていない
+- 初期保存に Manga Export Candidates と Anti-Meta Dialogue の候補を置ける余白がある
+
 ### 1. multi-session lifecycle
 
 確認:
@@ -70,6 +81,10 @@
 - ランダムイベントの発火率が、能力使用後に下がるような矛盾になっていない
 - active な脅威クロックが 2 以上ある章で、`hotset` や `gm.md` に直接圧候補が 0 本のままになっていない
 - 直接圧が「報告だけ」「電話だけ」「書類だけ」で代用されていない
+- 組織ごとに Organization Doctrine があり、手口、優先順位、禁じ手が同じ顔になっていない
+- contact surface が、受付、仲介者、協力企業、噂、現場担当など具体的な接点として見える
+- weak joint が、内部分裂、手続きの穴、依存先、信用の弱さなど攻略以外の形でも使える
+- 敵組織の圧が、討伐対象ではなく、交渉、逃走、暴露、保護、切断、潜伏の選択肢を生む
 
 ### 6. world autonomy / exploration
 
@@ -82,6 +97,16 @@
 - 能力が探索でちょうど効いた時、ツッコミ・不確定さ・軽い代償のどれかが入っている
 - `hotset` や朝の todo が、次の正解ルートの指示書になっていない
 - 戦闘がない章でも、追跡、侵入、環境突破、能力の無理押しで HP / コンディション / 残回数のどれかが意味を持って動いている
+
+### 6.5. ability / equipment crisis handling
+
+確認:
+
+- 危機は倒すか倒されるかだけでなく、逃げる、守る、交渉、隠す、耐える、助けを呼ぶ、能力使用の選択で処理される
+- Ability Constraint Profile の `できないこと`、代償、痕跡が、成功時にも残る
+- Equipment / Tools が万能解決にならず、準備、携行、場所、壊れる可能性の制約を持つ
+- 能力と道具が同時に効く時、どちらか片方の価値を消さず、組み合わせの余波が残る
+- 失敗や部分成功が、単なる足止めではなく、情報、信用、退路、体力、関係の変化になる
 
 ### 7. archive access
 
@@ -104,6 +129,35 @@
 - bond 2 でも再登場するルート鍵 NPC に `cast/npc/*.md` がある
 - hidden proper noun を `suspected` や `unknown` のキャラが口にしない
 - 日数進行だけで、cast file の年齢ラベルが勝手に更新されない
+
+### 9. visual / manga export
+
+確認:
+
+- Appearance Profile が、服、髪、体格、目立つ癖、直近の乱れを分けて保持している
+- Visual Character Sheet が、正面、側面、背面、表情差分、持ち物差分へ展開できる密度を持つ
+- Manga Export Candidates が、絵になる瞬間、構図、感情の見え方、台詞の短さを候補化している
+- Natural Language Manga Export を求められた時、プレイヤーは自然文で依頼でき、CLI 手順を要求されない
+- ヒロインPVや三面図の依頼が、保存済み Appearance Profile / Visual Character Sheet と矛盾しない
+
+### 10. anti-meta dialogue
+
+確認:
+
+- Anti-Meta Dialogue が、システム都合の説明ではなくキャラの口調で違和感を受け流す
+- NPC が hidden state、保存構造、判定都合をメタに断定しない
+- プレイヤーの自然文依頼に対し、GM は世界内の言い換えで返し、必要な内部処理だけを裏で行う
+- 同じ拒否や軌道修正が毎回同じ台詞にならない
+
+### 11. PI Player / smoke / pre_compress
+
+確認:
+
+- PI Player smoke が new -> 1 turn -> save -> resume -> pre_compress の流れで通る
+- smoke の出力に session-scoped path 以外の live read が混ざらない
+- pre_compress 後も hotset、gm、player、harem、cast の入口が欠落しない
+- 圧縮後に Appearance Profile、Ability Constraint Profile、Equipment / Tools、Organization Doctrine の要点が消えない
+- smoke は本命プレイの代替ではなく、破綻検知の最低線として扱う
 
 ## 長編テストの観点
 

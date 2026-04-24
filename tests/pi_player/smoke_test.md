@@ -56,6 +56,7 @@
 - ヒロイン昇格時、または漫画化対象になった時だけ、ヒロイン Visual Character Sheet が `cast/heroine/[name].md` 側へ入る
 - `Heroine Crisis Role` が `current/harem.md` に残る
 - `Organization Doctrine`, `contact surface`, `weak joint` が `design/villain_design.md` などの design 層に残る
+- 表記は `weak joint / 弱い継ぎ目` のように日英どちらでも追える
 - current に必要な抜粋だけが `current/gm.md` や `current/hotset.md` に入る
 
 ## Behavior Checks
@@ -117,9 +118,12 @@
 ```bash
 git diff --check
 bash -n scripts/create_manga_export.sh
+bash -n scripts/check_session_integrity.sh
+bash -n scripts/pre_compress_check.sh
 bash scripts/check_session_integrity.sh --repo-only
 rg -n "Appearance Profile|Visual Character Sheet|Manga Export|create_manga_export|Equipment / Tools|Organization Doctrine|Heroine Crisis Role|Anti-Meta" prompt/pi_player.md tests/pi_player
-rg -n "Appearance Profile|Visual Character Sheet|Ability Constraint Profile|Equipment|Manga Export Candidates|Heroine Crisis Role|Organization Doctrine|contact surface|弱い継ぎ目|Anti-Meta|Knowledge Boundary|Anti-Leading" scripts/pre_compress_check.sh
+rg -n "Appearance Profile|Visual Character Sheet|Ability Constraint Profile|Equipment|Manga Export Candidates|Heroine Crisis Role|Organization Doctrine|contact surface|weak joint|弱い継ぎ目|Anti-Meta|Knowledge Boundary|Anti-Leading" scripts/pre_compress_check.sh
+rg -n "異世界ファンタジ[ー]|媚薬の[念]|魔道具カフ[ェ]|魔王討[伐]|装備強[化]|レベル上[げ]|フラグ|好感度" prompt/core.md scripts tests templates
 git check-ignore -q exports/
 ```
 

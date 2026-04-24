@@ -19,6 +19,30 @@
 - manga export package scaffold と `exports/` の Git 管理外確認
 - `pre_compress_check.sh` が v1 の新項目を確認することの確認
 
+## Out of Scope: Real Play Raw Log Analysis
+
+実プレイ生ログ分析器は、この PI Player smoke とは別物である。
+
+```bash
+bash scripts/analyze_play_log.sh path/to/raw_log.md
+```
+
+PI Player smoke は、新規開始、保存分配、resume、pre-compress などの最低限の破綻検知を目的とする。
+実プレイ生ログ分析器は、保存チェックではなく、実プレイ風ログを人間がレビューするための補助である。
+
+分析観点:
+
+- LIRIAらしさ
+- ヒロイン自律性
+- 恋愛 / 生活 / 事件の絡み
+- 能力 / 装備の便利すぎチェック
+- Anti-Meta / Knowledge Boundary
+- 保存候補
+- 漫画化候補
+- 次ターンへの引き
+
+この分析器も本命プレイの代替ではない。長い実プレイや人間レビューを置き換えず、ログから改善点と次の確認観点を拾いやすくするために使う。
+
 ## Setup
 
 1. テスト専用の session 名を決める。既存の `saves/*` は削除しない

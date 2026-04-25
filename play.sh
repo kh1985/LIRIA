@@ -14,6 +14,8 @@ GENERATED_PROMPT_FILES=()
 usage() {
   cat <<'EOF'
 Usage:
+  bash play.sh
+  bash play.sh menu
   bash play.sh list
   bash play.sh list-sessions [scenario]
   bash play.sh new [scenario] [session_name]
@@ -24,6 +26,8 @@ Usage:
   bash play.sh [--claude|--codex|--engine ENGINE] ...
 
 Examples:
+  bash play.sh
+  bash play.sh menu
   bash play.sh list
   bash play.sh list-sessions
   bash play.sh new
@@ -39,6 +43,7 @@ Examples:
   bash play.sh new --prompt-only
 
 Notes:
+  - Running without arguments opens a Japanese start menu when stdin is a terminal.
   - `new` / `resume` without scenario use `liria`.
   - `new` without session_name creates the next session_NNN automatically.
   - Auto numbering starts at session_002 to avoid the legacy first slot.
@@ -49,6 +54,159 @@ Notes:
   - Claude bare mode is opt-in. Set `CLAUDE_BARE=1` to enable `--bare`.
   - `--prompt-only` creates the session and generated prompt files, then exits before launching Claude/Codex.
 EOF
+}
+
+trim_spaces() {
+  local value="$1"
+  value="${value#"${value%%[![:space:]]*}"}"
+  value="${value%"${value##*[![:space:]]}"}"
+  echo "${value}"
+}
+
+menu_session_names() {
+  local save_root="${ROOT_DIR}/saves"
+  local dir
+
+  [[ -d "${save_root}" ]] || return 0
+
+  for dir in "${save_root}"/*; do
+    [[ -d "${dir}" ]] || continue
+    basename "${dir}"
+  done | sort
+}
+
+menu_latest_session_name() {
+  local latest=""
+  while IFS= read -r latest; do
+    :
+  done < <(menu_session_names)
+
+  [[ -n "${latest}" ]] || return 1
+  echo "${latest}"
+}
+
+interactive_menu() {
+  SCENARIO_ID="liria"
+  MODE=""
+  SESSION_NAME=""
+
+  echo
+  echo "LIRIA をどう始めますか？"
+  echo "  1. 新規スタート"
+  echo "  2. 続きから"
+  echo "  3. セッション一覧"
+  echo "  q. やめる"
+  echo
+
+  local answer
+  while true; do
+    printf "入力してください（新規 / 続きから / 一覧）: "
+    if ! IFS= read -r answer; then
+      echo
+      exit 0
+    fi
+    answer="$(trim_spaces "${answer}")"
+
+    case "${answer}" in
+      1|n|new|New|NEW|新規|新規スタート|はじめる|始める|スタート)
+        MODE="new"
+        printf "セッション名を入れてください（空Enterで自動採番）: "
+        IFS= read -r SESSION_NAME || SESSION_NAME=""
+        SESSION_NAME="$(trim_spaces "${SESSION_NAME}")"
+        return
+        ;;
+      2|r|resume|Resume|RESUME|続き|続きから|再開)
+        MODE="resume"
+        choose_resume_session_interactive
+        return
+        ;;
+      3|l|list|List|LIST|一覧|セッション一覧)
+        echo
+        echo "保存済みセッション:"
+        if ! menu_session_names; then
+          echo "まだありません"
+        fi
+        echo
+        ;;
+      q|Q|quit|exit|やめる|終了)
+        exit 0
+        ;;
+      "")
+        ;;
+      *)
+        echo "分からなかったので、'新規' か '続きから' で答えてください。"
+        ;;
+    esac
+  done
+}
+
+choose_resume_session_interactive() {
+  local -a sessions=()
+  local session
+  while IFS= read -r session; do
+    [[ -n "${session}" ]] || continue
+    sessions+=("${session}")
+  done < <(menu_session_names)
+
+  if [[ "${#sessions[@]}" -eq 0 ]]; then
+    echo "まだ保存済みセッションがありません。新規スタートにします。"
+    MODE="new"
+    printf "セッション名を入れてください（空Enterで自動採番）: "
+    IFS= read -r SESSION_NAME || SESSION_NAME=""
+    SESSION_NAME="$(trim_spaces "${SESSION_NAME}")"
+    return
+  fi
+
+  local latest
+  latest="$(menu_latest_session_name || true)"
+
+  echo
+  echo "どの続きから始めますか？"
+  echo "空Enterなら最新っぽいものを使います: ${latest}"
+  echo
+
+  local start=0
+  if (( ${#sessions[@]} > 20 )); then
+    start=$((${#sessions[@]} - 20))
+    echo "最近の候補（多いので末尾20件だけ表示）:"
+  else
+    echo "候補:"
+  fi
+
+  local i display_index
+  for (( i=start; i<${#sessions[@]}; i++ )); do
+    display_index=$((i - start + 1))
+    printf "  %2d. %s\n" "${display_index}" "${sessions[i]}"
+  done
+  echo
+
+  local pick
+  while true; do
+    printf "番号かセッション名を入力: "
+    if ! IFS= read -r pick; then
+      echo
+      exit 0
+    fi
+    pick="$(trim_spaces "${pick}")"
+
+    if [[ -z "${pick}" ]]; then
+      SESSION_NAME="${latest}"
+      return
+    fi
+
+    if [[ "${pick}" =~ ^[0-9]+$ ]]; then
+      local selected_index=$((start + pick - 1))
+      if (( pick >= 1 && selected_index < ${#sessions[@]} )); then
+        SESSION_NAME="${sessions[selected_index]}"
+        return
+      fi
+      echo "その番号は候補にありません。"
+      continue
+    fi
+
+    SESSION_NAME="${pick}"
+    return
+  done
 }
 
 list_scenarios() {
@@ -111,16 +269,8 @@ resolve_action_first_args() {
     return
   fi
 
-  case "${second}" in
-    session_*)
-      SCENARIO_ID="liria"
-      SESSION_NAME="${second}"
-      ;;
-    *)
-      SCENARIO_ID="${second}"
-      SESSION_NAME=""
-      ;;
-  esac
+  SCENARIO_ID="liria"
+  SESSION_NAME="${second}"
 }
 
 resolve_args() {
@@ -182,8 +332,15 @@ resolve_args() {
 
   case "${arg1}" in
     "")
-      usage
-      exit 0
+      if [[ -t 0 ]]; then
+        interactive_menu
+      else
+        usage
+        exit 0
+      fi
+      ;;
+    menu|start|スタート|起動)
+      interactive_menu
       ;;
     list)
       MODE="list"
@@ -195,7 +352,15 @@ resolve_args() {
       SCENARIO_ID="${arg2:-liria}"
       SESSION_NAME=""
       ;;
-    new|resume)
+    new|resume|新規|新規スタート|はじめる|始める|続き|続きから|再開)
+      case "${arg1}" in
+        新規|新規スタート|はじめる|始める)
+          arg1="new"
+          ;;
+        続き|続きから|再開)
+          arg1="resume"
+          ;;
+      esac
       resolve_action_first_args "${arg1}" "${arg2}" "${arg3}"
       ;;
     *)

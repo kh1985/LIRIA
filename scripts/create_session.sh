@@ -9,19 +9,31 @@ usage() {
   cat <<'EOF'
 Usage:
   bash scripts/create_session.sh <scenario_id> <session_name> [scenario_workdir]
+  bash scripts/create_session.sh <session_name>
 
 Creates a self-contained save scaffold under saves/<session_name>.
+
+通常プレイは、この内部スクリプトではなく以下を使ってください。
+
+  ./liria
+  bash play.sh
 EOF
 }
 
-if [[ "${1:-}" == "-h" || "${1:-}" == "--help" || "$#" -lt 2 ]]; then
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" || "$#" -lt 1 ]]; then
   usage
   exit 0
 fi
 
-SCENARIO_ID="$1"
-SESSION_NAME="$2"
-SCENARIO_WORKDIR="${3:-${ROOT_DIR}}"
+if [[ "$#" -eq 1 ]]; then
+  SCENARIO_ID="liria"
+  SESSION_NAME="$1"
+  SCENARIO_WORKDIR="${ROOT_DIR}"
+else
+  SCENARIO_ID="$1"
+  SESSION_NAME="$2"
+  SCENARIO_WORKDIR="${3:-${ROOT_DIR}}"
+fi
 SAVE_ROOT="${SCENARIO_WORKDIR}/saves"
 SESSION_DIR="${SAVE_ROOT}/${SESSION_NAME}"
 

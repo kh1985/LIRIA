@@ -32,6 +32,7 @@ SESSION="$(resolve_session "${1:-}")"
 CURRENT="${ROOT_DIR}/saves/${SESSION}/current"
 INDEXES="${ROOT_DIR}/saves/${SESSION}/indexes"
 DESIGN="${ROOT_DIR}/saves/${SESSION}/design"
+CAST="${ROOT_DIR}/saves/${SESSION}/cast"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -123,6 +124,31 @@ warn_check "Anti-Leading" "${CURRENT}/gm.md" "Anti-Leading"
 warn_check "Manga Export Candidates" "${CURRENT}/gm.md" "Manga Export Candidates"
 warn_check "Base Area Dossier" "${CURRENT}/gm.md" "Base Area Dossier|初期生活圏台帳"
 warn_check "Location Dossiers" "${CURRENT}/gm.md" "Location Dossiers|土地台帳"
+echo ""
+
+# --- cast/npc ---
+echo "■ cast/npc（重要NPC / 関係組織の主要人物）"
+if grep -Ehq "外部面談相手|配置確認の相手|敵幹部|主要人物|上位存在|scene lead|回収員|現場調整|社名空欄の外部面談" "${CURRENT}/gm.md" "${CURRENT}/case.md" "${CURRENT}/hotset.md" 2>/dev/null; then
+  npc_count="$(find "${CAST}/npc" -maxdepth 1 -type f -name '*.md' ! -name '.gitkeep' 2>/dev/null | wc -l | tr -d ' ')"
+  if [[ "${npc_count:-0}" -gt 0 ]]; then
+    echo -e "  ${GREEN}✓ 重要NPCシートあり (${npc_count})${NC}"
+    ((PASS++))
+  else
+    echo -e "  ${YELLOW}△ 重要NPCらしき接触面あり: cast/npc/*.md へ暫定カード作成推奨${NC}"
+    ((WARN++))
+  fi
+else
+  echo -e "  ${GREEN}✓ 重要NPCの昇格待ちなし${NC}"
+  ((PASS++))
+fi
+
+if grep -Eq "未命名|gm current 参照|current 参照" "${INDEXES}/cast_index.md" 2>/dev/null; then
+  echo -e "  ${YELLOW}△ cast_index に未解決NPC参照あり${NC}"
+  ((WARN++))
+else
+  echo -e "  ${GREEN}✓ cast_index 未解決NPC参照なし${NC}"
+  ((PASS++))
+fi
 echo ""
 
 # --- case.md ---

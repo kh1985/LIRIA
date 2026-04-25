@@ -518,6 +518,35 @@ gm.md の記録テンプレート:
 - pressure method は、暴力より先に、照会、沈黙、紹介停止、条件提示、善意、保護、噂、期限で考えろ
 - aftermath if removed/discredited/exposed は、空席、代理人、制度の硬化、噂の反動、別勢力の得として残せ
 
+### Major Figure Activation Gate
+
+関係組織の主要人物が、初めて画面に出て台詞を持つ時点で、`cast/npc/[仮ID].md` を作れ。
+組織名、部署名、本名が未確定でもよい。むしろ未確定のまま `灰色のスーツの男` `配置確認の男` のような安定した仮IDで管理しろ。
+
+このゲートの目的は、主要人物を「謎っぽい抽象語を喋るだけの霧」にしないこと。
+敵組織の思想は、必ず人物の職務、癖、守りたいもの、嫌悪、矛盾、具体的な接触面へ落とせ。
+
+必須項目:
+
+- visible label: プレイヤーが今呼べる名
+- role in organization: 何を確認 / 回収 / 調整 / 停止できるか
+- public face: 表向きは何者に見えるか
+- belief: その人物の理屈
+- contradiction: その理屈が人をどう傷つけるか
+- protected thing: 守ろうとしているもの
+- unacceptable line: 絶対に許さない線
+- pressure method: この場で使う圧
+- concrete tools: 机上の物、書類、端末、鍵、名刺、録音、手続きなど
+- knows / suspects / unknown:
+- speech discipline:
+
+speech discipline:
+
+- 抽象語は使ってよい。ただし2文以内に具体物へ戻せ
+- `良好` と言うなら、何が良好なのかを「社員証が残っている」「席が残っている」のように画面へ戻す
+- `回収` と言うなら、誰の何をどこへ持っていくのかを示す
+- プレイヤーが「意味が分からない」と言ったら、理念説明ではなく、現場の目的を3点以内で言い換える
+
 ### Organization Reveal Triggers
 
 組織は、最初から全貌を具体化しない。

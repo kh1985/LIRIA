@@ -89,6 +89,9 @@ check_current_specs() {
   local harem="${base}/current/harem.md"
   local case_file="${base}/current/case.md"
   local villain="${base}/design/villain_design.md"
+  local hotset="${base}/current/hotset.md"
+  local cast_index="${base}/indexes/cast_index.md"
+  local npc_dir="${base}/cast/npc"
 
   if [[ -f "$player" ]]; then
     local required_player=(
@@ -157,6 +160,21 @@ check_current_specs() {
     fi
   else
     warn "missing case card: ${case_file}"
+  fi
+
+  if [[ -f "$cast_index" ]] && grep -Eq '未命名|gm current 参照|current 参照' "$cast_index"; then
+    warn "cast_index has unresolved NPC reference; important or recurring NPCs should be promoted to cast/npc/*.md"
+  fi
+
+  local npc_sheet_count=0
+  if [[ -d "$npc_dir" ]]; then
+    npc_sheet_count="$(find "$npc_dir" -maxdepth 1 -type f -name '*.md' ! -name '.gitkeep' 2>/dev/null | wc -l | tr -d ' ')"
+  fi
+
+  local major_npc_pressure
+  major_npc_pressure="$(grep -Eh '外部面談相手|配置確認の相手|敵幹部|主要人物|上位存在|scene lead|回収員|現場調整|社名空欄の外部面談' "$gm" "$case_file" "$hotset" 2>/dev/null || true)"
+  if [[ -n "$major_npc_pressure" && "${npc_sheet_count:-0}" -eq 0 ]]; then
+    warn "important NPC / organization contact appears active, but cast/npc/*.md has no NPC sheet"
   fi
 
   if [[ -f "$villain" ]]; then

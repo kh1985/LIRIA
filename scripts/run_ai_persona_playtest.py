@@ -283,6 +283,8 @@ def build_play_prompt(
             "- GM応答には、地の文、ヒロイン/NPCの自律反応、生活感、事件の外圧を入れる。",
             "- Save Notes には active case の `visible problem / short goal / handles / progress condition / if ignored / next visible change` が分かる短い要約を入れる。",
             "- 謎を増やす時は、既存の手がかり、人物、場所、記録、関係のどれに繋がるかを本文で分かるようにする。",
+            "- 敵幹部、関係組織の主要人物、ルート鍵NPC、scene lead NPCを出す時は、内部的に Major Figure Dossier を作る。role、public face、belief、contradiction、wants this scene、knows/suspects/unknown、can/cannot、speech rule を持たせる。",
+            "- 重要NPCに抽象語を喋らせる場合は、2文以内に具体物、人物、手続きへ戻す。プレイヤーが `意味が分からない` と感じる霧の会話にしない。",
             "- ヒロイン候補、敵幹部、関係組織の主要人物、ルート鍵NPCの初登場では、頭から爪先まで全身を詳細に描写する。",
             "- 全身描写には髪、顔、体型、首筋、鎖骨、胸元、腰、脚、服装、足元、匂い、仕草、視線が引っかかる外見フックを入れる。",
             "- 成人ヒロイン候補は、下品な採寸ではなく、服の張り方、首筋、鎖骨、腰、脚、歩き方などで恋愛ゲームとしての身体的魅力を出す。",

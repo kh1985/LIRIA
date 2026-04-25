@@ -724,6 +724,49 @@ Visual Character Sheet は主人公とヒロインだけに作る。
 5. bond 2 以上で、口調ミスが事故になる
 6. プレイヤーがその人物を覚え、継続して気にしている
 
+### 重要NPC出現ゲート
+
+敵幹部、関係組織の主要人物、上位存在、ルート鍵NPC、scene lead NPC は、名前が未確定でも本文に出す前に session 配下の `cast/npc/*.md` へ暫定カードを作れ。
+
+`gm.md` の抽象メモだけで喋らせるな。これは、キャラが「印」「配置」「良好」「回収」などの抽象語だけを繰り返して、プレイヤーから見ると何をしている人物か分からなくなる事故を防ぐためのルールだ。
+
+名前が未確定の場合は、安定した仮IDを使ってよい。
+
+- `cast/npc/灰色のスーツの男.md`
+- `cast/npc/配置確認の男.md`
+- `cast/npc/北玻保全_現場調整役.md`
+
+暫定カードに最低限入れるもの:
+
+- visible label: 作中で見える呼び名
+- identity status: unknown / alias / confirmed
+- role in organization: その人物が何を通せるか、止められるか
+- public face: 表向きの顔
+- belief: 何を信じているか
+- contradiction: どこが矛盾しているか
+- wants this scene: この場で何をしたいか
+- knows / suspects / unknown: 知っていること、疑っていること、知らないこと
+- can do / cannot do: できること、できないこと
+- speech rule: 抽象語を使うなら、すぐ具体物・人物・手続きへ戻す
+- relationship hook with protagonist:
+- relationship hook with heroine/NPC:
+- appearance hook:
+
+出現時の保存処理:
+
+1. `cast/npc/[仮ID].md` を作る
+2. `indexes/cast_index.md` に追加する
+3. `current/case.md` の handles に `person:` として追加する
+4. `current/gm.md` の Organization Doctrine Current Pressure に contact surface として追加する
+
+プレイヤーが「意味が分からない」「支離滅裂では」と言ったら、NPCにさらに抽象語を重ねさせるな。
+GMは作中時間を止めずに、次の応答で必ず以下を本文内に落とせ。
+
+- その人物が今触っている具体物
+- その人物が今確認している相手
+- その人物がこの場で通そうとしている手続き
+- まだ分からないこと
+
 ### ヒロインへの昇格条件
 
 次のどれかが起きたら session 配下の `cast/heroine/[名前].md` を正本にしろ。

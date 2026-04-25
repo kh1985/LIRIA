@@ -6,7 +6,7 @@
 
 - Natural language trigger: 漫画化 / 1ページ漫画 / ヒロインPV / 三面図 / 立ち絵 / キャラシート
 - Standard output: `exports/<session_name>/manga/<timestamp>_<type>_<slug>/`
-- Standard package: `source.md`, `brief.md`, `character_refs.md`, `name.md`, `panel_prompts.md`, `image_gen_tasks.md`, `publish_notes.md`
+- Standard package: `source.md`, `brief.md`, `character_refs.md`, `name.md`, `panel_prompts.md`, `lettering.md`, `image_gen_tasks.md`, `publish_notes.md`
 - Standard stop point: package 作成と image gen tasks 分解まで
 - Actual generation: プレイヤー確認後のみ
 - Internal helper: GM/Codex は必要なら `bash scripts/create_manga_export.sh <session_name> <type> <slug>` で雛形を作ってよい。プレイヤーに覚えさせるコマンドではない
@@ -35,6 +35,7 @@
 - `character_refs.md`: 主人公とヒロインの Visual Character Sheet、キャラID正本、generated asset references、prompt-ready 点検、current appearance delta
 - `name.md`: internal name、display title、slug、spoiler-safe title、caption
 - `panel_prompts.md`: コマ / カットごとの構図、表情、台詞、背景、negative prompt
+- `lettering.md`: 正確なセリフ、キャプション、吹き出し位置。画像AIには空吹き出しを作らせ、文字は後工程で載せる
 - `image_gen_tasks.md`: image gen skill / tool へ渡す前のタスク分解。ここでは生成しない
 - `publish_notes.md`: 公開可否、spoiler、成人向け表現の分離、公開しない情報
 
@@ -54,6 +55,7 @@
 - プレイヤーにCLIコマンドを覚えさせない
 - Visual Character Sheet は主人公とヒロインだけを `prompt-ready` 点検する
 - メタ発言を絵や台詞に混ぜない
+- 1ページ漫画は、空吹き出しの下絵で終わらせず、`lettering.md` を使って文字入り版まで作る
 - 未確定秘密を絵で確定しすぎない
 - ヒロインの自律性と現在の関係段階を壊さない
 - 公開 / 集客用は成人向け表現を分離・制御する

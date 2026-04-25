@@ -103,6 +103,7 @@ brief.md
 character_refs.md
 name.md
 panel_prompts.md
+lettering.md
 image_gen_tasks.md
 publish_notes.md
 ```
@@ -185,6 +186,24 @@ private / model reference で必要な場合だけ内部参照し、public tease
 メタ発言を混ぜない。
 キャラ台詞に `GM` `シナリオ` `フラグ` `イベント` `好感度` `判定` などを入れない。
 
+### lettering.md
+
+写植 / セリフ / キャプションの正本を置く。
+
+漫画生成では、画像AIに長い日本語を直接描かせると文字化けしやすい。
+そのため、原則として画像生成では空吹き出し / 空キャプション枠を作り、正確な日本語は `lettering.md` に分離して後工程で載せる。
+
+- reading direction: Japanese right-to-left / top-to-bottom
+- font mood: 手書き寄り / 明朝寄り / ゴシック寄り / モノローグ寄り
+- balloon style: 通常 / 小声 / 叫び / 内心 / ナレーション
+- panel number
+- speaker
+- exact text
+- placement hint
+- priority: must-have / optional / cut if crowded
+
+`lettering.md` の exact text は、画像生成 prompt にそのまま任せるのではなく、写植レイヤー / 画像編集 / 手動レタリングの正本として扱う。
+
 ### image_gen_tasks.md
 
 image gen skill / tool に渡す前のタスク分解を置く。
@@ -198,6 +217,13 @@ image gen skill / tool に渡す前のタスク分解を置く。
 - target file name
 - confirmation needed before generation
 - post-generation notes to record
+
+`one-page` では task を原則2段階に分ける。
+
+1. `art-base`: 空吹き出し / 空キャプション枠つきの漫画ページを生成する
+2. `lettering`: `lettering.md` の exact text を後工程で載せる
+
+最終成果物は、空吹き出しの `art-base` ではなく、文字入りの `lettered` 版とする。
 
 Visual Character Sheet は image gen skill / tool へ渡す前に `prompt-ready` へ点検する。
 `text-only` のままなら、まず `image prompt anchor`、`continuity locks`、`negative prompt / avoid` を整える。

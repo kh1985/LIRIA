@@ -183,27 +183,70 @@ cat > "${PACKAGE_DIR}/panel_prompts.md" <<EOF
 - negative prompt: TODO
 EOF
 
+cat > "${PACKAGE_DIR}/lettering.md" <<EOF
+# Lettering
+
+> 正確な日本語は画像AIに直接任せず、ここを写植 / 後工程の正本にする。
+
+- reading direction: Japanese right-to-left / top-to-bottom
+- font mood: TODO handwritten / gothic / mincho / narration
+- balloon style guide:
+  - normal: TODO
+  - whisper: TODO
+  - inner thought: TODO
+  - narration: TODO
+
+## Panel 1
+
+- text item:
+  - speaker: TODO
+  - exact text: TODO
+  - placement hint: TODO
+  - priority: must-have | optional | cut if crowded
+  - notes: TODO
+
+## Final Lettering Check
+
+- no mojibake / garbled Japanese
+- no meta terms in character dialogue
+- no hidden proper nouns leaked
+- no unreadable tiny text used for essential story information
+- final output includes a lettered version, not only blank balloons
+EOF
+
 cat > "${PACKAGE_DIR}/image_gen_tasks.md" <<EOF
 # Image Gen Tasks
 
 This file is task planning only. It does not authorize image generation.
 
-## Task 1
+## Task 1: art-base
 
 - task id: ${SLUG}-001
 - dependency: none
 - prompt source: panel_prompts.md#panel-1
 - required Visual Character Sheet status: TODO prompt-ready before generation
 - output kind: TODO model sheet / teaser image / scene card / one-page manga
-- target file name: TODO ${SLUG}_001.png
+- target file name: TODO ${SLUG}_art-base.png
 - confirmation needed before generation: yes
 - post-generation notes to record: generated asset references, seed, prompt version, continuity issues
+
+## Task 2: lettering
+
+- task id: ${SLUG}-lettering-001
+- dependency: ${SLUG}-001
+- prompt source: lettering.md
+- required input: generated art-base image with blank balloons / caption areas
+- output kind: lettered one-page manga
+- target file name: TODO ${SLUG}_lettered.png
+- confirmation needed before generation/editing: yes
+- post-generation notes to record: font/lettering method, text fit issues, corrections needed
 
 Preflight:
 - Confirm protagonist and heroine IDs from character_refs.md source-of-truth paths.
 - Confirm generated asset references are supplemental, not identity source.
 - Confirm adult content handling and spoiler boundaries.
 - Confirm the player explicitly approved actual generation.
+- Confirm final result is not blank-balloon-only; one-page manga needs lettering.
 EOF
 
 cat > "${PACKAGE_DIR}/publish_notes.md" <<EOF

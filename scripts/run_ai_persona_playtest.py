@@ -12,11 +12,9 @@ from __future__ import annotations
 import argparse
 from datetime import datetime
 from pathlib import Path
-import select
 import shutil
 import subprocess
 import sys
-import time
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,7 +24,6 @@ MARKETING_DEFAULT_PERSONA = Path(
     "output/gal-sim-testers/01_ishikawa_ryota.yaml"
 )
 MAX_TURNS = 1000
-DEFAULT_PROGRESS_INTERVAL_SECONDS = 10
 NEW_SYSTEM_PROMPT_FILES = [
     "GALGE.md",
     "prompt/core.md",
@@ -93,7 +90,6 @@ def main() -> int:
             log_path=log_path,
             model=args.model,
             timeout_seconds=timeout_seconds,
-            progress_interval_seconds=args.progress_interval_seconds,
         )
         print(f"AI persona play log: {display_path(log_path)}")
 
@@ -147,15 +143,6 @@ def parse_args() -> argparse.Namespace:
         type=int,
         help="Codex exec timeout. Defaults to max(300, turns * 60).",
     )
-    parser.add_argument(
-        "--progress-interval-seconds",
-        type=int,
-        default=DEFAULT_PROGRESS_INTERVAL_SECONDS,
-        help=(
-            "Print a heartbeat while Codex is generating. "
-            f"Default: {DEFAULT_PROGRESS_INTERVAL_SECONDS}. Use 0 to disable."
-        ),
-    )
     parser.add_argument("--no-analyze", dest="analyze", action="store_false", help="Skip analyze_play_log after generation.")
     parser.add_argument("--dry-run", action="store_true", help="Create the session and prompt, but do not call Codex.")
     parser.set_defaults(analyze=True)
@@ -164,8 +151,6 @@ def parse_args() -> argparse.Namespace:
         parser.error(f"--turns must be between 1 and {MAX_TURNS}")
     if args.timeout_seconds is not None and args.timeout_seconds < 60:
         parser.error("--timeout-seconds must be at least 60")
-    if args.progress_interval_seconds < 0:
-        parser.error("--progress-interval-seconds must be 0 or greater")
     if args.persona is not None:
         args.persona = resolve_persona_path(args.persona)
     return args
@@ -339,7 +324,6 @@ def run_codex(
     log_path: Path,
     model: str | None,
     timeout_seconds: int,
-    progress_interval_seconds: int,
 ) -> None:
     log_path.parent.mkdir(parents=True, exist_ok=True)
     argv = [
@@ -356,97 +340,32 @@ def run_codex(
     if model:
         argv[2:2] = ["--model", model]
 
-    started_at = time.monotonic()
-    next_progress_at = started_at + progress_interval_seconds
-    stdout_parts: list[str] = []
-
-    print(
-        "codex exec started: "
-        f"timeout={format_duration(timeout_seconds)}, "
-        f"heartbeat={progress_interval_seconds}s, "
-        f"log={display_path(log_path)}",
-        flush=True,
-    )
-
     try:
-        process = subprocess.Popen(
+        completed = subprocess.run(
             argv,
             cwd=ROOT,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
+            input=prompt,
             text=True,
             encoding="utf-8",
             errors="replace",
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+            timeout=timeout_seconds,
         )
-        if process.stdin is None:
-            raise SystemExit("codex exec failed to open stdin")
-        process.stdin.write(prompt)
-        process.stdin.close()
-
-        while True:
-            if process.stdout is not None:
-                readable, _, _ = select.select([process.stdout], [], [], 0.5)
-                if readable:
-                    line = process.stdout.readline()
-                    if line:
-                        stdout_parts.append(line)
-
-            returncode = process.poll()
-            if returncode is not None:
-                if process.stdout is not None:
-                    remainder = process.stdout.read()
-                    if remainder:
-                        stdout_parts.append(remainder)
-                break
-
-            elapsed_seconds = int(time.monotonic() - started_at)
-            if elapsed_seconds >= timeout_seconds:
-                process.kill()
-                process.wait()
-                raise TimeoutError
-
-            if progress_interval_seconds and time.monotonic() >= next_progress_at:
-                print_codex_heartbeat(
-                    elapsed_seconds=elapsed_seconds,
-                    timeout_seconds=timeout_seconds,
-                    log_path=log_path,
-                )
-                next_progress_at += progress_interval_seconds
-    except TimeoutError as exc:
+    except subprocess.TimeoutExpired as exc:
+        if exc.stdout:
+            sys.stdout.write(exc.stdout if isinstance(exc.stdout, str) else exc.stdout.decode("utf-8", errors="replace"))
         raise SystemExit(
             f"codex exec timed out after {timeout_seconds} seconds. "
             "Retry with a larger --timeout-seconds value or fewer --turns."
         ) from exc
 
-    if process.returncode != 0:
-        sys.stdout.write("".join(stdout_parts))
-        raise SystemExit(f"codex exec failed ({process.returncode})")
+    if completed.returncode != 0:
+        sys.stdout.write(completed.stdout)
+        raise SystemExit(f"codex exec failed ({completed.returncode})")
     if not log_path.exists() or not log_path.read_text(encoding="utf-8", errors="replace").strip():
-        log_path.write_text("".join(stdout_parts), encoding="utf-8")
-
-
-def print_codex_heartbeat(*, elapsed_seconds: int, timeout_seconds: int, log_path: Path) -> None:
-    if log_path.exists():
-        log_status = f"log={display_path(log_path)} ({log_path.stat().st_size} bytes)"
-    else:
-        log_status = f"log={display_path(log_path)} (not written yet)"
-    print(
-        "[ai-playtest] still generating... "
-        f"elapsed={format_duration(elapsed_seconds)} / timeout={format_duration(timeout_seconds)}; "
-        f"{log_status}",
-        flush=True,
-    )
-
-
-def format_duration(seconds: int) -> str:
-    minutes, sec = divmod(max(0, int(seconds)), 60)
-    hours, minutes = divmod(minutes, 60)
-    if hours:
-        return f"{hours}h{minutes:02d}m{sec:02d}s"
-    if minutes:
-        return f"{minutes}m{sec:02d}s"
-    return f"{sec}s"
+        log_path.write_text(completed.stdout, encoding="utf-8")
 
 
 def run(argv: list[str]) -> subprocess.CompletedProcess[str]:

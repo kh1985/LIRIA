@@ -60,7 +60,6 @@ personas/kenji_style_player.yaml
 
 これは `play.sh --prompt-only` で作ったLIRIA開始プロンプトと、人格YAMLを Codex CLI に渡して、`archive/logs/raw_*_ai_persona_playtest.md` を生成する。
 生成後は既定で `analyze_play_log.sh` を実行し、`analysis_*_ai_persona_playtest.md` も作る。
-生成中は既定で10秒ごとに heartbeat を表示する。表示間隔を変える場合は `--progress-interval-seconds 30`、消す場合は `--progress-interval-seconds 0` を指定する。
 
 安全方針:
 

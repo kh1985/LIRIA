@@ -52,6 +52,12 @@ AI人格に実プレイ風ログを生成させる場合は、以下を使う。
 bash scripts/run_ai_persona_playtest.sh --turns 8
 ```
 
+既定では、リポジトリ内の Kenji 人格を使う。
+
+```text
+personas/kenji_style_player.yaml
+```
+
 これは `play.sh --prompt-only` で作ったLIRIA開始プロンプトと、人格YAMLを Codex CLI に渡して、`archive/logs/raw_*_ai_persona_playtest.md` を生成する。
 生成後は既定で `analyze_play_log.sh` を実行し、`analysis_*_ai_persona_playtest.md` も作る。
 
@@ -67,6 +73,18 @@ bash scripts/run_ai_persona_playtest.sh --turns 8
 
 ```bash
 bash scripts/run_ai_persona_playtest.sh --turns 8 --dry-run
+```
+
+Kenji人格で長めに試走する場合:
+
+```bash
+bash scripts/run_ai_persona_playtest.sh session_kenji_ai_test_001 --turns 30
+```
+
+別人格を使う場合:
+
+```bash
+bash scripts/run_ai_persona_playtest.sh session_ai_playtest_other --turns 8 --persona /path/to/persona.yaml
 ```
 
 ## Auto Smoke Runner

@@ -18,7 +18,8 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_PERSONA = Path(
+LOCAL_DEFAULT_PERSONA = ROOT / "personas" / "kenji_style_player.yaml"
+MARKETING_DEFAULT_PERSONA = Path(
     "/Users/kenjihachiya/Desktop/work/development/marketing/character/"
     "output/gal-sim-testers/01_ishikawa_ryota.yaml"
 )
@@ -108,8 +109,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--persona",
         type=Path,
-        default=DEFAULT_PERSONA if DEFAULT_PERSONA.exists() else None,
-        help="Persona YAML/text file. Defaults to the marketing tester persona if present.",
+        default=default_persona_path(),
+        help=(
+            "Persona YAML/text file. Defaults to personas/kenji_style_player.yaml "
+            "if present, otherwise the marketing tester persona if present."
+        ),
     )
     parser.add_argument("--turns", type=int, default=8, help="Number of play turns to generate. Default: 8.")
     parser.add_argument("--model", help="Optional Codex model override.")
@@ -126,11 +130,30 @@ def parse_args() -> argparse.Namespace:
         parser.error("--turns must be between 1 and 30")
     if args.timeout_seconds is not None and args.timeout_seconds < 60:
         parser.error("--timeout-seconds must be at least 60")
+    if args.persona is not None:
+        args.persona = resolve_persona_path(args.persona)
     return args
 
 
 def default_session_name() -> str:
     return "session_ai_playtest_" + datetime.now().strftime("%Y%m%d_%H%M%S")
+
+
+def default_persona_path() -> Path | None:
+    if LOCAL_DEFAULT_PERSONA.exists():
+        return LOCAL_DEFAULT_PERSONA
+    if MARKETING_DEFAULT_PERSONA.exists():
+        return MARKETING_DEFAULT_PERSONA
+    return None
+
+
+def resolve_persona_path(path: Path) -> Path:
+    if path.is_absolute() or path.exists():
+        return path
+    repo_relative = ROOT / path
+    if repo_relative.exists():
+        return repo_relative
+    return path
 
 
 def read_optional(path: Path | None) -> str:

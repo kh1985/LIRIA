@@ -36,7 +36,7 @@ AI人格に実プレイ風ログを生成させる試走は `bash scripts/run_ai
 - 仮想プレイヤー複数ターン smoke cleanup付き: `bash scripts/run_pi_player_smoke.sh --turns 8 --cleanup`
 - 実プレイ生ログ分析: `bash scripts/analyze_play_log.sh path/to/raw_log.md`
 - AI人格 実プレイ風ログ生成: `bash scripts/run_ai_persona_playtest.sh --turns 8`
-- Kenji人格で30ターン試走: `bash scripts/run_ai_persona_playtest.sh session_kenji_ai_test_001 --turns 30`
+- Kenji人格で長期試走: `bash scripts/run_ai_persona_playtest.sh session_kenji_ai_test_001 --turns 1000`
 - 別人格を明示して試走: `bash scripts/run_ai_persona_playtest.sh session_ai_playtest_001 --turns 8 --persona /path/to/persona.yaml`
 - Claude で再開: `bash play.sh resume -claude`
 - Codex で再開: `bash play.sh resume -codex`
@@ -94,7 +94,7 @@ saves/
 - 生ログ保存: `bash scripts/save_rawlog.sh session_002`
 - 実プレイ生ログ分析: `bash scripts/analyze_play_log.sh path/to/raw_log.md`
 - AI人格 実プレイ風ログ生成: `bash scripts/run_ai_persona_playtest.sh session_ai_playtest_001 --turns 8`
-- Kenji人格 実プレイ風ログ生成: `bash scripts/run_ai_persona_playtest.sh session_kenji_ai_test_001 --turns 30`
+- Kenji人格 実プレイ風ログ生成: `bash scripts/run_ai_persona_playtest.sh session_kenji_ai_test_001 --turns 1000`
 - 事前チェック: `bash scripts/pre_compress_check.sh session_002`
 - session 整合確認: `bash scripts/check_session_integrity.sh session_002`
 - GM/Codex 内部用 manga export 雛形作成: `bash scripts/create_manga_export.sh session_002 heroine-teaser mizuki-smile`

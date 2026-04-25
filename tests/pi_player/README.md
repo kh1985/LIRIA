@@ -75,10 +75,10 @@ personas/kenji_style_player.yaml
 bash scripts/run_ai_persona_playtest.sh --turns 8 --dry-run
 ```
 
-Kenji人格で長めに試走する場合:
+Kenji人格で長期試走する場合:
 
 ```bash
-bash scripts/run_ai_persona_playtest.sh session_kenji_ai_test_001 --turns 30
+bash scripts/run_ai_persona_playtest.sh session_kenji_ai_test_001 --turns 1000
 ```
 
 別人格を使う場合:

@@ -23,6 +23,7 @@ MARKETING_DEFAULT_PERSONA = Path(
     "/Users/kenjihachiya/Desktop/work/development/marketing/character/"
     "output/gal-sim-testers/01_ishikawa_ryota.yaml"
 )
+MAX_TURNS = 1000
 NEW_SYSTEM_PROMPT_FILES = [
     "GALGE.md",
     "prompt/core.md",
@@ -115,7 +116,12 @@ def parse_args() -> argparse.Namespace:
             "if present, otherwise the marketing tester persona if present."
         ),
     )
-    parser.add_argument("--turns", type=int, default=8, help="Number of play turns to generate. Default: 8.")
+    parser.add_argument(
+        "--turns",
+        type=int,
+        default=8,
+        help=f"Number of play turns to generate. Must be between 1 and {MAX_TURNS}. Default: 8.",
+    )
     parser.add_argument("--model", help="Optional Codex model override.")
     parser.add_argument(
         "--timeout-seconds",
@@ -126,8 +132,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dry-run", action="store_true", help="Create the session and prompt, but do not call Codex.")
     parser.set_defaults(analyze=True)
     args = parser.parse_args()
-    if args.turns < 1 or args.turns > 30:
-        parser.error("--turns must be between 1 and 30")
+    if args.turns < 1 or args.turns > MAX_TURNS:
+        parser.error(f"--turns must be between 1 and {MAX_TURNS}")
     if args.timeout_seconds is not None and args.timeout_seconds < 60:
         parser.error("--timeout-seconds must be at least 60")
     if args.persona is not None:

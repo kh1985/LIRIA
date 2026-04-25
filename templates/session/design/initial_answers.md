@@ -60,6 +60,18 @@
 - 例: 依頼型、生活型、商売型、外圧型、遭遇型、お任せ
 - GMによる事件導線の解釈
 
+## Q5.5: Initial Unease Source
+- 最初のきっかけの出どころ
+- 例: 仕事や依頼、拠点や近所、昔の知り合い、社会の窓口、偶然拾ったものや通知、お任せ
+- 避けたい雰囲気や小物
+- GMによる initial unease seed 解釈
+- life contact
+- first pressure
+- object / signal
+- social surface
+- heroine / NPC stake
+- avoid motifs
+
 ## Q6: Initial Heroine / Initial Relationship
 - 初期ヒロインあり/なし
 - 初対面か既知か
@@ -78,4 +90,5 @@
 - `romance bias`
 - `ability/action point summary`
 - `incident seed`
+- `initial unease seed`
 - `heroine generation hints`

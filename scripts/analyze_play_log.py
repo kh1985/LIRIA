@@ -132,6 +132,12 @@ def build_findings(lines: list[str], *, expected_turns: int | None, turn_count: 
             [r"怜|真凛|澪|月読堂"],
             "旧inner-galgeや人格例文の固有名詞が、新規LIRIA playtestへ混入していないか。",
         ),
+        check_absence(
+            "例文モチーフ再利用リスク",
+            lines,
+            [r"クリーニング|洗濯店|白い上着|預かり札|白い軽バン|蒼湾|青鈍"],
+            "prompt例文や直近playtestに寄った職業・小物・導入が再利用されていないか。プレイヤーが明示した場合は人間レビューで許容してよい。",
+        ),
         check_presence(
             "LIRIAらしさ",
             lines,

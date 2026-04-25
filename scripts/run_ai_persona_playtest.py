@@ -98,7 +98,17 @@ def main() -> int:
         print(f"AI persona play log: {display_path(log_path)}")
 
         if args.analyze:
-            run(["bash", "scripts/analyze_play_log.sh", str(log_path), "-o", str(analysis_path)])
+            run(
+                [
+                    "bash",
+                    "scripts/analyze_play_log.sh",
+                    str(log_path),
+                    "-o",
+                    str(analysis_path),
+                    "--expected-turns",
+                    str(args.turns),
+                ]
+            )
             print(f"analysis report: {display_path(analysis_path)}")
     finally:
         cleanup_generated_prompts()
@@ -270,6 +280,8 @@ def build_play_prompt(
             "- ファイル編集、保存ファイル更新、コマンド実行はしない。",
             "- 出力は raw play log の Markdown だけにする。",
             "- scripted smoke のように同じ検査パターンを繰り返さない。",
+            "- AIプレイヤー人格やprompt内の例文に出てくる固有名詞、旧セッションの人物名、旧拠点名を、現在sessionの正本として流用しない。",
+            "- `怜` `真凛` `澪` `月読堂` は旧inner-galge由来または例文由来の名前として扱い、新規playtestでは使わない。必要ならLIRIA v1用に新規キャラ名と新規拠点名を作る。",
             "- 1ターンごとに Player 入力と GM 応答を書く。",
             "- GM応答には、地の文、ヒロイン/NPCの自律反応、生活感、事件の外圧を入れる。",
             "- ヒロイン候補、敵幹部、関係組織の主要人物、ルート鍵NPCの初登場では、頭から爪先まで全身を詳細に描写する。",

@@ -32,7 +32,7 @@ def main() -> int:
         raise SystemExit(f"log file not found: {log_path}")
 
     text = log_path.read_text(encoding="utf-8", errors="replace")
-    report = analyze_log(text, log_path=log_path)
+    report = analyze_log(text, log_path=log_path, expected_turns=args.expected_turns)
 
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -55,18 +55,24 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="Optional markdown output path. Prints to stdout when omitted.",
     )
+    parser.add_argument(
+        "--expected-turns",
+        type=int,
+        help="Expected number of turns. Used to flag truncated AI persona logs.",
+    )
     return parser.parse_args()
 
 
-def analyze_log(text: str, *, log_path: Path) -> str:
+def analyze_log(text: str, *, log_path: Path, expected_turns: int | None = None) -> str:
     lines = [line.rstrip() for line in text.splitlines()]
     logical_lines = merge_label_lines(lines)
     non_empty = [line for line in logical_lines if line.strip()]
     player_lines = grep_lines(logical_lines, PLAYER_PATTERNS)
+    turn_count = len(grep_lines(logical_lines, [r"^###\s*Turn\s+\d+"], limit=None))
     gm_lines = grep_lines(logical_lines, GM_PATTERNS)
     dialogue_lines = grep_lines(logical_lines, DIALOGUE_PATTERNS)
     quoted_dialogue = grep_lines(logical_lines, [r"「[^」]{2,}」"])
-    findings = build_findings(logical_lines)
+    findings = build_findings(logical_lines, expected_turns=expected_turns, turn_count=turn_count)
     save_candidates = collect_save_candidates(logical_lines)
     manga_candidates = collect_manga_candidates(logical_lines)
     risks = collect_risks(findings)
@@ -83,6 +89,8 @@ def analyze_log(text: str, *, log_path: Path) -> str:
                 [
                     f"- log: {display_path(log_path)}",
                     f"- non-empty lines: {len(non_empty)}",
+                    f"- estimated turns: {turn_count}",
+                    f"- expected turns: {expected_turns if expected_turns is not None else 'not provided'}",
                     f"- estimated player inputs: {len(player_lines)}",
                     f"- estimated GM / narration lines: {len(gm_lines)}",
                     f"- estimated dialogue lines: {max(len(dialogue_lines), len(quoted_dialogue))}",
@@ -115,8 +123,15 @@ def analyze_log(text: str, *, log_path: Path) -> str:
     ).strip() + "\n"
 
 
-def build_findings(lines: list[str]) -> list[Finding]:
+def build_findings(lines: list[str], *, expected_turns: int | None, turn_count: int) -> list[Finding]:
     return [
+        check_turn_count(lines, expected_turns=expected_turns, turn_count=turn_count),
+        check_absence(
+            "旧inner-galge固有名詞リーク",
+            lines,
+            [r"怜|真凛|澪|月読堂"],
+            "旧inner-galgeや人格例文の固有名詞が、新規LIRIA playtestへ混入していないか。",
+        ),
         check_presence(
             "LIRIAらしさ",
             lines,
@@ -202,7 +217,41 @@ def check_presence(label: str, lines: list[str], patterns: list[str], note: str)
 def check_absence(label: str, lines: list[str], patterns: list[str], note: str) -> Finding:
     evidence = grep_lines(lines, patterns, limit=3)
     status = "warn" if evidence else "ok"
-    return Finding(label=label, status=status, evidence=evidence, note=note)
+    return Finding(label=label, status=status, evidence=evidence or ["赤信号なし"], note=note)
+
+
+def check_turn_count(lines: list[str], *, expected_turns: int | None, turn_count: int) -> Finding:
+    player_count = len(grep_lines(lines, PLAYER_PATTERNS, limit=None))
+    evidence = [f"turns={turn_count}", f"player_inputs={player_count}"]
+    if expected_turns is not None:
+        evidence.insert(0, f"expected_turns={expected_turns}")
+    if turn_count == 0:
+        return Finding(
+            label="ターン数",
+            status="missing",
+            evidence=evidence,
+            note="`### Turn NNN` が見つからない。ログ形式が崩れている可能性がある。",
+        )
+    if expected_turns is not None and turn_count < expected_turns:
+        return Finding(
+            label="ターン数",
+            status="warn",
+            evidence=evidence,
+            note="指定ターン数より実出力ターン数が少ない。AIが途中で要約終了したか、出力を短く切った可能性がある。",
+        )
+    if player_count and abs(player_count - turn_count) > 1:
+        return Finding(
+            label="ターン数",
+            status="warn",
+            evidence=evidence,
+            note="Turn数とPlayer入力数が大きくズレている。ログ形式または抽出が崩れている可能性がある。",
+        )
+    return Finding(
+        label="ターン数",
+        status="ok",
+        evidence=evidence,
+        note="Turn見出しとPlayer入力数がおおむね対応している。",
+    )
 
 
 def check_choice_scaffold(lines: list[str]) -> Finding:
@@ -272,40 +321,85 @@ def merge_label_lines(lines: list[str]) -> list[str]:
         stripped = lines[index].strip()
         match = label_pattern.match(stripped)
         if match:
-            next_text = next_nonempty(lines, index + 1)
-            if next_text:
+            next_index, next_text = next_nonempty(lines, index + 1)
+            if next_index is not None and next_text:
                 merged.append(f"{match.group(1)}: {next_text}")
+                index = next_index + 1
             else:
                 merged.append(stripped)
-            index += 1
+                index += 1
             continue
         merged.append(lines[index])
         index += 1
     return merged
 
 
-def next_nonempty(lines: list[str], start: int) -> str:
-    for line in lines[start:]:
+def next_nonempty(lines: list[str], start: int) -> tuple[int | None, str]:
+    for offset, line in enumerate(lines[start:], start=start):
         stripped = line.strip()
         if stripped:
-            return stripped
-    return ""
+            return offset, stripped
+    return None, ""
 
 
 def collect_save_candidates(lines: list[str]) -> list[str]:
+    section_items = extract_section_items(lines, "Save Notes")
+    if section_items:
+        return section_items[:10]
     patterns = [
         r"約束|秘密|本名|能力|痕跡|後遺症|クロック|フック|コンディション|AFFINITY|bond|Manga Export Candidates",
         r"知らない|伏せる|共有|推測|疑い|確定していない",
     ]
-    return unique(grep_lines(lines, patterns, limit=10))
+    return unique(grep_lines(candidate_source_lines(lines), patterns, limit=10))
 
 
 def collect_manga_candidates(lines: list[str]) -> list[str]:
+    section_items = extract_section_items(lines, "Manga Candidates")
+    if section_items:
+        return section_items[:10]
     patterns = [
         r"手|指|スマホ|視線|目|沈黙|震え|涙|笑|背中|扉|窓|雨|夜|光|影|足音",
         r"漫画化|PV|三面図|コマ|見開き|カット|構図",
     ]
-    return unique(grep_lines(lines, patterns, limit=10))
+    return unique(grep_lines(candidate_source_lines(lines), patterns, limit=10))
+
+
+def extract_section_items(lines: list[str], heading: str) -> list[str]:
+    in_section = False
+    items: list[str] = []
+    heading_pattern = re.compile(rf"^##\s+{re.escape(heading)}\s*$", re.IGNORECASE)
+    for line in lines:
+        stripped = line.strip()
+        if heading_pattern.match(stripped):
+            in_section = True
+            continue
+        if in_section and stripped.startswith("## "):
+            break
+        if not in_section or not stripped:
+            continue
+        if stripped.startswith(("-", "*")):
+            stripped = stripped[1:].strip()
+        if stripped:
+            items.append(trim(stripped))
+    return unique(items)
+
+
+def candidate_source_lines(lines: list[str]) -> list[str]:
+    result: list[str] = []
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if re.match(r"^(Player|User|プレイヤー)[:：]", stripped):
+            continue
+        if re.match(r"^[1-4][.．]\s", stripped):
+            continue
+        if stripped == "→ どうする？":
+            continue
+        if stripped.startswith("#"):
+            continue
+        result.append(stripped)
+    return result
 
 
 def collect_risks(findings: list[Finding]) -> list[str]:

@@ -66,15 +66,13 @@
 - relationship risk
 - escalation rule
 
-## Q5: Incident Entry Type
-- 事件の入口
-- 例: 依頼型、生活型、商売型、外圧型、遭遇型、お任せ
-- GMによる事件導線の解釈
+## Q5: First Daily Disturbance
+- 最初に揺れる日常の面
+- 例: 訪問者、いつもの場所の変化、仕事/お金/信用のズレ、手続きや窓口、通知/落とし物/記録、お任せ
+- GMによる incident seed / initial pressure 解釈
 
 ## Q5.5: Initial Unease Source
-- 最初のきっかけの出どころ
-- 例: 仕事や依頼、拠点や近所、昔の知り合い、社会の窓口、偶然拾ったものや通知、お任せ
-- 避けたい雰囲気や小物
+- 避けたい始まり方や使ってほしくない小物
 - GMによる initial unease seed 解釈
 - life contact
 - first pressure
@@ -86,7 +84,9 @@
 ## Q6: Initial Heroine / Initial Relationship
 - 初期ヒロインあり/なし
 - 初対面か既知か
+- 最初の相手との距離感
 - 共同体型か流動型か
+- 1人目を強く固定するか / プレイ中の縁で自然に増やすか
 - 初期関係の方針
 
 ## Generated Seeds

@@ -395,7 +395,7 @@ def write_scripted_session(
         ## Q4: Ability
 
         - 能力名: 縁寄せ
-        - 概要: 困りごとを抱えた人物や事件の入口に遭遇しやすくなる。
+        - 概要: 困りごとを抱えた人物や、日常の小さな乱れに遭遇しやすくなる。
         - Ability Constraint Profile:
           - output scale: 小規模。街角、持ち物、直近の行動痕跡に限る。
           - trigger condition: 対象に関係する物・場所・会話が必要。

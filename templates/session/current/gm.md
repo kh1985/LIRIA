@@ -17,7 +17,8 @@
 - 汎用化回避:
 - 情報の確度:
 
-## Incident Entry Type
+## First Daily Disturbance
+> Q5 で選ばれた、最初に揺れる日常の面。本文では「事件タイプ」として説明せず、生活上の小さな乱れとして出す。
 
 ## Incident Seeds
 

@@ -141,6 +141,7 @@ flowchart TD
 | ヒロイン個別の tone / Layer / fixed memory / 呼称 / Visual Character Sheet | `saves/<session_name>/cast/heroine/*.md` |
 | ヒロインのキャラID / 関係性 / 秘密 / 内面 | `saves/<session_name>/cast/heroine/*.md` と current の知識スコープ |
 | NPC 個別の tone / role / fixed memory | `saves/<session_name>/cast/npc/*.md` |
+| GM-only Body Profile / 3サイズ等の裏設定 | 成人ヒロインは `saves/<session_name>/cast/heroine/*.md`、成人主要NPCは `saves/<session_name>/cast/npc/*.md` |
 | 関係組織 / 外圧 / Organization Doctrine Layer | `saves/<session_name>/design/villain_design.md` |
 | image gen skill 連携方針 / visual pipeline | `saves/<session_name>/design/visual_pipeline.md` |
 | 自然文漫画化 / manga export pipeline | `saves/<session_name>/design/manga_pipeline.md` |

@@ -139,6 +139,7 @@
 - Manga Export Candidates が、絵になる瞬間、構図、感情の見え方、台詞の短さを候補化している
 - Natural Language Manga Export を求められた時、プレイヤーは自然文で依頼でき、CLI 手順を要求されない
 - ヒロインPVや三面図の依頼が、保存済み Appearance Profile / Visual Character Sheet と矛盾しない
+- 3サイズ等の `GM-only Body Profile` は、GM相談や非公開資料でのみ使われ、通常本文や公開用プロンプトへ漏れていない
 
 ### 10. anti-meta dialogue
 

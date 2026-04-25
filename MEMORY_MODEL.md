@@ -130,6 +130,7 @@ cast には「何が変わったか」だけを短く残す。本文や長い経
 | `Appearance Profile` | `current/player.md` | 身長、体型、基本服装、髪型、顔つき、雰囲気、現在差分は残す |
 | 主人公の `Visual Character Sheet` | `current/player.md` | 画像/漫画生成用の固定資料。model sheet status、front / side / back notes、image prompt anchor、negative prompt / avoid を残す |
 | ヒロインの `Visual Character Sheet` | `cast/heroine/*.md` | ヒロインだけに持たせる。text-only / prompt-ready / image-generated の状態と、generated asset references を残す |
+| `GM-only Body Profile` | 成人ヒロインは `cast/heroine/*.md`、成人主要NPCは `cast/npc/*.md` | 3サイズ等はGM相談/画像資料用。本文、hotset、公開用manga promptへ漏らさない |
 | キャラID / 関係性 / 秘密 / 内面 | `current/player.md`, `cast/heroine/*.md`, current の知識スコープ | 画像、立ち絵、model sheet、seed、URL から確定しない |
 | `Ability Constraint Profile` | `current/player.md` | output scale、trigger condition、range / target、uses / cooldown、cost、trace、collateral、social risk、relationship risk、escalation rule は残す |
 | `Ability Runtime` | `current/player.md` | 残回数、cooldown、直近の trace、巻き添え、現在の社会/関係リスクは volatile として残す |

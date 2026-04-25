@@ -112,6 +112,9 @@ LIRIA の危機処理は、以下を扱う。
 5. physical damage / emotional damage / social damage / trust shift / secret exposure / debt / obligation / authority attention / heroine safety / relationship aftermath のいずれかを更新する。
 6. まだ危機が続くなら、次の「どうする？」へ返す。
 
+危機でプレイヤーが迷いやすい場合は、`prompt/runtime.md` の `プレイヤーへの渡し方` に従い、`1-3` の自然な候補と `4. 自由入力` を出してよい。
+ただし、危機の解決結果、成功、好意、真相を選択肢で保証するな。
+
 ### 交換数の目安
 
 - 小さな危機: 1〜2交換

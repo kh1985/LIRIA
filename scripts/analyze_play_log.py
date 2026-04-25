@@ -144,7 +144,7 @@ def build_findings(lines: list[str]) -> list[Finding]:
         check_absence(
             "恋愛の自動確定リスク",
             lines,
-            [r"惚れた|落ちた|攻略完了|陥落|好感度が上がった|身体を許した"],
+            [r"惚れた|恋に落ちた|攻略完了|陥落|好感度が上がった|身体を許した"],
             "好意や親密さがプレイヤー願望だけで確定していないか。",
         ),
         check_presence(
@@ -168,7 +168,7 @@ def build_findings(lines: list[str]) -> list[Finding]:
         check_absence(
             "Anti-Meta Dialogueリスク",
             lines,
-            [r"「[^」]*(AFFINITY|フラグ|好感度|GM|システム|知識境界|Manga Export)[^」]*」"],
+            [r"「[^」]*(AFFINITY|フラグ|好感度|GM|システム(?!ズ)|知識境界|Manga Export)[^」]*」"],
             "NPC台詞にメタ語が混ざっていないか。",
         ),
         check_presence(
@@ -189,6 +189,7 @@ def build_findings(lines: list[str]) -> list[Finding]:
             [r"次|まだ|だが|しかし|その時|電話|通知|足音|視線|沈黙|返事はない|終わっていない"],
             "次に再開したくなる未解決の引きがあるか。",
         ),
+        check_choice_scaffold(lines),
     ]
 
 
@@ -202,6 +203,51 @@ def check_absence(label: str, lines: list[str], patterns: list[str], note: str) 
     evidence = grep_lines(lines, patterns, limit=3)
     status = "warn" if evidence else "ok"
     return Finding(label=label, status=status, evidence=evidence, note=note)
+
+
+def check_choice_scaffold(lines: list[str]) -> Finding:
+    numbered = grep_lines(lines, [r"^[1-4][.．]\s"], limit=12)
+    if not numbered:
+        return Finding(
+            label="選択補助",
+            status="ok",
+            evidence=[],
+            note="番号つき選択補助は未使用。自由入力中心なら問題なし。",
+        )
+
+    turn_count = len(grep_lines(lines, [r"^###\s*Turn\s+\d+"], limit=None))
+    choice_four = grep_lines(lines, [r"^4[.．]\s*自由入力"], limit=3)
+    risky = grep_lines(
+        lines,
+        [r"^[1-3][.．].*(好感度|惚れ|成功|解決|暴く|確定|親密になる|身体的親密)"],
+        limit=3,
+    )
+    choice_block_count = len(grep_lines(lines, [r"^1[.．]\s"], limit=None))
+
+    evidence = numbered[:3]
+    warnings: list[str] = []
+    if not choice_four:
+        warnings.append("4. 自由入力が見当たらない")
+    if turn_count and choice_block_count >= max(3, int(turn_count * 0.7)):
+        warnings.append("番号つき選択補助が多すぎる可能性")
+    if risky:
+        warnings.append("候補文が成功/好意/真相を保証している可能性")
+        evidence.extend(risky)
+
+    if warnings:
+        return Finding(
+            label="選択補助",
+            status="warn",
+            evidence=unique(evidence),
+            note="; ".join(warnings),
+        )
+
+    return Finding(
+        label="選択補助",
+        status="ok",
+        evidence=choice_four[:1] or evidence,
+        note="選択補助は `1-3` 候補 + `4. 自由入力` として使われている。",
+    )
 
 
 def grep_lines(lines: list[str], patterns: list[str], *, limit: int | None = None) -> list[str]:

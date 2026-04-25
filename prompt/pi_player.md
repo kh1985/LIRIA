@@ -128,6 +128,8 @@ PI Playerによる検証では、以下を確認する。
 - `gm_policy.md` の入力解釈ルールが守られる
 - Character Knowledge Boundary が破られない
 - NPC/ヒロインの台詞で Anti-Meta Dialogue が破られない
+- 選択補助を出す場合、`1-3` の自然な候補と `4. 自由入力` で、毎ターンの固定メニューになっていない
+- 候補は `1`: 安全/生活、`2`: 関係/本音、`3`: 事件/能力/リスクの入口であり、成功・好意・真相を保証しない
 - ヒロイン昇格または漫画化対象化の時、ヒロイン Visual Character Sheet が `cast/heroine/` 側に入る
 - Heroine Crisis Role が `current/harem.md` に残る
 - Organization Doctrine / contact surface / weak joint が design 層に残り、current には必要な抜粋だけ入る

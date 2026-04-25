@@ -4,6 +4,11 @@
 参照作品の固有名詞、台詞、キャラ、展開を再現するための資料ではない。
 使ってよいのは、物語が動く抽象構造だけである。
 
+重要:
+ここにある Reference Engine は、固定の漫画リストではない。
+会話中にユーザーが挙げた作品名は、あくまで「こういう構造が欲しい」という例・方向性ヒントとして扱う。
+それらの作品を LIRIA の正本参照元として固定してはいけない。
+
 ## 目的
 
 LIRIA は一本道シナリオではなく、自由入力TRPGを基点にした恋愛シミュレーションである。
@@ -25,15 +30,36 @@ Story Reference Layer は、以下を防ぐために使う。
 - 参照元をプレイヤーに説明しない
 - `これは〇〇っぽい話` と本文で言わない
 
+## 参照元の扱い
+
+参照元は、次の3種類に分けて扱う。
+
+1. `default stock`
+   - このファイルに最初からある Reference Engine。
+   - すぐ使える初期カードであり、固定作品リストではない。
+2. `user hint`
+   - ユーザーが会話中に挙げた作品、ジャンル、好み、嫌いな展開。
+   - 正本化せず、抽象構造だけを一時的に取り出す。
+3. `session-derived`
+   - 新規開始Q&A、実プレイログ、ヒロイン、組織、舞台から、その session 用に作る一時エンジン。
+   - 既存ストックに合わない時は、こちらを作ってよい。
+
+GMは、ユーザーが「今回はこの作品群を参考にして」と明示しない限り、特定作品を固定参照元として扱わない。
+必要なのは「どの漫画か」ではなく、「その session に必要な物語構造は何か」である。
+
 ## 参照の使い方
 
 1. プレイヤーの Q&A、生活基盤、インナー、能力、恋愛好み、最初の日常の揺れを見る。
-2. 下の Reference Engine Stock から 1-3 個だけ選ぶ。
+2. 下の Reference Engine Stock または session-derived engine から 1-3 個だけ選ぶ。
 3. 固有設定を捨て、LIRIA の現代社会、生活、恋愛、能力、関係組織へ変換する。
 4. `design/story_reference.md` に採用理由を短く保存する。
 5. `design/story_spine.md` に Main Question と Reveal Ladder を作る。
 
 ## Reference Engine Stock
+
+これは初期ストックである。
+この5つに限定しない。
+新規開始Q&Aや実プレイログから、より適切な構造が見えた場合は、session-derived engine を作ってよい。
 
 ### Institution Secret Engine
 
@@ -174,7 +200,32 @@ End Choice Seeds:
 ## 運用原則
 
 - Reference Engine は 1-3 個まで。盛りすぎると散る。
+- Stock 外の engine を作る時も、必ず抽象構造として書く。作品名、キャラ名、名場面を保存しない。
+- ユーザーが例として出した作品を、固定の参照元リストに格上げしない。
 - `story_spine.md` は短く保つ。長編プロット表にしない。
 - プレイヤーが無視、遠出、脱線しても、Pressure Direction だけは裏で進めてよい。
 - ただし、プレイヤーの選択を無効化するために使うな。世界側が動いた結果として見せろ。
 - ヒロインの自律性を必ず含めろ。事件だけが進んで恋愛が止まるなら、Story Spine として失敗である。
+
+## Session-Derived Engine Template
+
+既存 Stock だけでは合わない時は、次の形で session 用エンジンを作る。
+
+```text
+### [engine name]
+
+source type:
+default stock / user hint / session-derived
+
+abstract structure:
+何が物語を動かす構造か。
+
+why it fits this session:
+Q&A、主人公、ヒロイン、生活導線、最初の揺れのどこに合うか。
+
+LIRIA conversion:
+現代社会、恋愛、生活、能力、関係組織へどう変換するか。
+
+do not imitate:
+真似してはいけない固有要素、展開、キャラ、台詞。
+```

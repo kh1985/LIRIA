@@ -6,10 +6,18 @@
 ## Selected Reference Engines
 
 - engine:
+  - source type: default stock / user hint / session-derived
   - reason:
   - Q&A source:
   - LIRIA conversion:
   - avoid direct imitation:
+
+## Source Policy
+
+- fixed manga list: no
+- user examples are hints, not canon:
+- if stock does not fit, create session-derived engine:
+- do not save source title / character / famous scene:
 
 ## Rejected / Avoided Engines
 

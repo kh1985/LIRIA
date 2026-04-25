@@ -22,20 +22,44 @@ DEFAULT_PERSONA = Path(
     "/Users/kenjihachiya/Desktop/work/development/marketing/character/"
     "output/gal-sim-testers/01_ishikawa_ryota.yaml"
 )
+NEW_SYSTEM_PROMPT_FILES = [
+    "GALGE.md",
+    "prompt/core.md",
+    "prompt/gm_policy.md",
+    "prompt/visual_character_sheet.md",
+    "prompt/manga_export.md",
+    "prompt/core_newgame.md",
+    "prompt/runtime.md",
+    "prompt/combat.md",
+    "prompt/villain_engine.md",
+    "prompt/romance.md",
+    "prompt/save_resume.md",
+]
+RESUME_SYSTEM_PROMPT_FILES = [
+    "GALGE.md",
+    "prompt/core.md",
+    "prompt/gm_policy.md",
+    "prompt/visual_character_sheet.md",
+    "prompt/manga_export.md",
+    "prompt/runtime.md",
+    "prompt/combat.md",
+    "prompt/villain_engine.md",
+    "prompt/romance.md",
+    "prompt/save_resume.md",
+]
 
 
 def main() -> int:
     args = parse_args()
     session_name = args.session or default_session_name()
     session_path = ROOT / "saves" / session_name
-    if session_path.exists():
-        raise SystemExit(f"session already exists: {session_path}")
+    session_mode = resolve_session_mode(session_path)
+    prompt_mode = "new" if session_mode == "new-retry" else session_mode
 
-    run(["bash", "play.sh", "liria", "new", session_name, "--prompt-only"])
+    prepare_session(session_name=session_name, session_path=session_path, session_mode=session_mode)
 
     persona_text = read_optional(args.persona)
-    generated_prompt = ROOT / ".codex/generated/liria-new.instructions.md"
-    liria_prompt = generated_prompt.read_text(encoding="utf-8")
+    liria_prompt = read_liria_prompt(prompt_mode)
     play_prompt = build_play_prompt(
         session_name=session_name,
         session_path=session_path,
@@ -52,20 +76,22 @@ def main() -> int:
     prompt_path.parent.mkdir(parents=True, exist_ok=True)
     prompt_path.write_text(play_prompt, encoding="utf-8")
 
-    if args.dry_run:
-        print(f"dry-run prompt: {display_path(prompt_path)}")
-        print(f"session kept for review: saves/{session_name}")
+    try:
+        if args.dry_run:
+            print(f"dry-run prompt: {display_path(prompt_path)}")
+            print(f"session kept for review: saves/{session_name}")
+            return 0
+
+        timeout_seconds = args.timeout_seconds or default_timeout_seconds(args.turns)
+        run_codex(play_prompt, log_path=log_path, model=args.model, timeout_seconds=timeout_seconds)
+        print(f"AI persona play log: {display_path(log_path)}")
+
+        if args.analyze:
+            run(["bash", "scripts/analyze_play_log.sh", str(log_path), "-o", str(analysis_path)])
+            print(f"analysis report: {display_path(analysis_path)}")
+    finally:
         cleanup_generated_prompts()
-        return 0
 
-    run_codex(play_prompt, log_path=log_path, model=args.model)
-    print(f"AI persona play log: {display_path(log_path)}")
-
-    if args.analyze:
-        run(["bash", "scripts/analyze_play_log.sh", str(log_path), "-o", str(analysis_path)])
-        print(f"analysis report: {display_path(analysis_path)}")
-
-    cleanup_generated_prompts()
     print(f"session kept for review: saves/{session_name}")
     return 0
 
@@ -87,12 +113,19 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--turns", type=int, default=8, help="Number of play turns to generate. Default: 8.")
     parser.add_argument("--model", help="Optional Codex model override.")
+    parser.add_argument(
+        "--timeout-seconds",
+        type=int,
+        help="Codex exec timeout. Defaults to max(300, turns * 60).",
+    )
     parser.add_argument("--no-analyze", dest="analyze", action="store_false", help="Skip analyze_play_log after generation.")
     parser.add_argument("--dry-run", action="store_true", help="Create the session and prompt, but do not call Codex.")
     parser.set_defaults(analyze=True)
     args = parser.parse_args()
     if args.turns < 1 or args.turns > 30:
         parser.error("--turns must be between 1 and 30")
+    if args.timeout_seconds is not None and args.timeout_seconds < 60:
+        parser.error("--timeout-seconds must be at least 60")
     return args
 
 
@@ -104,6 +137,67 @@ def read_optional(path: Path | None) -> str:
     if path is None:
         return "名前: test_player\n方針: 好奇心はあるが、無茶はしすぎない。"
     return path.read_text(encoding="utf-8")
+
+
+def resolve_session_mode(session_path: Path) -> str:
+    if not session_path.exists():
+        return "new"
+    if has_completed_ai_persona_log(session_path):
+        print(f"session exists; resuming completed playtest scaffold: {display_path(session_path)}")
+        return "resume"
+    print(f"session exists without a completed AI play log; retrying as new-game playtest: {display_path(session_path)}")
+    return "new-retry"
+
+
+def has_completed_ai_persona_log(session_path: Path) -> bool:
+    logs_dir = session_path / "archive/logs"
+    if not logs_dir.exists():
+        return False
+    for log_path in sorted(logs_dir.glob("raw_*_ai_persona_playtest.md")):
+        text = log_path.read_text(encoding="utf-8", errors="replace")
+        if "## Play Log" in text and "## Save Notes" in text and "## Manga Candidates" in text:
+            return True
+    return False
+
+
+def prepare_session(*, session_name: str, session_path: Path, session_mode: str) -> None:
+    if session_mode in {"new", "resume"}:
+        run(["bash", "play.sh", "liria", session_mode, session_name, "--prompt-only"])
+        return
+
+    if session_mode != "new-retry":
+        raise SystemExit(f"unknown session mode: {session_mode}")
+
+    required_paths = [
+        session_path / "session.json",
+        session_path / "current/player.md",
+        session_path / "current/gm.md",
+        session_path / "current/harem.md",
+        session_path / "current/hotset.md",
+        session_path / "design/initial_answers.md",
+    ]
+    missing = [display_path(path) for path in required_paths if not path.exists()]
+    if missing:
+        raise SystemExit("existing session is not a valid scaffold:\n- " + "\n- ".join(missing))
+
+
+def read_liria_prompt(prompt_mode: str) -> str:
+    generated_prompt = ROOT / f".codex/generated/liria-{prompt_mode}.instructions.md"
+    if generated_prompt.exists():
+        return generated_prompt.read_text(encoding="utf-8")
+
+    if prompt_mode == "new":
+        prompt_files = NEW_SYSTEM_PROMPT_FILES
+    elif prompt_mode == "resume":
+        prompt_files = RESUME_SYSTEM_PROMPT_FILES
+    else:
+        raise SystemExit(f"unknown prompt mode: {prompt_mode}")
+
+    return "\n\n".join((ROOT / path).read_text(encoding="utf-8") for path in prompt_files)
+
+
+def default_timeout_seconds(turns: int) -> int:
+    return max(300, turns * 60)
 
 
 def build_play_prompt(
@@ -175,7 +269,7 @@ def build_play_prompt(
     )
 
 
-def run_codex(prompt: str, *, log_path: Path, model: str | None) -> None:
+def run_codex(prompt: str, *, log_path: Path, model: str | None, timeout_seconds: int) -> None:
     log_path.parent.mkdir(parents=True, exist_ok=True)
     argv = [
         "codex",
@@ -191,18 +285,26 @@ def run_codex(prompt: str, *, log_path: Path, model: str | None) -> None:
     if model:
         argv[2:2] = ["--model", model]
 
-    completed = subprocess.run(
-        argv,
-        cwd=ROOT,
-        input=prompt,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        check=False,
-        timeout=300,
-    )
+    try:
+        completed = subprocess.run(
+            argv,
+            cwd=ROOT,
+            input=prompt,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+            timeout=timeout_seconds,
+        )
+    except subprocess.TimeoutExpired as exc:
+        if exc.stdout:
+            sys.stdout.write(exc.stdout if isinstance(exc.stdout, str) else exc.stdout.decode("utf-8", errors="replace"))
+        raise SystemExit(
+            f"codex exec timed out after {timeout_seconds} seconds. "
+            "Retry with a larger --timeout-seconds value or fewer --turns."
+        ) from exc
     if completed.returncode != 0:
         sys.stdout.write(completed.stdout)
         raise SystemExit(f"codex exec failed ({completed.returncode})")
@@ -230,7 +332,9 @@ def run(argv: list[str]) -> subprocess.CompletedProcess[str]:
 def cleanup_generated_prompts() -> None:
     for path in [
         ROOT / ".codex/generated/liria-new.instructions.md",
+        ROOT / ".codex/generated/liria-resume.instructions.md",
         ROOT / ".claude/generated/liria-new.system-prompt.md",
+        ROOT / ".claude/generated/liria-resume.system-prompt.md",
     ]:
         if path.exists():
             path.unlink()

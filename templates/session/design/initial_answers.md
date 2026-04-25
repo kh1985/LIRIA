@@ -78,6 +78,7 @@
 - 最初に揺れる日常の面
 - 例: 目の前の相手、拠点/近所、仕事/お金/信用、社会の窓口、通知/落とし物/記録、お任せ
 - GMによる incident seed / initial pressure 解釈
+- story reference selection
 - organization pressure scale
 - organization cast pre-generation
 - minimal story spine
@@ -107,6 +108,7 @@
 - `incident seed`
 - `initial unease seed`
 - `organization pressure scale`
+- `story reference selection`
 - `organization cast pre-generation`
 - `minimal story spine`
 - `heroine generation hints`

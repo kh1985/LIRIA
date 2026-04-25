@@ -477,6 +477,7 @@ gm.md の記録テンプレート:
 
 既存作品を直接模倣するな。
 使ってよいのは構造だけであり、本文、台詞、固有人物、固有展開は LIRIA の現代社会、能力者、生活、恋愛、事件へ変換しろ。
+詳細なストックと運用ルールは `prompt/story_reference.md` を参照し、採用した抽象構造だけを `design/story_reference.md` と `design/story_spine.md` に保存しろ。
 
 - State Apparatus Model: 国家、軍、研究、歴史、公的制度が装置化した圧。LIRIA では警察、行政、病院、学校、企業監査、研究委託、記録管理として出す
 - Founder Wound Model: 創設者や中核人物の喪失、愛、執着が制度化した圧。LIRIA では古い約束、保護対象、家族史、消えた記録、代替不能な誰かへの執着として出す
@@ -517,6 +518,55 @@ gm.md の記録テンプレート:
 - daily-life contact point は、店、職場、病院、学校、役所、近所、客、家族、帰り道などに置け
 - pressure method は、暴力より先に、照会、沈黙、紹介停止、条件提示、善意、保護、噂、期限で考えろ
 - aftermath if removed/discredited/exposed は、空席、代理人、制度の硬化、噂の反動、別勢力の得として残せ
+
+### Organization Cast Pre-Generation
+
+関係組織 / 外圧を初期生成する時点で、`design/organization_cast.md` に主要人物候補を 3-5 人ほど先に作れ。
+本名や部署名が未確定でもよい。
+`現場確認担当` `交渉担当` `理念担当` `内部矛盾担当` `ヒロイン生活圏担当` のような仮IDで十分だ。
+
+目的は、敵や関係者を `gm.md` の抽象メモだけで喋らせないことだ。
+主要人物は、理念ではなく、職務、守りたいもの、嫌悪、弱み、生活上の接触面、具体的な道具を持つ。
+
+保存先:
+
+- 初期候補: `design/organization_cast.md`
+- 画面に出て台詞を持った人物: `cast/npc/[仮ID].md`
+
+最低限作る候補:
+
+- 現場担当: 主人公やヒロインの前に最初に現れる
+- 交渉担当: 条件提示、口止め、取引をする
+- 理念担当: 組織の大義を信じている
+- 内部矛盾担当: 組織内で迷いや弱みを抱えている
+- ヒロイン生活圏担当: 店、職場、役所、病院、家族、近所などに食い込む
+
+組織が小さい場合は 2-3 人に圧縮してよい。
+組織が大きい場合でも、最初に画面へ出すのは接触面の 1-2 人に絞れ。
+
+### Minimal Story Spine
+
+関係組織 / 外圧が出るなら、`design/story_spine.md` に薄い背骨を作れ。
+これは一本道シナリオではない。
+プレイヤーが無視、脱線、遠出をしても、世界側が何を進めるかを見失わないための内部設計である。
+
+必須項目:
+
+- Main Question: この話が主人公とヒロインに問うこと
+- Reference Engines: `prompt/story_reference.md` から採用した抽象エンジン
+- Reveal Ladder: 真相や組織の輪郭が見える段階
+- Pressure Direction: 放置時に組織や世界側が進めること
+- Heroine Tie: ヒロインの生活、秘密、仕事、恋愛感情のどこへ刺さるか
+- End Choice Seeds: 終盤で選びうる天秤
+- Drift Guard: 抽象語を使った時に戻す具体物
+
+運用:
+
+- story_spine は短く保て。長編プロット表にするな
+- Reference Engine は 1-3 個までにしろ
+- プレイヤーの自由入力を潰すために使うな
+- ヒロインが事件から切り離されるなら、Heroine Tie を作り直せ
+- 主要NPCが意味深な抽象語を喋るだけなら、organization_cast へ戻って人物を作り直せ
 
 ### Major Figure Activation Gate
 

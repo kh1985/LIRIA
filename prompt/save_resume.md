@@ -256,7 +256,9 @@ Claude / Codex のどちらで起動していても、GMはセーブカウンタ
 - Q0〜Q6 と Q1.5 の原始回答（またはプレイヤーの直接指定内容）。任意の避けたい導入 / 小物メモがあればそれも含める
 - 能力の全設計（危機面・生活面・親密面、暴走条件、変化の鍵、誓約の残り、成長の現在地）
 - 世界の全設計
+- Story Reference / Story Spine（採用した抽象エンジン、Main Question、Reveal Ladder、Pressure Direction、Heroine Tie）
 - 関係組織 / 外圧 / `Organization Doctrine Layer`（組織理念、目的、規模、主要人物、接触面、弱い継ぎ目、内部矛盾、外部レバレッジ）
+- Organization Cast（現場担当、交渉担当、理念担当、内部矛盾担当、ヒロイン生活圏担当。詳細は `design/organization_cast.md` と `cast/npc/` を参照）
 - **プレイヤーのヒロイン好み**（開始時の回答 + プレイ中の(gm ...)指示で更新）
 - **NG属性リスト**
 - NPC秘密情報（名前付きNPC・重要NPCの分。仲間NPCは `cast/npc/`、ヒロインは `cast/heroine/` を参照）

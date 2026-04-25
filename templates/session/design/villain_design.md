@@ -5,6 +5,8 @@
 - 目的:
 - 規模:
 - 主要人物:
+- organization_cast: design/organization_cast.md を参照
+- story_spine: design/story_spine.md を参照
 - contact surface:
 - weak joint / 弱い継ぎ目:
 - 内部矛盾:

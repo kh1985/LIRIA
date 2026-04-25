@@ -89,6 +89,9 @@ check_current_specs() {
   local harem="${base}/current/harem.md"
   local case_file="${base}/current/case.md"
   local villain="${base}/design/villain_design.md"
+  local story_reference="${base}/design/story_reference.md"
+  local story_spine="${base}/design/story_spine.md"
+  local organization_cast="${base}/design/organization_cast.md"
   local hotset="${base}/current/hotset.md"
   local cast_index="${base}/indexes/cast_index.md"
   local npc_dir="${base}/cast/npc"
@@ -177,6 +180,20 @@ check_current_specs() {
     warn "important NPC / organization contact appears active, but cast/npc/*.md has no NPC sheet"
   fi
 
+  local organization_pressure
+  organization_pressure="$(grep -Eh 'Organization Doctrine|関係組織|外圧|organization pressure|organization_cast|勢力クロック|contact surface|現場担当|回収員|現場調整' "$gm" "$case_file" "$hotset" "$villain" "$organization_cast" 2>/dev/null || true)"
+  if [[ -n "$organization_pressure" ]]; then
+    if [[ ! -f "$story_reference" ]] || ! grep -Eq 'engine:[[:space:]]*[^[:space:]]' "$story_reference"; then
+      warn "organization pressure active, but design/story_reference.md has no selected reference engine"
+    fi
+    if [[ ! -f "$story_spine" ]] || ! grep -Eq 'この話.*:[[:space:]]*[^[:space:]]|if ignored:[[:space:]]*[^[:space:]]|visible first sign:[[:space:]]*[^[:space:]]' "$story_spine"; then
+      warn "organization pressure active, but design/story_spine.md is missing story spine fields"
+    fi
+    if [[ ! -f "$organization_cast" ]] || ! grep -Eq 'organization:[[:space:]]*[^[:space:]]|role in organization:[[:space:]]*[^[:space:]]|pressure method:[[:space:]]*[^[:space:]]' "$organization_cast"; then
+      warn "organization pressure active, but design/organization_cast.md is missing major figure fields"
+    fi
+  fi
+
   if [[ -f "$villain" ]]; then
     if ! grep -Eq 'Organization Doctrine' "$villain"; then
       warn "villain_design.md missing Organization Doctrine"
@@ -218,6 +235,9 @@ check_session_scaffold() {
 
   [[ -f "${base}/session.json" ]] || warn "missing session metadata: ${base}/session.json"
   [[ -f "${base}/design/initial_answers.md" ]] || error "missing initial answers source of truth: ${base}/design/initial_answers.md"
+  [[ -f "${base}/design/story_reference.md" ]] || warn "missing story reference design: ${base}/design/story_reference.md"
+  [[ -f "${base}/design/story_spine.md" ]] || warn "missing story spine design: ${base}/design/story_spine.md"
+  [[ -f "${base}/design/organization_cast.md" ]] || warn "missing organization cast design: ${base}/design/organization_cast.md"
 
   local player_phase gm_phase hotset_phase
   player_phase="$(first_phase "${base}/current/player.md")"

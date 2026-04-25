@@ -419,8 +419,141 @@ def write_scripted_session(
         - 日常の揺れ: 目の前の相手 / 通知・持ち物・記録のズレ。
         - 外圧: 依頼人の背後に、表向きは福祉系NPOの関係組織が見える。
         - organization pressure scale: personal -> local / work pressure。
+        - story reference selection: Institution Secret Engine + Charismatic Contact Engine。
         - organization cast pre-generation: 依頼人、相談窓口、NPO現場担当を重要NPC候補にする。
         - minimal story spine: スマホを返す/返さない判断が、依頼人の信用と生活上の安全を揺らす。
+        """,
+    )
+
+    write(
+        session_path / "design" / "story_reference.md",
+        """
+        # story_reference
+
+        ## Selected Reference Engines
+
+        - engine: Institution Secret Engine
+          - reason: 相談窓口、提携クリニック、記録、福祉系NPOの表向きの支援が外圧になる。
+          - Q&A source: Q6 First Daily Disturbance / 通知・持ち物・記録のズレ。
+          - LIRIA conversion: 公的制度ではなく、地域支援と相談窓口の接触面として扱う。
+          - avoid direct imitation: 参照作品の固有設定、台詞、人物、展開は使わない。
+        - engine: Charismatic Contact Engine
+          - reason: 大組織を正面から出さず、依頼人と現場担当の濃い接触で始める。
+          - Q&A source: Q5 Initial Heroine / 訪問者・相談者として1人目が出る。
+          - LIRIA conversion: 瑞希、相談窓口担当、NPO現場担当を人物として先に立てる。
+          - avoid direct imitation: 刺客バトルではなく、生活上の圧と信頼の揺れに変換する。
+
+        ## Current Use
+
+        - active in story_spine: yes
+        - active in organization_cast: yes
+        - next review trigger: 関係組織の担当者が画面に出て台詞を持った時
+        """,
+    )
+
+    write(
+        session_path / "design" / "story_spine.md",
+        """
+        # story_spine
+
+        ## Main Question
+
+        - この話が主人公とヒロインに問うこと: 誰かの安全を守るために、どこまで秘密と記録へ踏み込むか。
+
+        ## Reference Engines
+
+        - engine: Institution Secret Engine
+          - how it is converted into LIRIA: 相談窓口、スマホ、受付記録、提携クリニックの接触面へ変換する。
+        - engine: Charismatic Contact Engine
+          - how it is converted into LIRIA: 組織全体ではなく、依頼人と現場担当者の濃い人物圧として出す。
+
+        ## Reveal Ladder
+
+        1. visible first sign: 瑞希がスマホを返さないでほしいと依頼する。
+        2. first concrete lead: 受け渡し場所、相談窓口名、スマホ未確認状態。
+        3. organization / pressure becomes clearer: 福祉系NPOの現場担当や相談窓口が見える。
+        4. heroine tie becomes unavoidable: 瑞希の信用、安全、秘密が主人公の判断に左右される。
+        5. late-stage truth or choice seed: 記録を外へ出すか、瑞希の生活上の安全を優先するか。
+
+        ## Pressure Direction
+
+        - if ignored: 瑞希は別の相談先へ逃げ、スマホの情報が相手側に消される可能性がある。
+        - next visible move: 受け渡し場所か相談窓口から、相手側の接触面が1つ見える。
+        - who acts: 瑞希、相談窓口担当、NPO現場担当。
+        - what changes in life/work/relationship: 主人公の便利屋としての信用と、瑞希からの信頼が揺れる。
+
+        ## Heroine Tie
+
+        - heroine / candidate: 瑞希
+          - life stake: スマホと相談先が生活上の安全に直結している。
+          - emotional stake: 秘密を覗かれたくないが、一人では抱えきれない。
+          - secret / boundary: スマホの中身と本名はまだ未確認。
+          - how she can act autonomously: 拒否する、逃げる、条件を出す、証言する、別相談先へ行く。
+
+        ## Organization Tie
+
+        - related organization: 福祉系NPO
+          - doctrine link: 孤立した若者の支援を表向きにする。
+          - contact surface: SNS相談窓口、夜間の居場所支援、提携クリニック、地域イベント。
+          - weak joint: 善意のスタッフ、紙の受付記録、夜間シフトの引き継ぎ漏れ。
+          - important NPC link: design/organization_cast.md
+
+        ## End Choice Seeds
+
+        - choice seed:
+          - what is gained: 瑞希の安全と信頼。
+          - what is lost: 相談窓口側との関係、主人公の社会的信用。
+          - who is affected: 瑞希、主人公、NPO現場担当、他の相談者。
+
+        ## Drift Guard
+
+        - この話を霧にしないための具体物: スマホ、受け渡しメモ、相談窓口名、受付記録。
+        - 抽象語を使ったら戻す先: 誰が持っている記録か、誰が消したいか、誰の生活が困るか。
+        - 直近で見せるべき生活上の変化: 瑞希が信頼するか、別相談先へ逃げるか。
+        """,
+    )
+
+    write(
+        session_path / "design" / "organization_cast.md",
+        """
+        # organization_cast
+
+        ## Organization Cast Summary
+
+        - organization: 福祉系NPO
+        - pressure scale: personal -> local / work pressure
+        - required major figures: 依頼人、相談窓口担当、NPO現場担当
+        - current major figures: 瑞希、福祉系NPO現場担当（未命名）
+
+        ## Major Figures
+
+        ### 瑞希
+
+        - status: active heroine candidate
+        - role in organization: 組織に追われる/利用される側の接触面。
+        - public face: 深夜の依頼人。
+        - private wound: 本名とスマホの持ち主を伏せる理由がある。
+        - belief: いきなり中身を覗かれたら誰も信用できない。
+        - contradiction: 助けを求めながら、情報を渡すことを拒む。
+        - protected thing: 自分の秘密と生活上の安全。
+        - daily-life contact point: 代々木の便利屋事務所。
+        - pressure method: 沈黙、条件提示、拒否。
+        - concrete tools: 未確認のスマホ、受け渡しメモ。
+        - speech discipline: 怖さを説明しすぎず、具体的な条件だけ出す。
+
+        ### 福祉系NPO現場担当
+
+        - status: seed
+        - role in organization: 相談記録、受け渡し、現場確認を通す。
+        - public face: 若者支援の現場スタッフ。
+        - belief: 支援には記録と管理が必要だと信じている。
+        - contradiction: 保護のための管理が、本人の自由と秘密を削る。
+        - protected thing: 組織の支援スキームと相談記録。
+        - unacceptable line: 外部の便利屋に記録を持ち出されること。
+        - daily-life contact point: 相談窓口、提携クリニック、地域イベント。
+        - pressure method: 照会、紹介停止、善意の説得、期限提示。
+        - concrete tools: 受付記録、相談ID、スマホ、提携先リスト。
+        - speech discipline: 抽象的な支援論を言ったら、2文以内に書類、窓口、相談者名へ戻す。
         """,
     )
 

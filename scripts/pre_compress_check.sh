@@ -121,6 +121,8 @@ warn_check "Anti-Meta Dialogue" "${CURRENT}/gm.md" "Anti-Meta"
 warn_check "Knowledge Boundary" "${CURRENT}/gm.md" "Knowledge Boundary"
 warn_check "Anti-Leading" "${CURRENT}/gm.md" "Anti-Leading"
 warn_check "Manga Export Candidates" "${CURRENT}/gm.md" "Manga Export Candidates"
+warn_check "Base Area Dossier" "${CURRENT}/gm.md" "Base Area Dossier|初期生活圏台帳"
+warn_check "Location Dossiers" "${CURRENT}/gm.md" "Location Dossiers|土地台帳"
 echo ""
 
 # --- harem.md ---
@@ -145,6 +147,7 @@ echo ""
 # --- design ---
 echo "■ design（長期設計）"
 warn_check "Organization Doctrine" "${DESIGN}/villain_design.md" "Organization Doctrine"
+warn_check "Base Area Dossier 初期条件" "${DESIGN}/initial_answers.md" "Base Area Dossier|初期生活圏台帳"
 warn_check "visual_pipeline 存在" "${DESIGN}/visual_pipeline.md" "Visual Character Sheet"
 warn_check "manga_pipeline 存在" "${DESIGN}/manga_pipeline.md" "Manga Pipeline"
 warn_check "contact surface" "${DESIGN}/villain_design.md" "contact surface"

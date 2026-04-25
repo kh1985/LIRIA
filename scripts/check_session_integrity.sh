@@ -117,6 +117,9 @@ check_current_specs() {
     if ! grep -Eq 'Knowledge Boundary' "$gm"; then
       warn "gm.md missing Knowledge Boundary guardrail"
     fi
+    if ! grep -Eq 'Base Area Dossier|初期生活圏台帳' "$gm"; then
+      warn "gm.md missing Base Area Dossier / 初期生活圏台帳"
+    fi
 
     local candidate_count
     candidate_count="$(section_count "$gm" "Manga Export Candidates" '^[[:space:]]*-[[:space:]]*candidate[[:space:]]*:')"

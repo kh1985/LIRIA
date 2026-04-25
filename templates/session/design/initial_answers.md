@@ -14,6 +14,17 @@
 - 生活ランク/事業状態
 - 拠点の自然さ
 
+## Base Area Dossier / 初期生活圏台帳
+- 地域名
+- 実在アンカー
+- 土地の質感
+- 主人公の接点
+- ヒロイン導線
+- 組織の接触面
+- シーン小物
+- 汎用化回避
+- 情報の確度
+
 ## Q1.5: Appearance Profile
 - 身長
 - 体型
@@ -84,6 +95,7 @@
 - `inner summary`
 - `world seed`
 - `life base summary`
+- `base area dossier`
 - `work profile`
 - `life rank`
 - `base plausibility`

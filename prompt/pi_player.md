@@ -121,6 +121,7 @@ PI Playerによる検証では、以下を確認する。
 - Q&A結果が `design/initial_answers.md` に保存される
 - `current/player.md`, `current/gm.md`, `current/harem.md` に要約が分配される
 - Q1.5 Appearance Profile が `design/initial_answers.md` と `current/player.md` に保存される
+- Base Area Dossier / 初期生活圏台帳 が `design/initial_answers.md` と `current/gm.md` に保存され、土地描写の汎用化を防ぐ
 - 主人公 Visual Character Sheet が `current/player.md` に text-only で初期化される
 - Ability Constraint Profile が output scale / uses / cooldown / trace / relationship risk まで保持される
 - Equipment / Tools が数値装備ではなく、選択肢、リスク、痕跡、関係リスクとして扱われる

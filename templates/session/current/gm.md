@@ -4,6 +4,19 @@
 
 ## World Seed
 
+## 初期生活圏台帳 / Base Area Dossier
+> Q1 の拠点/生活圏から作る運用用の土地台帳。本文では説明せず、描写・導線・小物・組織接触面へ変換する。
+
+- 地域名:
+- 実在アンカー:
+- 土地の質感:
+- 主人公の接点:
+- ヒロイン導線:
+- 組織の接触面:
+- シーン小物:
+- 汎用化回避:
+- 情報の確度:
+
 ## Incident Entry Type
 
 ## Incident Seeds
@@ -21,6 +34,21 @@
   - one bridge:
   - one cost:
   - status: named one-shot | recurring contact | dossier candidate
+
+## 土地台帳 / Location Dossiers
+> 遠出先、旅先、未準備地が再訪/連絡/事件接続/プレイヤー関心で重要化した時だけ昇格する。観光説明ではなく、描写と導線の足場。
+
+- location:
+  - 地域名:
+  - 実在アンカー:
+  - 土地の質感:
+  - 主人公の接点:
+  - ヒロイン導線:
+  - 組織の接触面:
+  - シーン小物:
+  - 汎用化回避:
+  - 情報の確度:
+  - status: active | recurring | archived
 
 ## Manga Export Candidates
 > 自然文で漫画化 / ヒロインPV / 三面図 / 立ち絵 / キャラシートを求められた時の候補。作中時間を止め、2-3個だけ提示する。未確定秘密を絵で確定させない。

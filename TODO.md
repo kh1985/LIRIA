@@ -34,6 +34,7 @@
 
 次の現実的な残件:
 
+- 全体設計案として、`Organization Cast Pre-Generation + Minimal Story Spine` を検証する。狙いは、組織の理念はあるのに主要人物が抽象メモだけで出てしまう事故を防ぎ、重い一本道シナリオなしで物語の背骨を持つこと
 - 実 smoke を回し、new -> 1 turn -> save -> resume -> pre_compress で session-scoped path と保存項目が欠けないか確認する
 - 本命新規プレイを開始し、初期状態、危機処理、組織圧、ヒロイン反応、漫画化導線が自然に出るか見る
 - 長編運用で、Ability Constraint Profile、Equipment / Tools、Appearance Profile、Organization Doctrine がログ置き場化しないよう保持量を調整する

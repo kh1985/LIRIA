@@ -41,13 +41,7 @@
 - 自分が出る状況
 - GMによるインナー要約
 
-## Q3: Romance Preference
-- 好きなタイプ
-- NG属性
-- 距離感の好み
-- ヒロイン生成バイアス
-
-## Q4: Ability / Action Point
+## Q3: Ability / Action Point
 - 能力あり/なし
 - パッシブ/アクティブ
 - 表面効果
@@ -66,12 +60,29 @@
 - relationship risk
 - escalation rule
 
-## Q5: First Daily Disturbance
-- 最初に揺れる日常の面
-- 例: 訪問者、いつもの場所の変化、仕事/お金/信用のズレ、手続きや窓口、通知/落とし物/記録、お任せ
-- GMによる incident seed / initial pressure 解釈
+## Q4: Romance Preference
+- 好きなタイプ
+- NG属性
+- 距離感の好み
+- ヒロイン生成バイアス
 
-## Q5.5: Initial Unease Source
+## Q5: Initial Heroine / Initial Relationship
+- 初期ヒロインあり/なし
+- 初対面か既知か
+- 最初の相手との距離感
+- 共同体型か流動型か
+- 1人目を強く固定するか / プレイ中の縁で自然に増やすか
+- 初期関係の方針
+
+## Q6: First Daily Disturbance
+- 最初に揺れる日常の面
+- 例: 目の前の相手、拠点/近所、仕事/お金/信用、社会の窓口、通知/落とし物/記録、お任せ
+- GMによる incident seed / initial pressure 解釈
+- organization pressure scale
+- organization cast pre-generation
+- minimal story spine
+
+## Optional Avoid Notes
 - 避けたい始まり方や使ってほしくない小物
 - GMによる initial unease seed 解釈
 - life contact
@@ -80,14 +91,6 @@
 - social surface
 - heroine / NPC stake
 - avoid motifs
-
-## Q6: Initial Heroine / Initial Relationship
-- 初期ヒロインあり/なし
-- 初対面か既知か
-- 最初の相手との距離感
-- 共同体型か流動型か
-- 1人目を強く固定するか / プレイ中の縁で自然に増やすか
-- 初期関係の方針
 
 ## Generated Seeds
 - `player profile`
@@ -103,4 +106,7 @@
 - `ability/action point summary`
 - `incident seed`
 - `initial unease seed`
+- `organization pressure scale`
+- `organization cast pre-generation`
+- `minimal story spine`
 - `heroine generation hints`

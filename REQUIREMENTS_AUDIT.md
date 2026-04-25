@@ -106,9 +106,9 @@ LIRIA の正本定義:
 ### ヒロイン生成
 - Classification: ADAPT
 - Priority: High
-- Current: `core_newgame.md` では Q3 を全体のヒロイン生成バイアスとして扱い、`romance.md` は自律したヒロインと Relationship / Heroine Network の運用へ整理済み。
+- Current: `core_newgame.md` では Q4 を全体のヒロイン生成バイアスとして扱い、`romance.md` は自律したヒロインと Relationship / Heroine Network の運用へ整理済み。
 - LIRIA v1での扱い: 維持するが、「攻略対象の束」ではなく「自律した人物群」の生成へ寄せる必要がある。
-- Risk: Q3 の好みを強く読みすぎると、ヒロインが自律人物ではなく「好みの型」へ寄りすぎる。
+- Risk: Q4 の好みを強く読みすぎると、ヒロインが自律人物ではなく「好みの型」へ寄りすぎる。
 - Next Action: 実プレイで、好みの反映が量産型ヒロイン生成にならず、現代生活圏ベースで自然に出るか確認する。
 
 ### bond / AFFINITY

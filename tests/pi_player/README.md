@@ -145,7 +145,10 @@ PI Player テストでは、主に以下を確認する。
 - GM仕様
 - 入力解釈
 - Q1.5 Appearance Profile / Visual Character Sheet の初期化
-- Ability Constraint Profile と Equipment / Tools の保存粒度
+- Q3 Ability Constraint Profile と Equipment / Tools の保存粒度
+- Q4 Romance Preferences、Q5 初期ヒロイン/初期関係、Q6 First Daily Disturbance の保存分配
+- Q6 由来の organization pressure scale / organization cast pre-generation / minimal story spine
+- Optional Avoid Notes が必須質問ではないこと
 - Heroine Crisis Role と Organization Doctrine Layer の保存
 - Anti-Meta Dialogue / Knowledge Boundary / Anti-Leading
 - Natural Language Manga Export と Manga Export Candidates

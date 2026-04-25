@@ -7,7 +7,7 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 usage() {
   cat <<'EOF'
 Usage:
-  bash scripts/create_manga_export.sh <session_name> <type> <slug>
+  bash scripts/create_manga_export.sh <session_name> <type> <slug> [--one-pass-approved]
 
 Types:
   model-sheet
@@ -16,11 +16,13 @@ Types:
   one-page
 
 Creates a manga export package scaffold under:
-  exports/<session_name>/manga/<timestamp>_<type>_<slug>/
+  exports/<session_name>/manga/<YYYYMMDD>/<HHMMSS>_<type>_<slug>/
+
+Use --one-pass-approved only when the player explicitly asked to generate/output the image now.
 EOF
 }
 
-if [[ "${1:-}" == "-h" || "${1:-}" == "--help" || "$#" -ne 3 ]]; then
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" || "$#" -lt 3 || "$#" -gt 4 ]]; then
   usage
   exit 0
 fi
@@ -28,6 +30,30 @@ fi
 SESSION_NAME="$1"
 EXPORT_TYPE="$2"
 SLUG="$3"
+MODE_FLAG="${4:-}"
+
+GENERATION_MODE="consultation"
+USER_APPROVAL="pending"
+TASK_CONFIRMATION="yes"
+JOB_STATUS="packaged"
+DEFAULT_VISUAL_MODE="Japanese manga / anime-style illustration, not photorealistic"
+DEFAULT_NEGATIVE_VISUALS="photorealistic, live-action, real photo, cinematic still, 3D render, uncanny realism, watermark, garbled text"
+
+if [[ -n "${MODE_FLAG}" ]]; then
+  case "${MODE_FLAG}" in
+    --one-pass-approved|--auto-generate-approved)
+      GENERATION_MODE="one-pass generation"
+      USER_APPROVAL="granted by explicit generation request"
+      TASK_CONFIRMATION="already granted by explicit generation request"
+      JOB_STATUS="queued"
+      ;;
+    *)
+      echo "invalid option: ${MODE_FLAG}" >&2
+      usage
+      exit 1
+      ;;
+  esac
+fi
 
 if [[ ! "${SESSION_NAME}" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
   echo "invalid session name: ${SESSION_NAME}" >&2
@@ -56,9 +82,11 @@ if [[ ! -d "${SAVE_DIR}" ]]; then
   echo "warning: save directory not found; creating export scaffold only: ${SAVE_DIR}" >&2
 fi
 
-TIMESTAMP="$(date +"%Y%m%d_%H%M%S")"
-PACKAGE_NAME="${TIMESTAMP}_${EXPORT_TYPE}_${SLUG}"
-PACKAGE_DIR="${ROOT_DIR}/exports/${SESSION_NAME}/manga/${PACKAGE_NAME}"
+DATE_STAMP="$(date +"%Y%m%d")"
+TIME_STAMP="$(date +"%H%M%S")"
+TIMESTAMP="${DATE_STAMP}_${TIME_STAMP}"
+PACKAGE_NAME="${TIME_STAMP}_${EXPORT_TYPE}_${SLUG}"
+PACKAGE_DIR="${ROOT_DIR}/exports/${SESSION_NAME}/manga/${DATE_STAMP}/${PACKAGE_NAME}"
 
 if [[ -e "${PACKAGE_DIR}" ]]; then
   echo "manga export package already exists: ${PACKAGE_DIR}" >&2
@@ -73,7 +101,7 @@ cat > "${PACKAGE_DIR}/source.md" <<EOF
 - session name: ${SESSION_NAME}
 - export type: ${EXPORT_TYPE}
 - slug: ${SLUG}
-- package name: ${PACKAGE_NAME}
+- package name: ${DATE_STAMP}/${PACKAGE_NAME}
 - created at: ${TIMESTAMP}
 - source type: TODO current scene / heroine debut / relationship beat / crisis hint / model reference
 - source files read:
@@ -106,10 +134,14 @@ cat > "${PACKAGE_DIR}/brief.md" <<EOF
 - adult content handling: keep adult or intimate material separated and controlled for the intended audience; do not delete Style Layer guidance.
 - relationship stage constraints: TODO preserve the current relationship stage and avoid over-intimacy.
 - spoiler policy: TODO
+- default visual mode: ${DEFAULT_VISUAL_MODE}
+- visual style rule: use manga line art, illustrated faces, controlled screentone/shading, and readable comic composition unless the player explicitly requests live-action.
+- must avoid visual style:
+  - ${DEFAULT_NEGATIVE_VISUALS}
 
 Generation status:
-- image generation has not been run.
-- player confirmation is required before any image gen skill or tool call.
+- current status: ${JOB_STATUS}
+- player confirmation: ${USER_APPROVAL}
 EOF
 
 cat > "${PACKAGE_DIR}/character_refs.md" <<EOF
@@ -164,12 +196,13 @@ cat > "${PACKAGE_DIR}/panel_prompts.md" <<EOF
 # Panel Prompts
 
 - page or panel count: TODO
-- global style notes: TODO use LIRIA style guidance without copying hidden notes into visible dialogue.
+- global style notes: ${DEFAULT_VISUAL_MODE}. Use LIRIA style guidance without copying hidden notes into visible dialogue.
 - global visual guardrails:
+  - default to manga/comic illustration, not photorealistic output
   - no meta terms in dialogue or visible text
   - do not reveal unconfirmed secrets visually
   - keep adult or intimate content separated according to brief.md
-- global negative prompt: TODO
+- global negative prompt: ${DEFAULT_NEGATIVE_VISUALS}
 
 ## Panel 1
 
@@ -180,7 +213,7 @@ cat > "${PACKAGE_DIR}/panel_prompts.md" <<EOF
 - background / prop: TODO
 - dialogue text if any: TODO
 - visual guardrails: TODO
-- negative prompt: TODO
+- negative prompt: ${DEFAULT_NEGATIVE_VISUALS}
 EOF
 
 cat > "${PACKAGE_DIR}/lettering.md" <<EOF
@@ -217,7 +250,8 @@ EOF
 cat > "${PACKAGE_DIR}/image_gen_tasks.md" <<EOF
 # Image Gen Tasks
 
-This file is task planning only. It does not authorize image generation.
+This file is task planning. In consultation mode it does not authorize image generation.
+In one-pass generation mode, user approval is already granted by the explicit request.
 
 ## Task 1: art-base
 
@@ -227,7 +261,9 @@ This file is task planning only. It does not authorize image generation.
 - required Visual Character Sheet status: TODO prompt-ready before generation
 - output kind: TODO model sheet / teaser image / scene card / one-page manga
 - target file name: TODO ${SLUG}_art-base.png
-- confirmation needed before generation: yes
+- confirmation needed before generation: ${TASK_CONFIRMATION}
+- visual mode: ${DEFAULT_VISUAL_MODE}
+- negative visuals: ${DEFAULT_NEGATIVE_VISUALS}
 - post-generation notes to record: generated asset references, seed, prompt version, continuity issues
 
 ## Task 2: lettering
@@ -238,15 +274,38 @@ This file is task planning only. It does not authorize image generation.
 - required input: generated art-base image with blank balloons / caption areas
 - output kind: lettered one-page manga
 - target file name: TODO ${SLUG}_lettered.png
-- confirmation needed before generation/editing: yes
+- confirmation needed before generation/editing: ${TASK_CONFIRMATION}
 - post-generation notes to record: font/lettering method, text fit issues, corrections needed
 
 Preflight:
 - Confirm protagonist and heroine IDs from character_refs.md source-of-truth paths.
 - Confirm generated asset references are supplemental, not identity source.
 - Confirm adult content handling and spoiler boundaries.
-- Confirm the player explicitly approved actual generation.
+- Confirm the player explicitly approved actual generation, or that this package was created with one-pass approval.
 - Confirm final result is not blank-balloon-only; one-page manga needs lettering.
+EOF
+
+cat > "${PACKAGE_DIR}/job_status.md" <<EOF
+# Job Status
+
+- mode: ${GENERATION_MODE}
+- user approval: ${USER_APPROVAL}
+- story blocking: forbidden
+- package status: packaged
+- overall status: ${JOB_STATUS}
+- art-base status: not started
+- lettering status: not needed / not started
+- output files:
+  - TODO
+- generated asset references:
+  - TODO path / URL / seed / model / prompt version
+- continuity issues:
+  - TODO
+- next user-facing update: short status only; do not paste command logs into GM narration
+
+Notes:
+- Keep long prompts and internal progress in this package.
+- In one-pass generation mode, return to the story handoff immediately instead of waiting in GM narration.
 EOF
 
 cat > "${PACKAGE_DIR}/publish_notes.md" <<EOF
@@ -260,7 +319,7 @@ cat > "${PACKAGE_DIR}/publish_notes.md" <<EOF
   - TODO hidden proper nouns
   - TODO unresolved secrets
   - TODO raw play log excerpts
-- final generation status: not generated
+- final generation status: ${JOB_STATUS}
 
 Reminder:
 - This package may guide later image generation, but no image has been generated by this scaffold.

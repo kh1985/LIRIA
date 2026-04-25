@@ -18,7 +18,7 @@ cast と save は session ごとに閉じる。
 - 標準 cast: `saves/<session_name>/cast/heroine/*.md`, `saves/<session_name>/cast/npc/*.md`
 - 標準 current: `saves/<session_name>/current/*`
 - 標準 archive: `saves/<session_name>/archive/*`
-- 標準 manga export package: `exports/<session_name>/manga/<timestamp>_<type>_<slug>/`
+- 標準 manga export package: `exports/<session_name>/manga/<YYYYMMDD>/<HHMMSS>_<type>_<slug>/`
 
 同じ scenario から作った別 session でも、キャラの関係、呼称、AFFINITY、固定記憶は共有しない。
 repo ルートの cast ディレクトリが残っていても、それは legacy import 用であり live data ではない。
@@ -144,7 +144,7 @@ cast には「何が変わったか」だけを短く残す。本文や長い経
 | `Knowledge Boundary / Anti-Leading` | `current/gm.md`, 補助で `current/harem.md` | known / suspected / unknown と、こちらから誘導してはいけない未発見情報を残す |
 | `Manga Export Candidates` | `current/gm.md` | 自然文の漫画化依頼で出す候補を2-3個だけ残す。package path と status は残すが、長文 prompt は exports 側へ置く |
 | `Manga Pipeline` | `design/manga_pipeline.md` | manga export package の構成、export type、image gen task 分解、公開時の成人向け表現分離方針を残す |
-| `manga export package` | `exports/<session_name>/manga/<timestamp>_<type>_<slug>/` | `source.md`、`brief.md`、`character_refs.md`、`name.md`、`panel_prompts.md`、`image_gen_tasks.md`、`publish_notes.md` を置く。Git管理外のローカル成果物 |
+| `manga export package` | `exports/<session_name>/manga/<YYYYMMDD>/<HHMMSS>_<type>_<slug>/` | `source.md`、`brief.md`、`character_refs.md`、`name.md`、`panel_prompts.md`、`lettering.md`、`image_gen_tasks.md`、`job_status.md`、`publish_notes.md` を置く。Git管理外のローカル成果物 |
 
 `current/hotset.md` は正本ではないが、再開1ターン目に影響する `Appearance Profile`、能力制約、仕事/生活、Equipment、Organization Doctrine、Heroine Crisis Role、Knowledge Boundary は短く抜粋してよい。
 Visual Character Sheet は正本の `current/player.md` または `cast/heroine/*.md` から読む。hotset には必要時だけ `model sheet status` や `image prompt anchor` の短い参照を置いてよい。
@@ -170,12 +170,12 @@ Visual Character Sheet は、画像/漫画生成用の固定資料だ。
 
 - 候補は `current/gm.md` の `Manga Export Candidates` に置ける
 - export type は `model-sheet` / `heroine-teaser` / `scene-card` / `one-page`
-- 出力先は `exports/<session_name>/manga/<timestamp>_<type>_<slug>/`
-- package は `source.md`、`brief.md`、`character_refs.md`、`name.md`、`panel_prompts.md`、`image_gen_tasks.md`、`publish_notes.md` で構成する
+- 出力先は `exports/<session_name>/manga/<YYYYMMDD>/<HHMMSS>_<type>_<slug>/`
+- package は `source.md`、`brief.md`、`character_refs.md`、`name.md`、`panel_prompts.md`、`lettering.md`、`image_gen_tasks.md`、`job_status.md`、`publish_notes.md` で構成する
 - GM/Codex は必要なら `scripts/create_manga_export.sh` を内部補助として使って package 雛形を作る。これはプレイヤーに覚えさせる CLI 導線ではない
 - `character_refs.md` では、キャラID正本と generated asset references を分ける
 - image gen skill / tool へ渡す前に、主人公と対象ヒロインの Visual Character Sheet を `prompt-ready` 点検する
-- 実際の画像生成は、`image_gen_tasks.md` まで分解し、プレイヤーが確認した後だけ行う
+- 実際の画像生成は、相談型では `image_gen_tasks.md` まで分解し、プレイヤーが確認した後だけ行う。`漫画を出して` などの実生成明示型では、その発話を確認として扱い、`job_status.md` に状態を残す
 - 公開 / 集客用 package では、成人向け表現を削除せず分離・制御する
 
 `exports/` はローカル成果物であり、session の正史保存ではない。

@@ -256,7 +256,7 @@ Claude / Codex のどちらで起動していても、GMはセーブカウンタ
 - **時間進行ポリシー**（日数 / 曜日 / 年齢ラベル / 誕生日処理の扱い）
 - **自動セーブ管理**（前回保存からのシーン数 / 最終保存 / 次回自動保存 / 自動セーブ保留）
 - **脅威クロック**
-- **Manga Export Candidates**（自然文の漫画化 / ヒロインPV / 三面図 / 立ち絵 / キャラシート候補。2-3個まで。package path と status だけを current に残し、長文 prompt は exports 側へ置く）
+- **Manga Export Candidates**（自然文の漫画化 / ヒロインPV / 三面図 / 立ち絵 / キャラシート候補。2-3個まで。package path と status だけを current に残し、長文 prompt と job_status は exports 側へ置く）
 - **直近の後遺症**
 - **直近の転機候補**
 - **直近のリアルタイム発見**
@@ -313,7 +313,7 @@ Claude / Codex のどちらで起動していても、GMはセーブカウンタ
   - appeal:
   - guardrails:
   - package path:
-  - status: proposed | selected | packaged | generated
+  - status: proposed | selected | packaged | queued | generating | generated | failed
 
 ## 脅威クロック
 - クロック名 [現在段階/最大段階]
@@ -437,7 +437,7 @@ hotset は、再開1ターン目のための **温度と圧の抜粋** だ。攻
 - すでに本文で確定していない推測を、確定解として書くこと
 
 これは hotset / save 要約の禁止事項であり、実プレイ中の判断補助とは別だ。
-実プレイ中に迷いやすい判断点が来た場合は、`prompt/runtime.md` の `1-3` 候補 + `4. 自由入力` を使ってよい。
+実プレイ中に初回導入、初登場、依頼、相談、危機、時間圧、複数分岐などの判断点が来た場合は、`prompt/runtime.md` の `1-3` 候補 + `4. 自由入力` を使う。
 
 ### セーブ時の簡易振り返り
 

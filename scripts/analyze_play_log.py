@@ -262,7 +262,15 @@ def check_turn_count(lines: list[str], *, expected_turns: int | None, turn_count
 
 def check_choice_scaffold(lines: list[str]) -> Finding:
     numbered = grep_lines(lines, [r"^[1-4][.．]\s"], limit=12)
+    handoffs = grep_lines(lines, [r"^→\s*どうする[？?]"], limit=5)
     if not numbered:
+        if handoffs:
+            return Finding(
+                label="選択補助",
+                status="warn",
+                evidence=handoffs[:3],
+                note="番号つき選択補助がない。通常会話や余韻なら問題ないが、初回導入、初登場、依頼、相談、危機、時間圧なら `1-3` 候補 + `4. 自由入力` が必要。",
+            )
         return Finding(
             label="選択補助",
             status="ok",

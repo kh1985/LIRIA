@@ -91,7 +91,8 @@ LIRIA/
 └── exports/
     └── session_XXX/
         └── manga/
-            └── YYYYMMDD_HHMMSS_<type>_<slug>/
+            └── YYYYMMDD/
+                └── HHMMSS_<type>_<slug>/
 ```
 
 ## Runtime Relationship

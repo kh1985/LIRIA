@@ -107,7 +107,7 @@ saves/
 
 `run_ai_persona_playtest.sh` は、`play.sh --prompt-only` でLIRIAの開始プロンプトを作り、AI人格ファイルと一緒に Codex CLI へ渡して実プレイ風の `raw_*.md` を生成します。デフォルトでは `personas/kenji_style_player.yaml` を使い、生成ログを `analyze_play_log.sh` にかけます。まずプロンプトだけ確認したい場合は `--dry-run` を使います。別人格を使う場合は `--persona /path/to/persona.yaml` を指定します。
 
-漫画化、ヒロインPV、三面図、立ち絵、キャラシートの自然文依頼では、プレイヤーに CLI を覚えさせず、GM/Codex 側が必要に応じて内部補助スクリプトを使います。生成される `exports/<session>/manga/*` は Git 管理外の prompt package であり、実画像生成はプレイヤー確認後だけ行います。
+漫画化、ヒロインPV、三面図、立ち絵、キャラシートの自然文依頼では、プレイヤーに CLI を覚えさせず、GM/Codex 側が必要に応じて内部補助スクリプトを使います。生成される `exports/<session>/manga/YYYYMMDD/*` は Git 管理外の prompt package です。相談型は実画像生成前に確認し、`漫画を出して` などの実生成明示型は裏ジョブとして進めます。
 
 ## 関連ドキュメント
 

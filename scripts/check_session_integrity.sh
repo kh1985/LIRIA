@@ -186,6 +186,12 @@ check_current_specs() {
     if [[ ! -f "$story_reference" ]] || ! grep -Eq 'engine:[[:space:]]*[^[:space:]]' "$story_reference"; then
       warn "organization pressure active, but design/story_reference.md has no selected reference engine"
     fi
+    if [[ -f "$story_reference" ]] && ! grep -Eq 'Selection Signals|romance / sweetness|institution / record' "$story_reference"; then
+      warn "organization pressure active, but design/story_reference.md has no selection signals"
+    fi
+    if [[ -f "$story_reference" ]] && ! grep -Eq 'Candidate Shortlist|candidate:' "$story_reference"; then
+      warn "organization pressure active, but design/story_reference.md has no candidate shortlist"
+    fi
     if [[ ! -f "$story_spine" ]] || ! grep -Eq 'この話.*:[[:space:]]*[^[:space:]]|if ignored:[[:space:]]*[^[:space:]]|visible first sign:[[:space:]]*[^[:space:]]' "$story_spine"; then
       warn "organization pressure active, but design/story_spine.md is missing story spine fields"
     fi

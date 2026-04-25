@@ -50,10 +50,120 @@ GMは、ユーザーが「今回はこの作品群を参考にして」と明示
 ## 参照の使い方
 
 1. プレイヤーの Q&A、生活基盤、インナー、能力、恋愛好み、最初の日常の揺れを見る。
-2. 下の Reference Engine Stock または session-derived engine から 1-3 個だけ選ぶ。
-3. 固有設定を捨て、LIRIA の現代社会、生活、恋愛、能力、関係組織へ変換する。
-4. `design/story_reference.md` に採用理由を短く保存する。
-5. `design/story_spine.md` に Main Question と Reveal Ladder を作る。
+2. `Reference Selection Policy` で Q&A をタグ化する。
+3. `references/story_media_stock.md` は必要時だけ参照し、候補を 3-5 個に絞る。
+4. 候補から Reference Engine または session-derived engine を 1-3 個だけ選ぶ。
+5. 固有設定を捨て、LIRIA の現代社会、生活、恋愛、能力、関係組織へ変換する。
+6. `design/story_reference.md` に採用理由を短く保存する。
+7. `design/story_spine.md` に Main Question と Reveal Ladder を作る。
+
+## Reference Selection Policy
+
+作品候補を選ぶ時は、作品名からではなく、Q&A と実ログから `selection signals` を作る。
+
+### Step 1: Signals
+
+次の信号を拾う。
+
+- `romance / sweetness`
+  - 正妻感、同居、嫉妬、独占欲、秘密、視線、沈黙、未遂、身分差、 forbidden love、大人の女、官能、帰る場所
+- `life / base`
+  - 店、事務所、家業、職場、近所、通勤路、家、食事、生活費、評判、客
+- `institution / record`
+  - 役所、病院、会社、学校、警察、契約、監査、本人確認、口座、ID、ログ、音声、映像、紹介状
+- `organization / ideology`
+  - NPO、財団、公安、研究会、自治会、企業、治安、保護、効率化、地域浄化、能力者管理
+- `ability / rule`
+  - 強い能力、条件、代償、痕跡、クールダウン、観測者、記録改ざん、本人性、触れてはいけない物
+- `place / inherited wound`
+  - 土地、旅先、古い店、先代、家族、昔の約束、手紙、鍵、地域の噂、閉じた共同体
+- `inner / recovery`
+  - 孤独、喪失、自己嫌悪、執着、帰る場所、救われたい/救いたい、壊れた日常
+- `media / social gaze`
+  - SNS、配信、報道、炎上、噂、人気商売、芸能、情報屋、観客
+
+### Step 2: Candidate Shortlist
+
+`references/story_media_stock.md` を見る場合でも、50作品全部を読むな。
+Quick Selection Guide と上の signals から、候補を 3-5 個だけ選べ。
+
+候補化の優先順位:
+
+1. LIRIA は恋愛シミュレーションなので、`romance / sweetness` が強い場合はロマンス系候補を最低 1 個入れる。
+2. 事件や組織がある場合は、pressure 系候補を 1 個入れる。
+3. 能力が強い場合は、ability / rule 系候補を 1 個入れる。
+4. 拠点や土地が強い場合は、life / place 系候補を 1 個入れる。
+5. 同じ作者・同じ構造に寄りすぎる候補を複数入れない。似た候補は 1 個へ圧縮する。
+
+候補ごとに、次を短く見る。
+
+- positive signal: なぜ今のQ&Aに合うか
+- negative signal: なぜ合わない可能性があるか
+- romance compatibility: 恋愛/ヒロイン/生活へ接続できるか
+- copy-risk: 固有名詞、名場面、能力名を引っ張りそうな危険はあるか
+
+### Step 3: Selection
+
+候補から採用する engine は 1-3 個まで。
+
+推奨配分:
+
+- romance engine: 0-1 個。恋愛信号が強い時は必須。
+- pressure engine: 1 個。事件や組織を霧にしないための外圧。
+- texture / scene engine: 0-1 個。拠点、旅先、土地、生活感、文体の厚み。
+
+`romance floor`:
+LIRIA は恋愛シミュレーションである。
+制度、組織、能力、事件の信号が強い時でも、恋愛と生活を押し潰すな。
+候補が事件系に偏った場合は、必ず次のどれかを選定理由へ混ぜる。
+
+- ヒロインが何を守り、何に怯え、何を言えないのか
+- 主人公との約束、帰る場所、共同生活、嫉妬、身体距離へどう接続するか
+- 事件後に二人の空気がどう変わるか
+
+採用しない候補も、なぜ落としたかを `Rejected / Avoided Engines` に短く残すと、次のGMが迷いにくい。
+
+### Step 4: Conversion
+
+候補作品をそのまま使わず、次へ変換する。
+
+- romance source -> 視線、沈黙、嫉妬、約束、身体距離、帰る場所
+- institution source -> 照会、記録、手続き、窓口、契約、紹介停止
+- organization source -> 理念、接触面、主要人物、内部矛盾、弱い継ぎ目
+- ability source -> 条件、代償、痕跡、誤解、関係リスク
+- place source -> 店、道、土地、気候、食べ物、古い物、地域の噂
+
+### Step 5: Save
+
+`design/story_reference.md` には、次を保存する。
+
+- selection signals
+- candidate shortlist
+- selected engines
+- rejected / avoided engines
+- LIRIA conversion notes
+
+作品名や stock id は内部監査用に短く残してもよいが、本文やNPC台詞には絶対に出すな。
+作品名を保存する場合も、`source hint` として扱い、正本設定にしない。
+
+### Step 6: Concrete Handoff
+
+選んだ engine は、保存して終わりにしない。
+必ず次へ渡す。
+
+- `design/story_spine.md`
+  - `Main Question`
+  - `Reveal Ladder`
+  - `Pressure Direction`
+  - `Heroine Tie`
+  - `if ignored`
+- `design/organization_cast.md`
+  - 組織が出るなら、最初から主要NPC候補を 3-5 人作る
+  - 役職だけでなく、欲しいもの、信じている理念、矛盾、話し方、何を知っているかを持たせる
+  - 画面に出た時点で「灰色の男」のような抽象語だけの人物にしない
+- `current/case.md`
+  - 最初に触れる物、人、場所、記録、関係、能力使用の入口へ落とす
+  - 事件名だけ、組織名だけ、理念だけで始めない
 
 ## Reference Engine Stock
 

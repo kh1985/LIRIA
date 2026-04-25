@@ -419,7 +419,7 @@ def write_scripted_session(
         - 日常の揺れ: 目の前の相手 / 通知・持ち物・記録のズレ。
         - 外圧: 依頼人の背後に、表向きは福祉系NPOの関係組織が見える。
         - organization pressure scale: personal -> local / work pressure。
-        - story reference selection: Institution Secret Engine + Charismatic Contact Engine。
+        - story reference selection: selection signals から Institution Secret Engine + Charismatic Contact Engine を採用。
         - organization cast pre-generation: 依頼人、相談窓口、NPO現場担当を重要NPC候補にする。
         - minimal story spine: スマホを返す/返さない判断が、依頼人の信用と生活上の安全を揺らす。
         """,
@@ -430,18 +430,85 @@ def write_scripted_session(
         """
         # story_reference
 
+        ## Selection Signals
+
+        - romance / sweetness: 初期ヒロインは訪問者/相談者。安心と警戒が混ざる関係開始。
+        - life / base: 代々木の便利屋兼調査補助、小さな事務所兼住居。
+        - institution / record: スマホ、相談窓口、福祉系NPO、記録のズレ。
+        - organization / ideology: 表向きは支援、裏では依頼人の生活安全に圧をかける。
+        - ability / rule: 縁寄せは痕跡と誤解を残す。
+        - place / inherited wound: weak。
+        - inner / recovery: 助けたいが踏み込みすぎたくない。
+        - media / social gaze: weak。
+        - avoid signals: 魔王討伐、戦闘報酬、攻略イベント化。
+
+        ## Candidate Shortlist
+
+        - candidate:
+          - source type: default stock
+          - source hint / stock id: Institution Secret Engine
+          - matched signals: institution / record, organization / ideology
+          - considered as: pressure
+          - why considered: 相談窓口、記録、NPOの表向き支援が外圧になる。
+          - selected: yes
+          - rejection reason:
+          - copy-risk: 制度陰謀を巨大化させすぎない。
+        - candidate:
+          - source type: default stock
+          - source hint / stock id: Charismatic Contact Engine
+          - matched signals: romance / sweetness, life / base, charismatic contact
+          - considered as: romance / pressure
+          - why considered: 大組織ではなく、依頼人と現場担当の濃い接触から始める。
+          - selected: yes
+          - rejection reason:
+          - copy-risk: 刺客バトル化しない。
+        - candidate:
+          - source type: default stock
+          - source hint / stock id: Rule-Bound Encounter Engine
+          - matched signals: ability / rule
+          - considered as: rule
+          - why considered: スマホ、痕跡、能力制約がある。
+          - selected: no
+          - rejection reason: 初回は能力ルールより、依頼人との信頼と記録圧を優先する。
+          - copy-risk: 能力バトル化。
+
         ## Selected Reference Engines
 
         - engine: Institution Secret Engine
+          - source type: default stock
+          - source hint / stock id: Institution Secret Engine
           - reason: 相談窓口、提携クリニック、記録、福祉系NPOの表向きの支援が外圧になる。
           - Q&A source: Q6 First Daily Disturbance / 通知・持ち物・記録のズレ。
+          - matched signals: institution / record, organization / ideology
+          - role: pressure
+          - romance priority: normal
           - LIRIA conversion: 公的制度ではなく、地域支援と相談窓口の接触面として扱う。
           - avoid direct imitation: 参照作品の固有設定、台詞、人物、展開は使わない。
         - engine: Charismatic Contact Engine
+          - source type: default stock
+          - source hint / stock id: Charismatic Contact Engine
           - reason: 大組織を正面から出さず、依頼人と現場担当の濃い接触で始める。
           - Q&A source: Q5 Initial Heroine / 訪問者・相談者として1人目が出る。
+          - matched signals: romance / sweetness, life / base, charismatic contact
+          - role: romance / pressure
+          - romance priority: high
           - LIRIA conversion: 瑞希、相談窓口担当、NPO現場担当を人物として先に立てる。
           - avoid direct imitation: 刺客バトルではなく、生活上の圧と信頼の揺れに変換する。
+
+        ## Rejected / Avoided Engines
+
+        - engine: Rule-Bound Encounter Engine
+          - reason: 能力とスマホのルールはあるが、初回は信頼形成を優先する。
+          - rejected because: ルール説明に寄ると恋愛と生活が薄くなる。
+          - copy-risk: 能力バトル化。
+
+        ## Conversion Notes
+
+        - 現代社会への変換: 相談窓口、スマホ、NPO、記録照会。
+        - 生活導線への変換: 便利屋の事務所、深夜の依頼、信用。
+        - 恋愛/ヒロインへの変換: 怖がっている依頼人との距離、秘密、本名をまだ伏せる緊張。
+        - 能力/作用点への変換: 縁寄せは便利ボタンではなく、痕跡と誤解を残す。
+        - 関係組織への変換: まず相談窓口や現場担当という接触面から出す。
 
         ## Current Use
 

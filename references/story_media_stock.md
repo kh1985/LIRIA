@@ -276,6 +276,21 @@ LIRIA 用の作品候補棚。
    - use: 複数ヒロイン/NPCの秘密を断片開示する長期構造。
    - do not copy: 巨大ロボ、固有時系列、セクター設定。
 
+## Selection Tags
+
+`prompt/story_reference.md` の `selection signals` から、この棚を見る時の早見表。
+作品番号は source hint であり、LIRIA の正本設定ではない。
+
+- romance / sweetness: 28, 29, 37, 38, 39, 40, 41, 42, 43, 44, 45, 50
+- life / base: 12, 27, 28, 30, 34, 37, 40, 49
+- institution / record: 1, 2, 16, 31, 34, 35, 36, 46, 48
+- organization / ideology: 1, 15, 16, 19, 31, 33, 35, 46
+- ability / rule: 6, 7, 8, 21, 22, 23, 47, 48, 50
+- place / inherited wound: 3, 12, 13, 14, 30, 40, 41, 43
+- inner / recovery: 4, 13, 19, 21, 27, 30, 37, 39, 45, 46
+- media / social gaze: 5, 6, 9, 16, 23, 31, 35, 36, 49
+- charismatic contact / dense NPC: 5, 8, 11, 20, 31, 33, 35, 44
+
 ## Quick Selection Guide
 
 - 行政・病院・会社・制度の奥へ潜る: 1, 2, 16, 31, 34, 36, 46

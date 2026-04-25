@@ -100,6 +100,7 @@
 
 ## 自動セーブ管理 / Autosave Counter
 - 方針: 10シーンごと
+- 実行補助: 通常シーン終了時に `bash scripts/autosave_turn.sh <session_name>` を使う
 - 前回保存からのシーン数: 0/10
 - 最終保存:
 - 次回自動保存:

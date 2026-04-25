@@ -95,6 +95,7 @@ saves/
 
 ## 補助コマンド
 
+- 通常シーン終了時の自動カウント/10シーン生ログ保存: `bash scripts/autosave_turn.sh session_002`
 - 生ログ保存: `bash scripts/save_rawlog.sh session_002`
 - 実プレイ生ログ分析: `bash scripts/analyze_play_log.sh path/to/raw_log.md`
 - AI人格 実プレイ風ログ生成: `bash scripts/run_ai_persona_playtest.sh session_ai_playtest_001 --turns 8`

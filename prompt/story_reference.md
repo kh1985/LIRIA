@@ -60,6 +60,8 @@ GMは、ユーザーが「今回はこの作品群を参考にして」と明示
 これは初期ストックである。
 この5つに限定しない。
 新規開始Q&Aや実プレイログから、より適切な構造が見えた場合は、session-derived engine を作ってよい。
+作品候補の研究棚は `references/story_media_stock.md` に置く。
+これは毎回読み込む prompt ではなく、必要時に 1-3 個だけ抽象化して使うための外部カタログである。
 
 ### Institution Secret Engine
 

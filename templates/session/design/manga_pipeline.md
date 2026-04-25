@@ -45,6 +45,7 @@
 - 画像、立ち絵、model sheet、URL、seed は `generated asset references` として扱う
 - 画像だけでキャラID、関係性、秘密、内面を確定しない
 - 画像と正本が矛盾する場合、正本を優先し、画像は continuity issue として記録する
+- `GM-only Body Profile` の正確な身長、3サイズ、体重、カップ数は公開用 prompt に入れない。private / model reference で必要な時だけ内部参照し、公開用では visible height と体型印象に変換する
 
 ## Guardrails
 

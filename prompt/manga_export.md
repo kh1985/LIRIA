@@ -149,6 +149,9 @@ publish_notes.md
 - current appearance deltas needed for this scene
 - generated asset references: 生成済み画像、立ち絵、seed、URL。補助参照であり正本ではない
 
+`GM-only Body Profile` の正確な身長、3サイズ、体重、カップ数は通常の公開用 prompt に入れない。
+private / model reference で必要な場合だけ内部参照し、public teaser や recap では `visible height` と体型印象に変換する。
+
 モブ、名前付きNPC、cast NPC、重要NPCには Visual Character Sheet を作らない。
 必要な場合も、場面上の外見メモに留める。
 

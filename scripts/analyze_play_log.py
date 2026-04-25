@@ -102,7 +102,7 @@ def analyze_log(text: str, *, log_path: Path, expected_turns: int | None = None)
             "## Save Candidates",
             format_list(
                 save_candidates,
-                empty="保存候補は自動抽出できませんでした。current/gm.md, current/player.md, current/harem.md を人間レビューしてください。",
+                empty="保存候補は自動抽出できませんでした。current/gm.md, current/player.md, current/harem.md, current/case.md を人間レビューしてください。",
             ),
             "## Manga Candidates",
             format_list(
@@ -186,6 +186,7 @@ def build_findings(lines: list[str], *, expected_turns: int | None, turn_count: 
             [r"理念|目的|組織|NPO|会社|支援|相談窓口|contact surface|弱い継ぎ目|弱点|矛盾"],
             "敵/関係組織がただの悪役でなく、理念・接点・矛盾を持つか。",
         ),
+        check_case_clarity(lines),
         check_absence(
             "Anti-Meta Dialogueリスク",
             lines,
@@ -311,6 +312,35 @@ def check_choice_scaffold(lines: list[str]) -> Finding:
         evidence=choice_four[:1] or evidence,
         note="選択補助は `1-3` 候補 + `4. 自由入力` として使われている。",
     )
+
+
+def check_case_clarity(lines: list[str]) -> Finding:
+    concrete = grep_lines(
+        lines,
+        [
+            r"名刺|社員証|鍵|机|引き出し|会議室|面談|記録|端末|紙|メモ|通知|着信|書類|店|駅|窓口|受け渡し|場所|スマホ",
+            r"次に|今夜|明日|まず|先に|確認|見る|聞く|移す|戻る|追う|待つ",
+        ],
+        limit=6,
+    )
+    abstract_only = grep_lines(
+        lines,
+        [r"印|配置|残滓|順番|照合|違和感|謎|何か"],
+        limit=6,
+    )
+    if concrete:
+        status = "ok"
+        note = "抽象的な謎だけでなく、次に触れる物 / 人 / 場所 / 記録がログに見えている。"
+        evidence = concrete[:4]
+    elif abstract_only:
+        status = "warn"
+        note = "抽象語は出ているが、次に触れる具体物や進行条件が薄い可能性がある。current/case.md の handles を確認する。"
+        evidence = abstract_only[:4]
+    else:
+        status = "missing"
+        note = "active case の足場になる具体物、人物、場所、記録が自動抽出できない。"
+        evidence = []
+    return Finding(label="Case clarity / 事件カード足場", status=status, evidence=evidence, note=note)
 
 
 def grep_lines(lines: list[str], patterns: list[str], *, limit: int | None = None) -> list[str]:

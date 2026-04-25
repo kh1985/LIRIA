@@ -31,6 +31,7 @@ NEW_SYSTEM_PROMPT_FILES = [
     "prompt/visual_character_sheet.md",
     "prompt/manga_export.md",
     "prompt/core_newgame.md",
+    "prompt/case_engine.md",
     "prompt/runtime.md",
     "prompt/combat.md",
     "prompt/villain_engine.md",
@@ -43,6 +44,7 @@ RESUME_SYSTEM_PROMPT_FILES = [
     "prompt/gm_policy.md",
     "prompt/visual_character_sheet.md",
     "prompt/manga_export.md",
+    "prompt/case_engine.md",
     "prompt/runtime.md",
     "prompt/combat.md",
     "prompt/villain_engine.md",
@@ -224,6 +226,12 @@ def prepare_session(*, session_name: str, session_path: Path, session_mode: str)
     if missing:
         raise SystemExit("existing session is not a valid scaffold:\n- " + "\n- ".join(missing))
 
+    case_path = session_path / "current/case.md"
+    if not case_path.exists():
+        template = ROOT / "templates/session/current/case.md"
+        if template.exists():
+            case_path.write_text(template.read_text(encoding="utf-8"), encoding="utf-8")
+
 
 def read_liria_prompt(prompt_mode: str) -> str:
     generated_prompt = ROOT / f".codex/generated/liria-{prompt_mode}.instructions.md"
@@ -273,6 +281,8 @@ def build_play_prompt(
             "- `怜` `真凛` `澪` `月読堂` は旧inner-galge由来または例文由来の名前として扱い、新規playtestでは使わない。必要ならLIRIA v1用に新規キャラ名と新規拠点名を作る。",
             "- 1ターンごとに Player 入力と GM 応答を書く。",
             "- GM応答には、地の文、ヒロイン/NPCの自律反応、生活感、事件の外圧を入れる。",
+            "- Save Notes には active case の `visible problem / short goal / handles / progress condition / if ignored / next visible change` が分かる短い要約を入れる。",
+            "- 謎を増やす時は、既存の手がかり、人物、場所、記録、関係のどれに繋がるかを本文で分かるようにする。",
             "- ヒロイン候補、敵幹部、関係組織の主要人物、ルート鍵NPCの初登場では、頭から爪先まで全身を詳細に描写する。",
             "- 全身描写には髪、顔、体型、首筋、鎖骨、胸元、腰、脚、服装、足元、匂い、仕草、視線が引っかかる外見フックを入れる。",
             "- 成人ヒロイン候補は、下品な採寸ではなく、服の張り方、首筋、鎖骨、腰、脚、歩き方などで恋愛ゲームとしての身体的魅力を出す。",

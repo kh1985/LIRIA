@@ -10,6 +10,7 @@ NEW_SYSTEM_PROMPT_FILES=(
   "prompt/visual_character_sheet.md"
   "prompt/manga_export.md"
   "prompt/core_newgame.md"
+  "prompt/case_engine.md"
   "prompt/runtime.md"
   "prompt/combat.md"
   "prompt/villain_engine.md"
@@ -23,6 +24,7 @@ RESUME_SYSTEM_PROMPT_FILES=(
   "prompt/gm_policy.md"
   "prompt/visual_character_sheet.md"
   "prompt/manga_export.md"
+  "prompt/case_engine.md"
   "prompt/runtime.md"
   "prompt/combat.md"
   "prompt/villain_engine.md"
@@ -43,7 +45,7 @@ GALGE.md のルールで LIRIA を開始して。新しいゲームを始めた�
 launcher が ${session_path} を作成済みなので、この session 配下だけを新規ゲームの保存先として使うこと。
 
 標準保存先:
-- current: ${session_path}/current/player.md, ${session_path}/current/gm.md, ${session_path}/current/harem.md, ${session_path}/current/hotset.md
+- current: ${session_path}/current/player.md, ${session_path}/current/gm.md, ${session_path}/current/harem.md, ${session_path}/current/case.md, ${session_path}/current/hotset.md
 - cast: ${session_path}/cast/heroine/*.md, ${session_path}/cast/npc/*.md
 - design: ${session_path}/design/villain_design.md, ${session_path}/design/visual_pipeline.md, ${session_path}/design/manga_pipeline.md
 - indexes: ${session_path}/indexes/cast_index.md, ${session_path}/indexes/decision_index.md, ${session_path}/indexes/event_index.md
@@ -65,7 +67,7 @@ GALGE.md のルールで LIRIA を再開して。
 読み込み対象は ${session_path}。
 
 標準の正本:
-- current: ${session_path}/current/player.md, ${session_path}/current/gm.md, ${session_path}/current/harem.md, ${session_path}/current/hotset.md
+- current: ${session_path}/current/player.md, ${session_path}/current/gm.md, ${session_path}/current/harem.md, ${session_path}/current/case.md, ${session_path}/current/hotset.md
 - cast: ${session_path}/cast/heroine/*.md, ${session_path}/cast/npc/*.md
 - design: ${session_path}/design/villain_design.md, ${session_path}/design/visual_pipeline.md, ${session_path}/design/manga_pipeline.md
 - indexes: ${session_path}/indexes/cast_index.md, ${session_path}/indexes/decision_index.md, ${session_path}/indexes/event_index.md

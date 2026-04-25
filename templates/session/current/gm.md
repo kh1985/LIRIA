@@ -23,9 +23,14 @@
 ## Incident Seeds
 
 ## 現在のフック / Active Hooks
+> 事件/依頼/違和感の短い設計図は `current/case.md` が正本。ここには他フックとの接続だけ置く。
+
 - 1:
+  - case_id:
 - 2:
+  - case_id:
 - 3:
+  - case_id:
 
 ## Local Expansion Notes
 > 未準備地で生成した接点のうち、再訪/連絡/事件接続/プレイヤー関心が立ったものだけ短く残す。通行人や一度きりの店は保存しない。

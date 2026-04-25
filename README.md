@@ -66,6 +66,7 @@ saves/
     │   ├── player.md
     │   ├── gm.md
     │   ├── harem.md
+    │   ├── case.md
     │   └── hotset.md
     ├── cast/
     │   ├── heroine/
@@ -84,7 +85,7 @@ saves/
         └── logs/
 ```
 
-`current/*` が現在状態、`cast/*` が session ごとの人物設定、`design/*` が長期設計と画像生成/漫画化連携方針、`indexes/*` が索引、`archive/*` が履歴です。`hotset.md` は再開用の軽量 cache であり、正本ではありません。
+`current/*` が現在状態、`current/case.md` が進行中の事件/依頼/違和感の短い設計図、`cast/*` が session ごとの人物設定、`design/*` が長期設計と画像生成/漫画化連携方針、`indexes/*` が索引、`archive/*` が履歴です。`hotset.md` は再開用の軽量 cache であり、正本ではありません。
 
 ## テンプレートとローカルデータ
 

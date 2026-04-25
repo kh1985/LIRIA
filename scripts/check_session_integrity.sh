@@ -87,6 +87,7 @@ check_current_specs() {
   local player="${base}/current/player.md"
   local gm="${base}/current/gm.md"
   local harem="${base}/current/harem.md"
+  local case_file="${base}/current/case.md"
   local villain="${base}/design/villain_design.md"
 
   if [[ -f "$player" ]]; then
@@ -136,6 +137,26 @@ check_current_specs() {
 
   if [[ -f "$harem" ]] && ! grep -Eq 'Heroine Crisis Role' "$harem"; then
     warn "harem.md missing Heroine Crisis Role"
+  fi
+
+  if [[ -f "$case_file" ]]; then
+    if ! grep -Eq 'Active Case' "$case_file"; then
+      warn "case.md missing Active Case section"
+    fi
+    if ! grep -Eq 'short goal|短期目標' "$case_file"; then
+      warn "case.md missing short goal"
+    fi
+    if ! grep -Eq 'handles|手がかり|具体物' "$case_file"; then
+      warn "case.md missing handles"
+    fi
+    if ! grep -Eq 'progress condition|進行条件' "$case_file"; then
+      warn "case.md missing progress condition"
+    fi
+    if ! grep -Eq 'if ignored|放置' "$case_file"; then
+      warn "case.md missing if ignored"
+    fi
+  else
+    warn "missing case card: ${case_file}"
   fi
 
   if [[ -f "$villain" ]]; then

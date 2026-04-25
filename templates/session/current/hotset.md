@@ -12,6 +12,15 @@
 - 能力と身体:
 - 現在の事業 / 世界 / 生活状況:
 
+## Active Case 抜粋
+> 正本は `current/case.md`。ここには再開1ターン目に必要な足場だけ置く。
+
+- case_id:
+- short goal:
+- handles:
+- if ignored:
+- next visible change:
+
 ## 主人公の再開スナップショット
 - Appearance Profile:
 - Visual Character Sheet:

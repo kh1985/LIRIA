@@ -533,8 +533,11 @@ def write_scripted_session(
 
         - 現在のフック:
           - 深夜の依頼人が持ち込んだスマホは、単なる落とし物ではない。
+            - case_id: case_pi_smoke_001
           - 福祉系NPOを名乗る関係組織が、若者の相談窓口を接点にしている。
+            - case_id: case_pi_smoke_001
           - 主人公が能力を使うか、通常調査で踏みとどまるかで、信頼と痕跡が変わる。
+            - case_id: case_pi_smoke_001
 
         ## Base Area Dossier / 初期生活圏台帳
 
@@ -624,6 +627,44 @@ def write_scripted_session(
     )
 
     write(
+        session_path / "current" / "case.md",
+        f"""
+        # Case State
+
+        > 固定ストーリーではなく、今動いている事件 / 依頼 / 違和感を短いカードで管理する。長文ログを置かない。
+
+        ## Active Case
+        - id: case_pi_smoke_001
+        - title: 瑞希のスマホ返却拒否依頼
+        - phase: first_handle
+        - visible problem: 瑞希はスマホを持ち主に返すことを恐れているが、本名と持ち主はまだ伏せている
+        - short goal: スマホを覗かず、受け渡し場所と相手の特徴を確認する
+        - handles:
+          - person: 瑞希
+          - object: 未確認のスマホ / 受け渡しメモ
+          - place: 代々木の事務所 / 近くの明るい店
+          - record: 相談窓口名 / 連絡履歴
+          - relationship: スマホを勝手に覗かない約束
+          - ability reaction: 縁寄せ使用前の痕跡リスク確認
+        - progress condition: スマホの中身を見ずに、受け渡し場所か相手の特徴が1つ分かる
+        - if ignored: 瑞希は別の相談先へ逃げ、スマホの情報が相手側に消される可能性がある
+        - next visible change: 受け渡し場所か相談窓口から、相手側の接触面が1つ見える
+        - relationship stake: 瑞希が主人公を秘密を尊重する相手として見られるか、危険な調査者として距離を取るか
+        - last delta: scripted turn {turn_count} まで、スマホ未確認と能力未使用を維持
+
+        ## Background Cases
+        - id:
+          - title:
+          - pressure:
+          - if ignored:
+          - next ping:
+
+        ## Closed / Archived Pointer
+        -
+        """,
+    )
+
+    write(
         session_path / "current" / "harem.md",
         f"""
         # Relationship Current State
@@ -691,6 +732,14 @@ def write_scripted_session(
         - Visual Character Sheet: model sheet status: text-only。front/side/backの文章指定あり。generated asset refs: none。
         - Ability Constraint Profile: 縁寄せ。output scale小規模、uses / cooldownは1 scene 1回目安、traceとrelationship riskあり。
         - Equipment / Tools: 軽バン、スマホ、工具バッグ、懐中電灯、防犯ブザー。攻撃力アップ装備ではなく、現代社会のリスクを持つ道具。
+
+        ## Active Case Snapshot
+
+        - case_id: case_pi_smoke_001
+        - short goal: スマホを覗かず、受け渡し場所と相手の特徴を確認する
+        - handles: 瑞希 / 未確認のスマホ / 受け渡しメモ / 相談窓口名
+        - if ignored: 瑞希は別の相談先へ逃げ、スマホの情報が相手側に消される可能性がある
+        - next visible change: 受け渡し場所か相談窓口から、相手側の接触面が1つ見える
 
         ## Relationship Snapshot
 
@@ -893,7 +942,7 @@ def write_report(
         ## What This Checked
 
         - new: real session scaffold creation
-        - scripted turn save: Q&A, player, gm, harem, hotset, villain design, indexes, raw log
+        - scripted turn save: Q&A, player, gm, harem, case, hotset, villain design, indexes, raw log
         - resume: prompt-only resume generation
         - integrity: scripts/check_session_integrity.sh
         - pre_compress: scripts/pre_compress_check.sh

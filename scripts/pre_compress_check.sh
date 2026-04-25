@@ -125,6 +125,22 @@ warn_check "Base Area Dossier" "${CURRENT}/gm.md" "Base Area Dossier|初期生�
 warn_check "Location Dossiers" "${CURRENT}/gm.md" "Location Dossiers|土地台帳"
 echo ""
 
+# --- case.md ---
+echo "■ case.md（事件カード / Case State）"
+if [[ -f "${CURRENT}/case.md" ]]; then
+  warn_check "case.md 存在" "${CURRENT}/case.md" "Active Case"
+  warn_check "active case" "${CURRENT}/case.md" "Active Case"
+  warn_check "short goal" "${CURRENT}/case.md" "short goal|短期目標"
+  warn_check "handles" "${CURRENT}/case.md" "handles|手がかり|具体物"
+  warn_check "progress condition" "${CURRENT}/case.md" "progress condition|進行条件"
+  warn_check "if ignored" "${CURRENT}/case.md" "if ignored|放置"
+  warn_check "next visible change" "${CURRENT}/case.md" "next visible change|次に表へ出る変化"
+else
+  echo -e "  ${YELLOW}△ case.md: ファイルなし${NC}"
+  ((WARN++))
+fi
+echo ""
+
 # --- harem.md ---
 echo "■ harem.md（Relationship / Heroine Network）"
 check "AFFINITY" "${CURRENT}/harem.md" "AFFINITY"

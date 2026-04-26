@@ -157,7 +157,7 @@
 
 完了:
 
-- `MEMORY_MODEL.md` を session-scoped cast 前提へ更新
+- `docs/architecture/MEMORY_MODEL.md` を session-scoped cast 前提へ更新
 - 記憶を `core fixed / historical fixed / echo / volatile` に分類
 - legacy import の扱いを read-only に固定
 
@@ -172,7 +172,7 @@
 
 完了:
 
-- `INTEGRITY_CHECK.md` を mirror 前提から session-scoped layout 前提へ更新
+- `docs/validation/INTEGRITY_CHECK.md` を mirror 前提から session-scoped layout 前提へ更新
 - legacy fallback を別節へ隔離
 - `scripts/check_session_integrity.sh` を追加
 
@@ -203,7 +203,7 @@
 
 完了:
 
-- `VALIDATION.md` に multi-session lifecycle を追加
+- `docs/validation/VALIDATION.md` に multi-session lifecycle を追加
 - cross-session isolation を追加
 - 長編・cast voice・archive 観点を session-scoped path に更新
 

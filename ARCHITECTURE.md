@@ -6,9 +6,9 @@
 
 関連文書:
 
-- `MEMORY_MODEL.md`: 記憶の分類と圧縮ルール
-- `INTEGRITY_CHECK.md`: save / resume 周りの整合チェック
-- `VALIDATION.md`: 長編・複数 session 前提の回帰確認
+- `docs/architecture/MEMORY_MODEL.md`: 記憶の分類と圧縮ルール
+- `docs/validation/INTEGRITY_CHECK.md`: save / resume 周りの整合チェック
+- `docs/validation/VALIDATION.md`: 長編・複数 session 前提の回帰確認
 - `TODO.md`: 移行ロードマップ
 
 ## 基本方針

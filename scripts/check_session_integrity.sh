@@ -306,14 +306,14 @@ check_repo_guardrails() {
   fi
 
   local doc_hits
-  doc_hits="$(rg -n "$legacy_pattern" README.md ARCHITECTURE.md MEMORY_MODEL.md INTEGRITY_CHECK.md VALIDATION.md TODO.md 2>/dev/null || true)"
+  doc_hits="$(rg -n "$legacy_pattern" README.md ARCHITECTURE.md docs/architecture/MEMORY_MODEL.md docs/validation/INTEGRITY_CHECK.md docs/validation/VALIDATION.md TODO.md 2>/dev/null || true)"
   if [[ -n "$doc_hits" ]]; then
     note "legacy session references in docs; these should be migration/example only:"
     printf '%s\n' "$doc_hits"
   fi
 
   local root_cast_hits
-  root_cast_hits="$(rg -n '(^|[[:space:]`"'"'"'(:])((heroine|npc)/\*\.md|(heroine|npc)/\[[^]]+\]\.md)' prompt README.md ARCHITECTURE.md MEMORY_MODEL.md INTEGRITY_CHECK.md VALIDATION.md TODO.md 2>/dev/null || true)"
+  root_cast_hits="$(rg -n '(^|[[:space:]`"'"'"'(:])((heroine|npc)/\*\.md|(heroine|npc)/\[[^]]+\]\.md)' prompt README.md ARCHITECTURE.md docs/architecture/MEMORY_MODEL.md docs/validation/INTEGRITY_CHECK.md docs/validation/VALIDATION.md TODO.md 2>/dev/null || true)"
   if [[ -n "$root_cast_hits" ]]; then
     warn "possible repo-root cast path reference:"
     printf '%s\n' "$root_cast_hits"

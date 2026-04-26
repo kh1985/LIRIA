@@ -16,7 +16,7 @@
   - `session_001` 前提を削除し、`bash play.sh new` / `bash play.sh resume` / `bash play.sh liria ...` の汎用説明へ更新。
 - `docs/usage/startup.md`
   - 再開例を `session_001` 固定から `session_002` の汎用例へ変更。
-- `ARCHITECTURE.md`, `INTEGRITY_CHECK.md`, `TODO.md`
+- `ARCHITECTURE.md`, `docs/validation/INTEGRITY_CHECK.md`, `TODO.md`
   - `session_001` を本体前提の記述から外し、「repo 外の個人 legacy asset」扱いへ変更。
 
 ## 固有名詞の整理結果

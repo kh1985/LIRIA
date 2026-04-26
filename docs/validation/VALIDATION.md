@@ -204,7 +204,7 @@
 
 ## 1回の手動確認で見る順番
 
-1. `INTEGRITY_CHECK.md`
+1. `docs/validation/INTEGRITY_CHECK.md`
 2. `saves/<session_name>/current/hotset.md`
 3. `saves/<session_name>/current/gm.md`
 4. 対象ヒロイン / NPC の session-scoped cast file

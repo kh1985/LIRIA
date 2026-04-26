@@ -15,7 +15,7 @@ LIRIA の正本定義:
 - `README.md`
 - `CONCEPT.md`
 - `REQUIREMENTS.md`
-- `MEMORY_MODEL.md`
+- `docs/architecture/MEMORY_MODEL.md`
 - `ARCHITECTURE.md`
 - `GALGE.md`
 - `prompt/*.md`
@@ -101,7 +101,7 @@ LIRIA の正本定義:
 - Current: `gm_policy.md` の `Character Knowledge Boundary`、`Known / Suspected / Unknown`、`Thought and GM Input Boundary` により定義済み。
 - LIRIA v1での扱い: 会話事故防止の必須要件として維持する。
 - Risk: save/resume で current 側の知識スコープ更新が漏れると、再開時に破綻する。
-- Next Action: `current/gm.md` と `current/harem.md` に知識境界メモを残す現行設計を維持し、`INTEGRITY_CHECK.md` の確認項目を活かす。
+- Next Action: `current/gm.md` と `current/harem.md` に知識境界メモを残す現行設計を維持し、`docs/validation/INTEGRITY_CHECK.md` の確認項目を活かす。
 
 ### ヒロイン生成
 - Classification: ADAPT
@@ -178,7 +178,7 @@ LIRIA の正本定義:
 ### セーブ/再開
 - Classification: KEEP
 - Priority: High
-- Current: `save_resume.md`、`ARCHITECTURE.md`、`MEMORY_MODEL.md`、`scripts/check_session_integrity.sh` が揃っている。
+- Current: `save_resume.md`、`ARCHITECTURE.md`、`docs/architecture/MEMORY_MODEL.md`、`scripts/check_session_integrity.sh` が揃っている。
 - LIRIA v1での扱い: 必須機能として維持する。
 - Risk: legacy fallback の説明がまだ多く、main path と読み分けを誤る余地がある。
 - Next Action: v1 公開時は `legacy fallback は旧卓専用` とする注意を継続し、新規運用では `current/*`, `cast/*`, `design/*` に限定する。
@@ -202,7 +202,7 @@ LIRIA の正本定義:
 ### hotset
 - Classification: KEEP
 - Priority: High
-- Current: `core_newgame.md`、`save_resume.md`、`INTEGRITY_CHECK.md` で再開用の短い要約キャッシュとして定義されている。
+- Current: `core_newgame.md`、`save_resume.md`、`docs/validation/INTEGRITY_CHECK.md` で再開用の短い要約キャッシュとして定義されている。
 - LIRIA v1での扱い: 維持する。
 - Risk: 攻略メモ化、Q&A 全文の複写、複数アンカー混在が起きると再開品質が落ちる。
 - Next Action: `hotset` を `今動いている圧 / 未確定情報 / 見えている入口 / 放置で変わること` に絞る原則を維持する。
@@ -246,7 +246,7 @@ LIRIA の正本定義:
 ### 長期継続性
 - Classification: KEEP
 - Priority: High
-- Current: `MEMORY_MODEL.md`、`ARCHITECTURE.md`、`VALIDATION.md` に長編前提の分離と確認観点がある。
+- Current: `docs/architecture/MEMORY_MODEL.md`、`ARCHITECTURE.md`、`docs/validation/VALIDATION.md` に長編前提の分離と確認観点がある。
 - LIRIA v1での扱い: 重要な非機能要件として維持する。
 - Risk: current / cast / archive の責務が崩れると、長編で破綻する。
 - Next Action: archive 逃がし、hotset 再生成、current 圧縮の方針を継続する。
@@ -254,7 +254,7 @@ LIRIA の正本定義:
 ### キャラ人格の一貫性
 - Classification: KEEP
 - Priority: High
-- Current: `VALIDATION.md`、`MEMORY_MODEL.md`、`save_resume.md` で tone / Layer / fixed memory / 呼称整合を確認する仕組みがある。
+- Current: `docs/validation/VALIDATION.md`、`docs/architecture/MEMORY_MODEL.md`、`save_resume.md` で tone / Layer / fixed memory / 呼称整合を確認する仕組みがある。
 - LIRIA v1での扱い: そのまま維持する。
 - Risk: `current` の短メモだけで再登場キャラを回すと声が崩れる。
 - Next Action: 再登場キャラや route key NPC を cast file 管理へ上げるルールを維持する。
@@ -262,7 +262,7 @@ LIRIA の正本定義:
 ### 知識境界
 - Classification: KEEP
 - Priority: High
-- Current: `gm_policy.md`、`INTEGRITY_CHECK.md`、`VALIDATION.md` に監査観点まで揃っている。
+- Current: `gm_policy.md`、`docs/validation/INTEGRITY_CHECK.md`、`docs/validation/VALIDATION.md` に監査観点まで揃っている。
 - LIRIA v1での扱い: 必須。
 - Risk: 知識境界は一度崩れると修復コストが高い。
 - Next Action: `Known / Suspected / Unknown` の更新を save 処理観点として維持する。
@@ -278,7 +278,7 @@ LIRIA の正本定義:
 ### 旧セッション混入防止
 - Classification: KEEP
 - Priority: High
-- Current: `.gitignore`、`check_session_integrity.sh`、`MEMORY_MODEL.md`、`ARCHITECTURE.md` が session 分離を前提にしている。
+- Current: `.gitignore`、`check_session_integrity.sh`、`docs/architecture/MEMORY_MODEL.md`、`ARCHITECTURE.md` が session 分離を前提にしている。
 - LIRIA v1での扱い: GitHub 公開上の必須要件として維持する。
 - Risk: legacy fallback の存在自体は必要だが、main path と混ざると事故る。
 - Next Action: `legacy read-only fallback` の扱いを旧卓専用として保ち、新規公開用途では参照頻度を下げる。
@@ -294,7 +294,7 @@ LIRIA の正本定義:
 ### hotset肥大化防止
 - Classification: KEEP
 - Priority: High
-- Current: `save_resume.md`、`INTEGRITY_CHECK.md`、`VALIDATION.md` で強く抑制されている。
+- Current: `save_resume.md`、`docs/validation/INTEGRITY_CHECK.md`、`docs/validation/VALIDATION.md` で強く抑制されている。
 - LIRIA v1での扱い: そのまま維持する。
 - Risk: hotset を便利メモとして足し続けると、再開キャッシュではなく第2の gm.md になる。
 - Next Action: 監査観点として `複数アンカー禁止` と `攻略メモ化禁止` を継続する。
@@ -318,7 +318,7 @@ LIRIA の正本定義:
 ### セッション分離
 - Classification: KEEP
 - Priority: High
-- Current: `ARCHITECTURE.md`、`MEMORY_MODEL.md`、`create_session.sh`、`check_session_integrity.sh` で self-contained session が成立している。
+- Current: `ARCHITECTURE.md`、`docs/architecture/MEMORY_MODEL.md`、`create_session.sh`、`check_session_integrity.sh` で self-contained session が成立している。
 - LIRIA v1での扱い: 維持する。
 - Risk: 同名キャラや旧 session mirror を live path として扱うと崩れる。
 - Next Action: `session-scoped only` の原則を継続し、legacy は fallback のままに留める。

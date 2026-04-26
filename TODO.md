@@ -529,9 +529,32 @@
 - 商品デモ生成
 - 人格ブレの検証
 
+#### 次フェーズ: AI Player Harness
+**優先度: 中**
+**状態: 未実装・設計TODO**
+
+目的:
+- PI Player smoke と AI Persona Playtest の次段として、複数personaによる実プレイ風検証を安全に回す
+- 人間プレイヤー1人では見切れない GM破綻、ヒロイン自律性、恋愛/生活/事件の絡み、能力の便利すぎ、Knowledge Boundary違反、漫画化候補を早めに検出する
+- AIプレイヤーを最終的な面白さ判定者にせず、人間レビューのためのQA補助として扱う
+
+やること:
+- 複数personaを指定できる設定形式を作る
+- personaごとに turn数を指定し、20〜100ターン程度の長めの実プレイ風 raw log を生成できるようにする
+- 生成した raw log を `scripts/analyze_play_log.sh` に渡す標準導線を作る
+- persona別 report を出し、慎重型、好奇心型、恋愛寄り、事件寄りなどの傾向差を見られるようにする
+- 将来的に `save/resume`、`pre_compress_check.sh`、`check_session_integrity.sh` との接続を検討する
+- report には GM破綻、ヒロイン自律性、恋愛/生活/事件の絡み、能力/装備の便利すぎ、Knowledge Boundary違反、漫画化候補を含める
+
+やらないこと:
+- AIに save ファイルを直接編集させない
+- 完全自律GM/Playerループをいきなり本格実装しない
+- AIプレイヤーの評価を、本命プレイの面白さ判定として扱わない
+
 完了条件:
 - 3者構成のテンプレファイルを用意する
 - 1本、自動実行サンプルのログを出す
+- AI Player Harness の最小仕様として、複数persona、turn数指定、raw log生成、analyze連携、persona別reportの境界が決まっている
 
 ### 構想5: 買い切り商品化
 **優先度: 高**

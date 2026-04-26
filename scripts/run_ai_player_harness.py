@@ -81,6 +81,12 @@ def main() -> int:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Run multiple LIRIA AI persona playtests and summarize the outputs.",
+        epilog=(
+            "Safety: this harness only calls scripts/run_ai_persona_playtest.py; "
+            "it does not implement a fully autonomous GM/Player loop or direct save-file editing. "
+            "In sandboxed environments, dry-run still needs permission to write session scaffolds, "
+            "prompts, reports, and play.sh generated files under .codex/generated."
+        ),
     )
     parser.add_argument(
         "--config",
@@ -115,7 +121,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Create sessions/prompts and report only; pass --dry-run to each persona playtest.",
+        help=(
+            "Do not call Codex for raw logs; still generate session scaffolds, "
+            "playtest prompts, and the harness report."
+        ),
     )
     parser.add_argument(
         "--session-prefix",

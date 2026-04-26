@@ -71,6 +71,7 @@ AIプレイ検証は、人間の本命プレイを置き換える仕組みでは
 `run_ai_persona_playtest.sh` は、`play.sh --prompt-only` でLIRIAの開始プロンプトを作り、AI人格ファイルと一緒に Codex CLI へ渡して `saves/<session>/archive/logs/raw_*_ai_persona_playtest.md` を生成します。既定では `personas/kenji_style_player.yaml` を使い、生成後に `analyze_play_log.sh` へ渡します。まずプロンプトだけ確認したい場合は `--dry-run`、分析を省く場合は `--no-analyze` を使います。
 
 `run_ai_player_harness.sh` は、複数personaを受け取り、personaごとに `session_ai_harness_...` 形式のsession名を自動生成して `run_ai_persona_playtest.py` を呼びます。結果は `saves/_harness_reports/ai_player_harness_YYYYMMDD_HHMMSS.md` にまとまり、persona名、session名、turns、raw log path、analysis path、exit status、失敗したpersona、次に人間が見るべきログを確認できます。config例は `tests/ai_player_harness/sample.yaml` にあります。
+`--dry-run` でも session scaffold、playtest prompt、harness report は生成されます。sandbox環境では、`play.sh --prompt-only` が使う `.codex/generated` への書き込み権限が必要になる場合があります。
 
 AI Persona Playtest の制限:
 

@@ -103,7 +103,7 @@
 
 完了:
 
-- `PROMPT_SPLIT_PLAN.md` を追加
+- `docs/legacy/PROMPT_SPLIT_PLAN.md` を追加
 - `prompt/core.md` `prompt/runtime.md` `prompt/combat.md` を追加
 - `prompt/save_resume.md` `prompt/villain_engine.md` `prompt/romance.md` を追加
 - ランチャーが分割 prompt を読む構造を導入

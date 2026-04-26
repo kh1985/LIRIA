@@ -26,7 +26,7 @@
 
 | レイヤ | 役割 | 主ファイル |
 |---|---|---|
-| Launcher Layer | CLI 起動、scenario 選択、session 作成 / 再開 | `play.sh`, `scenarios/*/config.sh`, `*.command` |
+| Launcher Layer | CLI 起動、scenario 選択、session 作成 / 再開 | `play.sh`, `liria`, `scenarios/*/config.sh` |
 | Prompt Layer | GM の実行ルール | `GALGE.md`, `prompt/*.md` |
 | Style Layer | 文体ルールと参考作品エンジン | `style/rules.md`, `style/reference.md`, `style/defaults/*` |
 | Story Reference Layer | 漫画/作品/ジャンル/実ログから抽出した抽象的な物語エンジン。固定作品リストではない | `prompt/story_reference.md`, `saves/session_XXX/design/story_reference.md` |

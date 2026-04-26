@@ -7,6 +7,7 @@ SCENARIOS_DIR="${ROOT_DIR}/scenarios"
 ENGINE="${ENGINE:-auto}"
 CLAUDE_BARE="${CLAUDE_BARE:-0}"
 PROMPT_ONLY=0
+CLEANUP_SESSIONS_DRY_RUN=0
 CODEX_INSTRUCTIONS_FILE=""
 CLAUDE_SYSTEM_PROMPT_FILE=""
 GENERATED_PROMPT_FILES=()
@@ -21,6 +22,7 @@ Usage:
   bash play.sh menu
   bash play.sh list
   bash play.sh list-sessions [scenario]
+  bash play.sh cleanup-sessions [--dry-run]
   bash play.sh new [scenario] [session_name]
   bash play.sh resume [scenario] [session_name]
   bash play.sh <scenario> new [session_name]
@@ -33,6 +35,7 @@ Examples:
   bash play.sh menu
   bash play.sh list
   bash play.sh list-sessions
+  bash play.sh cleanup-sessions --dry-run
   bash play.sh new
   bash play.sh new liria session_002
   bash play.sh resume
@@ -51,6 +54,7 @@ Notes:
   - `new` without session_name creates the next session_NNN automatically.
   - Auto numbering starts at session_002 to avoid the legacy first slot.
   - `resume` without session_name selects the latest numbered session and prints it.
+  - `cleanup-sessions --dry-run` lists removable local sessions without prompting.
   - This launcher supports Claude CLI and Codex CLI.
   - `ENGINE=auto` prefers Codex when available, then falls back to Claude.
   - Force an engine with `ENGINE=claude` or `ENGINE=codex`.
@@ -98,12 +102,13 @@ interactive_menu() {
   echo "  1. 新規スタート"
   echo "  2. 続きから"
   echo "  3. セッション一覧"
+  echo "  4. 不要なセッションを削除する"
   echo "  q. やめる"
   echo
 
   local answer
   while true; do
-    printf "入力してください（新規 / 続きから / 一覧）: "
+    printf "入力してください（新規 / 続きから / 一覧 / 削除）: "
     if ! IFS= read -r answer; then
       echo
       exit 0
@@ -130,6 +135,10 @@ interactive_menu() {
           echo "まだありません"
         fi
         echo
+        ;;
+      4|cleanup|cleanup-sessions|削除|セッション削除|不要なセッションを削除する)
+        MODE="cleanup-sessions"
+        return
         ;;
       q|Q|quit|exit|やめる|終了)
         exit 0
@@ -237,7 +246,7 @@ is_existing_scenario() {
 
 validate_mode() {
   case "${MODE}" in
-    new|resume|list|list-sessions)
+    new|resume|list|list-sessions|cleanup-sessions)
       ;;
     *)
       echo "unsupported mode: ${MODE}"
@@ -306,6 +315,9 @@ resolve_args() {
       --prompt-only)
         PROMPT_ONLY=1
         ;;
+      --dry-run)
+        CLEANUP_SESSIONS_DRY_RUN=1
+        ;;
       --)
         shift
         while [[ "$#" -gt 0 ]]; do
@@ -353,6 +365,11 @@ resolve_args() {
     list-sessions)
       MODE="list-sessions"
       SCENARIO_ID="${arg2:-liria}"
+      SESSION_NAME=""
+      ;;
+    cleanup-sessions|cleanup)
+      MODE="cleanup-sessions"
+      SCENARIO_ID=""
       SESSION_NAME=""
       ;;
     new|resume|新規|新規スタート|はじめる|始める|続き|続きから|再開)
@@ -446,6 +463,404 @@ list_sessions() {
   fi
 
   printf "%s\n" "${sessions[@]}" | sort
+}
+
+CLEANUP_CANDIDATE_NAMES=()
+CLEANUP_PROTECTED_NAMES=()
+CLEANUP_PROTECTED_REASONS=()
+CLEANUP_UNKNOWN_NAMES=()
+CLEANUP_UNKNOWN_REASONS=()
+CLEANUP_BLOCKED_NAMES=()
+CLEANUP_BLOCKED_REASONS=()
+CLEANUP_SELECTION=()
+
+cleanup_is_protected_session() {
+  case "$1" in
+    kaneko1|kaneko2|kaneko3)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+cleanup_is_candidate_name() {
+  case "$1" in
+    session_*|skill_probe)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+cleanup_name_is_unsafe() {
+  local name="$1"
+
+  [[ -z "${name}" || "${name}" == *"/"* || "${name}" == *".."* ]]
+}
+
+cleanup_tracked_files_for() {
+  local rel_path="$1"
+
+  git -C "${ROOT_DIR}" ls-files -- "${rel_path}"
+}
+
+cleanup_collect_sessions() {
+  CLEANUP_CANDIDATE_NAMES=()
+  CLEANUP_PROTECTED_NAMES=()
+  CLEANUP_PROTECTED_REASONS=()
+  CLEANUP_UNKNOWN_NAMES=()
+  CLEANUP_UNKNOWN_REASONS=()
+  CLEANUP_BLOCKED_NAMES=()
+  CLEANUP_BLOCKED_REASONS=()
+
+  local save_root="${ROOT_DIR}/saves"
+  local dir name rel_path tracked_files
+
+  [[ -d "${save_root}" ]] || return 0
+
+  for dir in "${save_root}"/*; do
+    [[ -d "${dir}" ]] || continue
+    name="$(basename "${dir}")"
+    rel_path="saves/${name}"
+
+    if cleanup_name_is_unsafe "${name}"; then
+      CLEANUP_BLOCKED_NAMES+=("${name:-<empty>}")
+      CLEANUP_BLOCKED_REASONS+=("unsafe name")
+      continue
+    fi
+
+    if cleanup_is_protected_session "${name}"; then
+      CLEANUP_PROTECTED_NAMES+=("${name}")
+      CLEANUP_PROTECTED_REASONS+=("protected")
+      continue
+    fi
+
+    tracked_files="$(cleanup_tracked_files_for "${rel_path}")"
+    if [[ -n "${tracked_files}" ]]; then
+      CLEANUP_BLOCKED_NAMES+=("${name}")
+      CLEANUP_BLOCKED_REASONS+=("contains tracked file")
+      continue
+    fi
+
+    if [[ ! -f "${dir}/session.json" ]]; then
+      CLEANUP_UNKNOWN_NAMES+=("${name}")
+      CLEANUP_UNKNOWN_REASONS+=("missing session.json")
+      continue
+    fi
+
+    if ! cleanup_is_candidate_name "${name}"; then
+      CLEANUP_UNKNOWN_NAMES+=("${name}")
+      CLEANUP_UNKNOWN_REASONS+=("not a cleanup candidate")
+      continue
+    fi
+
+    CLEANUP_CANDIDATE_NAMES+=("${name}")
+  done
+}
+
+cleanup_print_category() {
+  local header="$1"
+  local count="$2"
+  echo "${header}"
+  if [[ "${count}" -eq 0 ]]; then
+    echo "  (なし)"
+    echo
+    return
+  fi
+}
+
+cleanup_print_protected_sessions() {
+  cleanup_print_category "保護中:" "${#CLEANUP_PROTECTED_NAMES[@]}"
+  [[ "${#CLEANUP_PROTECTED_NAMES[@]}" -eq 0 ]] && return
+  local i
+  for (( i=0; i<${#CLEANUP_PROTECTED_NAMES[@]}; i++ )); do
+    echo "  - saves/${CLEANUP_PROTECTED_NAMES[i]}  reason: ${CLEANUP_PROTECTED_REASONS[i]}"
+  done
+  echo
+}
+
+cleanup_print_unknown_sessions() {
+  cleanup_print_category "要確認:" "${#CLEANUP_UNKNOWN_NAMES[@]}"
+  [[ "${#CLEANUP_UNKNOWN_NAMES[@]}" -eq 0 ]] && return
+  local i
+  for (( i=0; i<${#CLEANUP_UNKNOWN_NAMES[@]}; i++ )); do
+    echo "  - saves/${CLEANUP_UNKNOWN_NAMES[i]}  reason: ${CLEANUP_UNKNOWN_REASONS[i]}"
+  done
+  echo
+}
+
+cleanup_print_blocked_sessions() {
+  cleanup_print_category "削除不可:" "${#CLEANUP_BLOCKED_NAMES[@]}"
+  [[ "${#CLEANUP_BLOCKED_NAMES[@]}" -eq 0 ]] && return
+  local i
+  for (( i=0; i<${#CLEANUP_BLOCKED_NAMES[@]}; i++ )); do
+    echo "  - saves/${CLEANUP_BLOCKED_NAMES[i]}  reason: ${CLEANUP_BLOCKED_REASONS[i]}"
+  done
+  echo
+}
+
+cleanup_print_sessions() {
+  echo "削除候補:"
+  if [[ "${#CLEANUP_CANDIDATE_NAMES[@]}" -eq 0 ]]; then
+    echo "  (なし)"
+  else
+    local i
+    for (( i=0; i<${#CLEANUP_CANDIDATE_NAMES[@]}; i++ )); do
+      printf "  %d. saves/%s\n" "$((i + 1))" "${CLEANUP_CANDIDATE_NAMES[i]}"
+    done
+  fi
+  echo
+
+  cleanup_print_protected_sessions
+  cleanup_print_unknown_sessions
+  cleanup_print_blocked_sessions
+}
+
+cleanup_add_selected_index() {
+  local selected="$1"
+  local existing
+
+  if [[ "${#CLEANUP_SELECTION[@]}" -gt 0 ]]; then
+    for existing in "${CLEANUP_SELECTION[@]}"; do
+      [[ "${existing}" == "${selected}" ]] && return
+    done
+  fi
+
+  CLEANUP_SELECTION+=("${selected}")
+}
+
+cleanup_parse_selection() {
+  local raw="$1"
+  local max="$2"
+  local compact token start end start_num end_num token_num current
+  local -a tokens=()
+
+  CLEANUP_SELECTION=()
+  compact="${raw//[[:space:]]/}"
+
+  if [[ -z "${compact}" ]]; then
+    echo "番号、範囲、all、q のいずれかを入力してください。"
+    return 1
+  fi
+
+  case "${compact}" in
+    q|Q|quit|exit|やめる|キャンセル)
+      return 2
+      ;;
+    all|ALL|All)
+      for (( current=1; current<=max; current++ )); do
+        cleanup_add_selected_index "${current}"
+      done
+      return 0
+      ;;
+  esac
+
+  IFS=',' read -r -a tokens <<< "${compact}"
+  for token in "${tokens[@]}"; do
+    if [[ "${token}" =~ ^([0-9]+)-([0-9]+)$ ]]; then
+      start="${BASH_REMATCH[1]}"
+      end="${BASH_REMATCH[2]}"
+      start_num=$((10#${start}))
+      end_num=$((10#${end}))
+      if (( start_num < 1 || end_num < start_num || end_num > max )); then
+        echo "範囲が候補外です: ${token}"
+        return 1
+      fi
+      for (( current=start_num; current<=end_num; current++ )); do
+        cleanup_add_selected_index "${current}"
+      done
+    elif [[ "${token}" =~ ^[0-9]+$ ]]; then
+      token_num=$((10#${token}))
+      if (( token_num < 1 || token_num > max )); then
+        echo "番号が候補外です: ${token}"
+        return 1
+      fi
+      cleanup_add_selected_index "${token_num}"
+    else
+      echo "入力を解釈できません: ${token}"
+      return 1
+    fi
+  done
+
+  [[ "${#CLEANUP_SELECTION[@]}" -gt 0 ]]
+}
+
+cleanup_delete_block_reason() {
+  local name="$1"
+  local rel_path path tracked_files
+
+  if cleanup_name_is_unsafe "${name}"; then
+    echo "unsafe name"
+    return 0
+  fi
+
+  if cleanup_is_protected_session "${name}"; then
+    echo "protected"
+    return 0
+  fi
+
+  rel_path="saves/${name}"
+  path="${ROOT_DIR}/${rel_path}"
+
+  if [[ "${rel_path}" == "saves/.gitkeep" ]]; then
+    echo "protected"
+    return 0
+  fi
+
+  if [[ ! -d "${path}" ]]; then
+    echo "not a directory"
+    return 0
+  fi
+
+  case "${path}" in
+    "${ROOT_DIR}/saves/"*)
+      ;;
+    *)
+      echo "outside saves"
+      return 0
+      ;;
+  esac
+
+  tracked_files="$(cleanup_tracked_files_for "${rel_path}")"
+  if [[ -n "${tracked_files}" ]]; then
+    echo "contains tracked file"
+    return 0
+  fi
+
+  if [[ ! -f "${path}/session.json" ]]; then
+    echo "missing session.json"
+    return 0
+  fi
+
+  if ! cleanup_is_candidate_name "${name}"; then
+    echo "not a cleanup candidate"
+    return 0
+  fi
+
+  echo ""
+}
+
+cleanup_print_git_status() {
+  local status
+
+  status="$(git -C "${ROOT_DIR}" status --short)"
+  echo "git status --short:"
+  if [[ -z "${status}" ]]; then
+    echo "(no tracked changes)"
+  else
+    echo "${status}"
+  fi
+}
+
+cleanup_sessions() {
+  local dry_run="$1"
+
+  cleanup_collect_sessions
+  cleanup_print_sessions
+
+  if [[ "${dry_run}" == "1" ]]; then
+    echo "--dry-run: 削除は行いません。"
+    return 0
+  fi
+
+  if [[ "${#CLEANUP_CANDIDATE_NAMES[@]}" -eq 0 ]]; then
+    echo "削除候補がありません。"
+    return 0
+  fi
+
+  local answer parse_status
+  while true; do
+    echo "削除する番号を入力してください（例: 1 / 1,3,5 / 2-4 / all / q）:"
+    printf "> "
+    if ! IFS= read -r answer; then
+      echo
+      echo "キャンセルしました。"
+      return 0
+    fi
+
+    set +e
+    cleanup_parse_selection "${answer}" "${#CLEANUP_CANDIDATE_NAMES[@]}"
+    parse_status="$?"
+    set -e
+
+    if [[ "${parse_status}" == "0" ]]; then
+      break
+    fi
+    if [[ "${parse_status}" == "2" ]]; then
+      echo "キャンセルしました。"
+      return 0
+    fi
+  done
+
+  local index name
+  echo
+  echo "以下のセッションを削除します:"
+  for index in "${CLEANUP_SELECTION[@]}"; do
+    name="${CLEANUP_CANDIDATE_NAMES[$((index - 1))]}"
+    echo "- saves/${name}"
+  done
+  echo
+  echo "本当に削除しますか？"
+  printf "削除する場合は yes と入力してください: "
+
+  if ! IFS= read -r answer; then
+    echo
+    echo "キャンセルしました。"
+    return 0
+  fi
+
+  if [[ "${answer}" != "yes" ]]; then
+    echo "キャンセルしました。"
+    return 0
+  fi
+
+  local -a deleted=()
+  local -a skipped=()
+  local -a skipped_reasons=()
+  local reason rel_path path
+
+  for index in "${CLEANUP_SELECTION[@]}"; do
+    name="${CLEANUP_CANDIDATE_NAMES[$((index - 1))]}"
+    reason="$(cleanup_delete_block_reason "${name}")"
+    if [[ -n "${reason}" ]]; then
+      skipped+=("saves/${name}")
+      skipped_reasons+=("${reason}")
+      continue
+    fi
+
+    rel_path="saves/${name}"
+    path="${ROOT_DIR}/${rel_path}"
+    rm -rf -- "${path}"
+    deleted+=("${rel_path}")
+  done
+
+  echo
+  echo "削除済み:"
+  if [[ "${#deleted[@]}" -eq 0 ]]; then
+    echo "- (なし)"
+  else
+    for rel_path in "${deleted[@]}"; do
+      echo "- ${rel_path}"
+    done
+  fi
+
+  echo
+  echo "スキップ:"
+  if [[ "${#skipped[@]}" -eq 0 ]]; then
+    echo "- (なし)"
+  else
+    local i
+    for (( i=0; i<${#skipped[@]}; i++ )); do
+      echo "- ${skipped[i]} reason: ${skipped_reasons[i]}"
+    done
+  fi
+
+  echo
+  cleanup_print_git_status
 }
 
 latest_session_name() {
@@ -765,6 +1180,11 @@ main() {
 
   if [[ "${MODE}" == "list" ]]; then
     list_scenarios
+    exit 0
+  fi
+
+  if [[ "${MODE}" == "cleanup-sessions" ]]; then
+    cleanup_sessions "${CLEANUP_SESSIONS_DRY_RUN}"
     exit 0
   fi
 

@@ -34,6 +34,7 @@ AIプレイ検証系は、回帰確認用の `PI Player`、実プレイ風ログ
 - prompt だけ確認: `bash play.sh liria new session_002 --prompt-only`
 - Claude で再開: `bash play.sh resume -claude`
 - Codex で再開: `bash play.sh resume -codex`
+- 不要セッション削除: `./liria` → 「不要なセッションを削除する」
 
 AIプレイ検証:
 

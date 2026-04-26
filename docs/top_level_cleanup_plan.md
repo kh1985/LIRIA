@@ -9,9 +9,9 @@
 今回の推奨は以下。
 
 - root に残す: `README.md`, `CONCEPT.md`, `ARCHITECTURE.md`, `REQUIREMENTS.md`, `TODO.md`, `GALGE.md`, `play.sh`, `liria`, `.gitignore`
-- docs へ移す候補: `REQUIREMENTS_AUDIT.md`
 - 第1弾で移動済み: `docs/legacy/CLEANUP_REPORT.md`, `docs/legacy/PROMPT_SPLIT_PLAN.md`, `docs/usage/startup.md`
 - 第2弾で移動済み: `docs/validation/INTEGRITY_CHECK.md`, `docs/architecture/MEMORY_MODEL.md`, `docs/validation/VALIDATION.md`
+- 第3弾で移動済み: `docs/maintenance/REQUIREMENTS_AUDIT.md`
 - legacy/archive 残候補: `CORE.md`
 - 要確認: `choose_scenario.command`, `resume_game.command`, `resume_game_codex.command`, `start_new_game.command`
 
@@ -33,7 +33,6 @@
 ./GALGE.md
 ./README.md
 ./REQUIREMENTS.md
-./REQUIREMENTS_AUDIT.md
 ./TODO.md
 ./choose_scenario.command
 ./docs
@@ -58,8 +57,8 @@
 `git ls-files | awk -F/ '{print $1}' | sort | uniq -c` の要約。
 
 ```text
-root markdown / launcher files: 15
-docs: 11
+root markdown / launcher files: 14
+docs: 12
 personas: 4
 prompt: 17
 scripts: 19
@@ -79,7 +78,6 @@ CORE.md
 GALGE.md
 README.md
 REQUIREMENTS.md
-REQUIREMENTS_AUDIT.md
 TODO.md
 choose_scenario.command
 liria
@@ -119,7 +117,7 @@ start_new_game.command
 | `docs/validation/INTEGRITY_CHECK.md` | 移動済み | save / resume 整合確認の詳細。重要だがroot必須ではない | README, ARCHITECTURE, TODO, `scripts/check_session_integrity.sh` を更新済み |
 | `docs/architecture/MEMORY_MODEL.md` | 移動済み | 記憶モデル詳細。rootよりarchitecture配下が自然 | README, ARCHITECTURE, TODO, `scripts/check_session_integrity.sh` を更新済み |
 | `docs/validation/VALIDATION.md` | 移動済み | 回帰確認観点。validation配下が自然 | README, ARCHITECTURE, TODO, `scripts/check_session_integrity.sh` を更新済み |
-| `REQUIREMENTS_AUDIT.md` | `docs/maintenance/REQUIREMENTS_AUDIT.md` | 要件監査メモ。`REQUIREMENTS.md` からリンクすれば十分 | REQUIREMENTS |
+| `docs/maintenance/REQUIREMENTS_AUDIT.md` | 移動済み | 要件監査メモ。`REQUIREMENTS.md` からリンクすれば十分 | REQUIREMENTS.md を更新済み |
 | `docs/liria_prompt_auditor.md` | `docs/maintenance/liria_prompt_auditor.md` | 既にdocs内だがmaintenance配下が自然 | docs/maintenance_task_template.md |
 | `docs/maintenance_task_template.md` | `docs/maintenance/maintenance_task_template.md` | 保守テンプレ。maintenance配下が自然 | 参照があれば更新 |
 | `docs/story_generation_improvement_plan.md` | `docs/planning/story_generation_improvement_plan.md` | 実装済みの改善計画。planning配下が自然 | 参照があれば更新 |
@@ -165,7 +163,7 @@ start_new_game.command
 | `docs/validation/INTEGRITY_CHECK.md` | `README.md`, `ARCHITECTURE.md`, `TODO.md`, `scripts/check_session_integrity.sh` を更新済み |
 | `docs/architecture/MEMORY_MODEL.md` | `README.md`, `ARCHITECTURE.md`, `TODO.md`, `scripts/check_session_integrity.sh` を更新済み |
 | `docs/validation/VALIDATION.md` | `README.md`, `ARCHITECTURE.md`, `TODO.md`, `scripts/check_session_integrity.sh` を更新済み |
-| `REQUIREMENTS_AUDIT.md` | `REQUIREMENTS.md` |
+| `docs/maintenance/REQUIREMENTS_AUDIT.md` | `REQUIREMENTS.md` を更新済み |
 | `docs/legacy/PROMPT_SPLIT_PLAN.md` | `TODO.md` |
 | `CORE.md` | `ARCHITECTURE.md`, `TODO.md` |
 | `docs/usage/startup.md` | `docs/legacy/CLEANUP_REPORT.md` |
@@ -221,22 +219,21 @@ LIRIA/
 
 macOS launcher を残す場合は root に置くか、`launchers/macos/` を新設する案もある。ただしダブルクリック用途ではroot直下の方が発見しやすい可能性があるため要確認。
 
-## 次回、第2弾を実施する場合の安全手順
+## 次回以降の安全手順
 
 1. 必要なら `docs/architecture`, `docs/validation`, `docs/maintenance`, `docs/planning`, `docs/product` を作る。
-2. 第1弾の `docs/legacy/CLEANUP_REPORT.md`, `docs/legacy/PROMPT_SPLIT_PLAN.md`, `docs/usage/startup.md` 移動は実施済み。
-3. `README.md`, `TODO.md`, `ARCHITECTURE.md`, `REQUIREMENTS.md` のリンクを更新する。
-4. `scripts/check_session_integrity.sh` のドキュメント検査対象を新pathへ更新する。
+2. 第1弾から第3弾までの移動済みファイルは、現行pathを前提として扱う。
+3. 移動対象の参照元だけリンクを更新する。
+4. 移動対象が integrity script に現れる場合は、検査対象を新pathへ更新する。
 5. `docs/liria_prompt_auditor.md` を移す場合は、`docs/maintenance_task_template.md` と `scripts/liria_prompt_auditor.py` の漏れ検知文字列を更新する。
 6. `git grep -n "旧ファイル名"` で古いpath参照を確認する。
 7. `bash scripts/run_ai_player_harness.sh --help`、`python scripts/liria_prompt_auditor.py --root .`、`bash scripts/check_session_integrity.sh <任意のローカルsession>` など、影響範囲の軽い確認を行う。
 8. `git diff --check` を実行する。
 9. ひとまとまりで commit する。
 
-## 第2弾で実施しないこと
+## 第3弾後も実施しないこと
 
 - ファイル削除はしない。
 - `CORE.md` は移動しない。
-- `REQUIREMENTS_AUDIT.md` は移動しない。
 - macOS launcher の `.command` ファイルは触らない。
 - README / scripts / prompt は書き換えない。

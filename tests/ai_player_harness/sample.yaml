@@ -5,3 +5,6 @@ personas:
   - name: cautious
     path: personas/cautious_player.yaml
     turns: 6
+  - name: romance_first
+    path: personas/romance_first_player.yaml
+    turns: 6

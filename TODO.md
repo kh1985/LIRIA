@@ -543,8 +543,10 @@
 - personaごとに turn数を指定し、20〜100ターン程度の長めの実プレイ風 raw log を生成できるようにする（最小実装: config item の `turns`）
 - 生成した raw log を `scripts/analyze_play_log.sh` に渡す標準導線を作る（最小実装: 下位 `run_ai_persona_playtest.py` の既存分析を利用）
 - persona別 report を出し、慎重型、好奇心型、恋愛寄り、事件寄りなどの傾向差を見られるようにする（最小実装: `saves/_harness_reports/ai_player_harness_*.md`）
+- persona拡充として `romance_first_player` を追加し、ヒロイン即落ち、好意確定、同意境界の破綻を検出しやすくする
 - 将来的に `save/resume`、`pre_compress_check.sh`、`check_session_integrity.sh` との接続を検討する
 - report には GM破綻、ヒロイン自律性、恋愛/生活/事件の絡み、能力/装備の便利すぎ、Knowledge Boundary違反、漫画化候補を含める
+- 次に必要なpersona候補: `case_solver`、`reckless_player`、`completionist_player`
 
 やらないこと:
 - AIに save ファイルを直接編集させない

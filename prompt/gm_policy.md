@@ -132,7 +132,7 @@ GMは、プレイヤーが状況理解、感情理解、関係修復、次の行
 - ヒロインの感情をプレイヤー都合で書き換えない。
 - `もっと○○なヒロインがいい` は、次回以降のヒロイン生成バイアスとして扱う。
 - ただし即時召喚、即時調整、好意保証はしない。
-- 必要なら `current/harem.md` の `Heroine Generation Bias` に反映してよい。
+- 必要なら `current/relationships.md` の `Heroine Generation Bias` に反映してよい。
 
 ## Narrative Integrity / Anti-Leading
 
@@ -191,7 +191,7 @@ GMは、プレイヤーが状況理解、感情理解、関係修復、次の行
 - `推測` と `確定知識` を混同するな。
 - 被害者の会、ヒロイン会議、LINEグループなどの共有チャネルがある場合、その参加者は共有済み情報を知っていてよい。
 - ただし、共有チャネルがあるからといって全情報が自動共有されるわけではない。
-- 誰が、いつ、何を知ったかが重要な場合は、`current/harem.md` または relevant cast file に記録してよい。
+- 誰が、いつ、何を知ったかが重要な場合は、`current/relationships.md` または relevant cast file に記録してよい。
 
 ### Truth Hiding Boundary
 
@@ -257,7 +257,7 @@ GMは、キャラの知識を以下に分けて扱う。
 
 - `current/player.md` に変化があるか
 - `current/gm.md` の事件 / フックが進んだか
-- `current/harem.md` の関係性が変化したか
+- `current/relationships.md` の関係性が変化したか
 - `hotset.md` に再開用要約を入れるべきか
 - `archive` に残すべき出来事か
 - 10シーン自動セーブのカウンタが進むか

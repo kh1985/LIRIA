@@ -139,7 +139,7 @@ check_required_files() {
     "templates/session/session.json"
     "templates/session/current/player.md"
     "templates/session/current/gm.md"
-    "templates/session/current/harem.md"
+    "templates/session/current/relationships.md"
     "templates/session/current/case.md"
     "templates/session/current/hotset.md"
     "templates/session/current/mechanics_card.md"

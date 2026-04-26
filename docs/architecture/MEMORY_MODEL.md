@@ -85,7 +85,7 @@ cast には「何が変わったか」だけを短く残す。本文や長い経
 保存先:
 
 - `saves/<session_name>/current/gm.md`
-- `saves/<session_name>/current/harem.md`
+- `saves/<session_name>/current/relationships.md`
 - `saves/<session_name>/current/hotset.md`
 
 ### 4. volatile
@@ -113,7 +113,7 @@ cast には「何が変わったか」だけを短く残す。本文や長い経
 |---|---|
 | `current/player.md` | volatile + プレイヤー視点の現在状態 |
 | `current/gm.md` | volatile + echo + 世界進行 + 知識スコープ台帳 + Manga Export Candidates |
-| `current/harem.md` | echo + 関係運用 + hidden 深化ベクトル + hidden ヒロイン間ベクトル |
+| `current/relationships.md` | echo + 関係運用 + hidden 深化ベクトル + hidden ヒロイン間ベクトル |
 | `current/hotset.md` | 再開用の echo / volatile 抜粋。正本ではない |
 | `cast/heroine/*.md` | core fixed + historical fixed |
 | `cast/npc/*.md` | core fixed + historical fixed |
@@ -139,9 +139,9 @@ cast には「何が変わったか」だけを短く残す。本文や長い経
 | `Equipment / Tools` | `current/player.md` | 行動選択肢、リスク、痕跡、関係リスクとして残す。攻撃力/防御力スロットにしない |
 | `Organization Doctrine Layer` | `design/villain_design.md` | 組織理念、目的、規模、主要人物、接触面、弱い継ぎ目、内部矛盾、外部レバレッジを長期設計として残す |
 | `Organization current pressure` | `current/gm.md`, `current/hotset.md` | 今接触している面、今動く外圧、勢力クロックへ落ちた要素だけ抜粋する |
-| `Heroine Crisis Role` | `current/harem.md` | frontline / support / civilian / wildcard と危機時の行動傾向を残す |
+| `Heroine Crisis Role` | `current/relationships.md` | frontline / support / civilian / wildcard と危機時の行動傾向を残す |
 | `Anti-Meta Dialogue` | `current/gm.md` | NPC/ヒロインが GM、シナリオ、フラグ、イベント、好感度、判定を台詞に出さないための運用メモとして残す |
-| `Knowledge Boundary / Anti-Leading` | `current/gm.md`, 補助で `current/harem.md` | known / suspected / unknown と、こちらから誘導してはいけない未発見情報を残す |
+| `Knowledge Boundary / Anti-Leading` | `current/gm.md`, 補助で `current/relationships.md` | known / suspected / unknown と、こちらから誘導してはいけない未発見情報を残す |
 | `Manga Export Candidates` | `current/gm.md` | 自然文の漫画化依頼で出す候補を2-3個だけ残す。package path と status は残すが、長文 prompt は exports 側へ置く |
 | `Manga Pipeline` | `design/manga_pipeline.md` | manga export package の構成、export type、image gen task 分解、公開時の成人向け表現分離方針を残す |
 | `manga export package` | `exports/<session_name>/manga/<YYYYMMDD>/<HHMMSS>_<type>_<slug>/` | `source.md`、`brief.md`、`character_refs.md`、`name.md`、`panel_prompts.md`、`lettering.md`、`image_gen_tasks.md`、`job_status.md`、`publish_notes.md` を置く。Git管理外のローカル成果物 |
@@ -186,7 +186,7 @@ current には候補、status、package path だけを残し、長い prompt 本
 誰が何を知っているかは、cast file の固定人格ではなく、**current layer の運用情報**として扱う。
 
 - 正本は `current/gm.md` の `知識スコープ台帳`
-- ヒロインだけの見取り図は `current/harem.md` に補助として置いてよい
+- ヒロインだけの見取り図は `current/relationships.md` に補助として置いてよい
 - cast file には「秘密を持つ性格」や「開示条件」は残してよいが、今どこまで誰が知ったかは current 側で管理する
 
 知識の段階は 3 つに分ける。

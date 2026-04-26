@@ -163,7 +163,7 @@ Heroine Crisis Role
 -> 危機や恋愛で本人が判断する
 -> 拒否 / 保留 / 条件提示 / 協力
 -> 関係変化
--> `current/harem.md` / `cast/heroine/*.md` に残る
+-> `current/relationships.md` / `cast/heroine/*.md` に残る
 
 合格状態:
 
@@ -184,7 +184,7 @@ FAIL 寄り。LIRIA の核に関わる。
 将来の自動化ヒント:
 
 - raw log にヒロインの判断、拒否、保留、条件提示、協力があるか
-- `current/harem.md` に関係変化や Heroine Crisis Role の現在運用が残るか
+- `current/relationships.md` に関係変化や Heroine Crisis Role の現在運用が残るか
 - `cast/heroine/*.md` に fixed memory / tone / boundary / role の更新があるか
 - AI Player Harness の romance-first persona で即落ち、同意境界崩れ、好意確定が多発していないか
 
@@ -221,7 +221,7 @@ FAIL。長編の信用が壊れる。
 
 - raw log に境界整理らしい短い地の文があるか
 - `current/gm.md` に Knowledge Boundary / Anti-Meta guardrail があるか
-- `current/harem.md` と `current/gm.md` の shared / hidden が矛盾していないか
+- `current/relationships.md` と `current/gm.md` の shared / hidden が矛盾していないか
 - 重要 NPC / ヒロイン台詞に未発見の固有名詞、真相、システム語が混ざっていないか
 
 ### Save / Resumeチェーン
@@ -229,7 +229,7 @@ FAIL。長編の信用が壊れる。
 連動:
 
 本文で起きた変化
--> `current/player.md` / `current/gm.md` / `current/harem.md` / `current/case.md`
+-> `current/player.md` / `current/gm.md` / `current/relationships.md` / `current/case.md`
 -> `cast/`
 -> `indexes/` / `archive/`
 -> `current/hotset.md`
@@ -248,7 +248,7 @@ FAIL。長編の信用が壊れる。
 
 浮いている状態:
 
-本文では関係が動いたが、`current/harem.md` や `case.md` に残らない。resume 後に初対面のような距離へ戻る。
+本文では関係が動いたが、`current/relationships.md` や `case.md` に残らない。resume 後に初対面のような距離へ戻る。
 
 判定:
 
@@ -345,7 +345,7 @@ FAIL:
 - 保存候補と current 保存先の対応があるか
 - `current/player.md` に Ability Constraint Profile があるか
 - `current/gm.md` に Knowledge Boundary / Manga Export Candidates があるか
-- `current/harem.md` に Heroine Crisis Role があるか
+- `current/relationships.md` に Heroine Crisis Role があるか
 
 自動化しすぎない方がいいもの:
 
@@ -420,7 +420,7 @@ v1:
 
 v2:
 
-- `current/harem.md` / `cast/heroine/*.md` まで見る
+- `current/relationships.md` / `cast/heroine/*.md` まで見る
 - ヒロインの境界線、約束、関係変化が保存されているかを見る
 
 v3:

@@ -86,7 +86,7 @@ check_current_specs() {
   local base="$1"
   local player="${base}/current/player.md"
   local gm="${base}/current/gm.md"
-  local harem="${base}/current/harem.md"
+  local relationships="${base}/current/relationships.md"
   local case_file="${base}/current/case.md"
   local villain="${base}/design/villain_design.md"
   local story_reference="${base}/design/story_reference.md"
@@ -141,8 +141,13 @@ check_current_specs() {
     fi
   fi
 
-  if [[ -f "$harem" ]] && ! grep -Eq 'Heroine Crisis Role' "$harem"; then
-    warn "harem.md missing Heroine Crisis Role"
+  if [[ ! -f "$relationships" && -f "${base}/current/harem.md" ]]; then
+    relationships="${base}/current/harem.md"
+    warn "using legacy current/harem.md; migrate to current/relationships.md"
+  fi
+
+  if [[ -f "$relationships" ]] && ! grep -Eq 'Heroine Crisis Role' "$relationships"; then
+    warn "relationships.md missing Heroine Crisis Role"
   fi
 
   if [[ -f "$case_file" ]]; then

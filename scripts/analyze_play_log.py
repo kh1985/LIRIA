@@ -102,7 +102,7 @@ def analyze_log(text: str, *, log_path: Path, expected_turns: int | None = None)
             "## Save Candidates",
             format_list(
                 save_candidates,
-                empty="保存候補は自動抽出できませんでした。current/gm.md, current/player.md, current/harem.md, current/case.md を人間レビューしてください。",
+                empty="保存候補は自動抽出できませんでした。current/gm.md, current/player.md, current/relationships.md, current/case.md を人間レビューしてください。",
             ),
             "## Manga Candidates",
             format_list(

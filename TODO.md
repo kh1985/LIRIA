@@ -88,7 +88,7 @@
 完了:
 
 - `ARCHITECTURE.md` に session-scoped source of truth 表を反映
-- `current/player.md` `current/gm.md` `current/harem.md` の責務を固定
+- `current/player.md` `current/gm.md` `current/relationships.md` の責務を固定
 - `cast/heroine` `cast/npc` を session 配下へ固定
 - `design/villain_design.md` を session 配下の設計資料の正本に固定
 - legacy mirror を read-only fallback へ格下げ

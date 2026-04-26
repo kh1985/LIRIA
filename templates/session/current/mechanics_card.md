@@ -12,7 +12,7 @@ Compact player-facing rules that affect the next scene. Keep this file small; mo
 | Range / trigger |  |  | `current/player.md` |
 | Daily uses / cooldown |  |  | `current/hotset.md` |
 | Trace / detection risk |  |  | `current/gm.md` |
-| Relationship risk |  |  | `current/harem.md` |
+| Relationship risk |  |  | `current/relationships.md` |
 
 ## Available Moves
 

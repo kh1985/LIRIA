@@ -210,11 +210,15 @@ def prepare_session(*, session_name: str, session_path: Path, session_mode: str)
     if session_mode != "new-retry":
         raise SystemExit(f"unknown session mode: {session_mode}")
 
+    relationships_path = session_path / "current/relationships.md"
+    if not relationships_path.exists() and (session_path / "current/harem.md").exists():
+        relationships_path = session_path / "current/harem.md"
+
     required_paths = [
         session_path / "session.json",
         session_path / "current/player.md",
         session_path / "current/gm.md",
-        session_path / "current/harem.md",
+        relationships_path,
         session_path / "current/hotset.md",
         session_path / "design/initial_answers.md",
     ]

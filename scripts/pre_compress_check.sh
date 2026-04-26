@@ -33,6 +33,10 @@ CURRENT="${ROOT_DIR}/saves/${SESSION}/current"
 INDEXES="${ROOT_DIR}/saves/${SESSION}/indexes"
 DESIGN="${ROOT_DIR}/saves/${SESSION}/design"
 CAST="${ROOT_DIR}/saves/${SESSION}/cast"
+RELATIONSHIPS="${CURRENT}/relationships.md"
+if [[ ! -f "${RELATIONSHIPS}" && -f "${CURRENT}/harem.md" ]]; then
+  RELATIONSHIPS="${CURRENT}/harem.md"
+fi
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -167,13 +171,13 @@ else
 fi
 echo ""
 
-# --- harem.md ---
-echo "■ harem.md（Relationship / Heroine Network）"
-check "AFFINITY" "${CURRENT}/harem.md" "AFFINITY"
-check "bond" "${CURRENT}/harem.md" "bond"
-warn_check "hidden 深化ベクトル" "${CURRENT}/harem.md" "hidden 深化ベクトル"
-warn_check "約束体系" "${CURRENT}/harem.md" "約束体系"
-warn_check "Heroine Crisis Role" "${CURRENT}/harem.md" "Heroine Crisis Role"
+# --- relationships.md ---
+echo "■ relationships.md（Relationship / Heroine Network）"
+check "AFFINITY" "${RELATIONSHIPS}" "AFFINITY"
+check "bond" "${RELATIONSHIPS}" "bond"
+warn_check "hidden 深化ベクトル" "${RELATIONSHIPS}" "hidden 深化ベクトル"
+warn_check "約束体系" "${RELATIONSHIPS}" "約束体系"
+warn_check "Heroine Crisis Role" "${RELATIONSHIPS}" "Heroine Crisis Role"
 echo ""
 
 # --- hotset.md ---

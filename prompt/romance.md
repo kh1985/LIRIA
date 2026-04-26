@@ -244,7 +244,7 @@ contrast anchor:
 ※ `GM-only Body Profile` はGM相談、画像/漫画化、恋愛描写の体型ロック用。本文で正確な身長や3サイズを直接出すな。身長は目測/相対で出せ
 ※ `(gm 身長は？)` `(gm 3サイズは？)` のように聞かれた時だけ、成人ヒロインに限ってメタ回答してよい。主人公が知ったことにはしない
 ※ 未成年に見える人物、年齢未確定の人物、恐怖状態の被害者には性的な採寸情報を作らない
-※ `contrast anchor` は `current/harem.md` の `Heroine Contrast Matrix` と対応させる。既存ヒロインと似すぎる場合は、本文登場前に personality axis / distance style / crisis role / intimacy texture / protagonist hook のうち最低2軸を変えろ
+※ `contrast anchor` は `current/relationships.md` の `Heroine Contrast Matrix` と対応させる。既存ヒロインと似すぎる場合は、本文登場前に personality axis / distance style / crisis role / intimacy texture / protagonist hook のうち最低2軸を変えろ
 
 ## Visual Character Sheet
 - model sheet status: none | text-only | prompt-ready | image-generated
@@ -295,7 +295,7 @@ AFFINITY 5:
 育つ部分: 性格の発見、関係変化、個人ストーリーの種
 
 ## 恋愛固有
-※ bond / AFFINITY の正本は `current/harem.md`。ここは口調再現用 snapshot
+※ bond / AFFINITY の正本は `current/relationships.md`。ここは口調再現用 snapshot
 bond: [値]
 AFFINITY: [値]
 ヒロイン内面段階: [1-4]
@@ -318,13 +318,13 @@ AFFINITY: [値]
   - [ ] 離脱自由の確認
   - [ ] 嫉妬の克服（任意）
   （GMがプレイ中に追加可能）
-※ hidden の深化ベクトル正本は `current/harem.md`。ここには傾向だけ残せ
+※ hidden の深化ベクトル正本は `current/relationships.md`。ここには傾向だけ残せ
 最終更新: チャプター[番号]（fixed memory 更新時のみ。直近の echo は current 側を参照）
 ```
 
 ### Heroine Contrast Protocol
 
-ヒロインの被り防止は気分で処理するな。新ヒロイン生成、NPCからの昇格、再登場時の役割変更では、必ず `current/harem.md` の `Heroine Contrast Matrix` を見てから決める。
+ヒロインの被り防止は気分で処理するな。新ヒロイン生成、NPCからの昇格、再登場時の役割変更では、必ず `current/relationships.md` の `Heroine Contrast Matrix` を見てから決める。
 
 照合軸:
 - surface archetype: 表面型。例: 静かな実務家、明るい共犯者、危険な保護者
@@ -468,7 +468,7 @@ AFFINITY 5到達後の「深化タグ」:
 
 AFFINITY 5到達後の hidden 深化ベクトル:
   プレイヤーには見せない。本文でも名前を出すな。行動と空気でだけ返せ。
-  正本は `current/harem.md`。
+  正本は `current/relationships.md`。
 
   共通5軸 + 1負債:
   - 安心: 一緒にいて傷つかない、戻ってこられる、任せられる
@@ -496,7 +496,7 @@ AFFINITY 5到達後の hidden 深化ベクトル:
   閾値の扱い:
   - 2: 小さな習慣の変化として出せ
   - 3: そのヒロインから自発的な一歩が出てよい
-  - 4: `current/harem.md` の関係フックに新しい枝を1本足せ
+  - 4: `current/relationships.md` の関係フックに新しい枝を1本足せ
   - 5 かつ `摩耗 <= 1`: 関係変化の候補が見えるだけで、親密段階を自動前進させない。`深化タグ` 解放、`ヒロイン内面段階 +1`、`嫉妬耐性` の変化、`身体的親密さ段階` の候補化のどれかに留めろ
   - `身体的親密さ段階` の前進は、AFFINITY や深化ベクトルの閾値だけでは発生しない。scene 内での明示的または十分に自然な合意、ヒロイン側の意思 / 状態 / 感情、関係段階、文脈、余波を受け止める流れが揃った場合に限り、関係変化の結果として扱え
   - 条件を満たしたように見えても、ヒロイン側の意思や文脈が薄いなら「まだ候補」で止めろ。数値を達成報酬として使うな
@@ -541,7 +541,7 @@ AFFINITY 5到達後の hidden 深化ベクトル:
 
 ヒロイン同士の hidden 関係ベクトル:
   複数関係は主人公と各ヒロインの線だけで作るな。ヒロイン同士にも hidden の温度を持たせろ。
-  ただし重くするな。**全ペア総当たりではなく、今動いているペアだけ** を `current/harem.md` に置け。
+  ただし重くするな。**全ペア総当たりではなく、今動いているペアだけ** を `current/relationships.md` に置け。
 
   基本:
   - ペアは共有 1 本で持て。`ヒロインA↔ヒロインB` と `ヒロインB↔ヒロインA` を別管理するな
@@ -565,7 +565,7 @@ AFFINITY 5到達後の hidden 深化ベクトル:
   閾値の扱い:
   - 2: 呼び方、席順、視線、会話の入り方に差が出てよい
   - 3: 小さな貸し借り、共同作業、気まずさの処理が scene に乗る
-  - 4: `current/harem.md` の相性表や関係フックに新しい枝を 1 本足せ
+  - 4: `current/relationships.md` の相性表や関係フックに新しい枝を 1 本足せ
   - 警戒 4 以上かつ嫉妬 4 以上: バチバチを隠し切れない。対立 scene 候補
   - 敬意 4 以上かつ共闘 4 以上: 主人公抜きでも最低限組める。協力 scene 候補
 
@@ -695,7 +695,7 @@ AFFINITYが下がりうる要因:
 - `style/reference.md` と `style/defaults/romance.md` は、scene の温度、視点、余白、描写密度を制御するために使え
 - 参照は本文模倣ではなく、構造、温度、リズム、余白、視点、描写密度の参照として扱え
 - 親密 scene は単独の刺激ではなく、関係性の確認、揺らぎ、深化、摩耗、事件後の余波として描くと強い
-- scene の後に関係性が動いた場合だけ、`current/harem.md` や `hotset.md` に余韻や関係変化を短く反映してよい
+- scene の後に関係性が動いた場合だけ、`current/relationships.md` や `hotset.md` に余韻や関係変化を短く反映してよい
 
 ### Intimate Voice and Aftercare Rule / 親密な声とアフターケア
 

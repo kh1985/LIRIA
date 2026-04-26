@@ -107,7 +107,7 @@ cat > "${PACKAGE_DIR}/source.md" <<EOF
 - source files read:
   - TODO saves/${SESSION_NAME}/current/player.md
   - TODO saves/${SESSION_NAME}/current/gm.md
-  - TODO saves/${SESSION_NAME}/current/harem.md
+  - TODO saves/${SESSION_NAME}/current/relationships.md
   - TODO saves/${SESSION_NAME}/cast/heroine/[name].md
   - TODO saves/${SESSION_NAME}/indexes/[index].md
 - scene summary: TODO summarize only the needed scene facts. Do not paste full play logs.

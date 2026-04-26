@@ -96,7 +96,7 @@ saves/
     ├── current/
     │   ├── player.md
     │   ├── gm.md
-    │   ├── harem.md
+    │   ├── relationships.md
     │   ├── case.md
     │   ├── hotset.md
     │   ├── mechanics_card.md

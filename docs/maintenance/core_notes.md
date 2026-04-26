@@ -72,7 +72,7 @@
 - Anti-Meta Dialogue の発火候補
 - Heroine Crisis Role
 
-### harem.md
+### relationships.md
 
 - メンバー一覧
 - 嫉妬クロック

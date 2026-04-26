@@ -1,8 +1,8 @@
 # Legacy Concept Audit
 
-Note: This audit predates the `GALGE.md` -> `LIRIA.md` rename. Mentions of
-`GALGE.md` below describe the former prompt orchestrator name as historical
-context.
+Note: This audit predates the `GALGE.md` -> `LIRIA.md` rename and the
+`current/harem.md` -> `current/relationships.md` rename. Mentions of those old
+paths below describe historical names and migration targets.
 
 ## 結論
 

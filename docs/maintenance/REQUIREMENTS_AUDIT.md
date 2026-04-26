@@ -101,7 +101,7 @@ LIRIA の正本定義:
 - Current: `gm_policy.md` の `Character Knowledge Boundary`、`Known / Suspected / Unknown`、`Thought and GM Input Boundary` により定義済み。
 - LIRIA v1での扱い: 会話事故防止の必須要件として維持する。
 - Risk: save/resume で current 側の知識スコープ更新が漏れると、再開時に破綻する。
-- Next Action: `current/gm.md` と `current/harem.md` に知識境界メモを残す現行設計を維持し、`docs/validation/INTEGRITY_CHECK.md` の確認項目を活かす。
+- Next Action: `current/gm.md` と `current/relationships.md` に知識境界メモを残す現行設計を維持し、`docs/validation/INTEGRITY_CHECK.md` の確認項目を活かす。
 
 ### ヒロイン生成
 - Classification: ADAPT
@@ -130,7 +130,7 @@ LIRIA の正本定義:
 ### ヒロイン間関係
 - Classification: ADAPT
 - Priority: Medium
-- Current: `runtime.md`、`save_resume.md`、`current/harem.md` で active なヒロイン間ベクトルを扱う前提がある。
+- Current: `runtime.md`、`save_resume.md`、`current/relationships.md` で active なヒロイン間ベクトルを扱う前提がある。
 - LIRIA v1での扱い: 維持するが、`Relationship / Heroine Network` として `共同体 / 嫉妬 / 共有境界 / 利害調整` に寄せる。
 - Risk: 関係群の管理が目的化すると旧ゲーム性へ戻る。
 - Next Action: ヒロイン間関係を `共同生活 / 知識共有 / 利害衝突` の観点で書き直す候補として整理する。
@@ -194,7 +194,7 @@ LIRIA の正本定義:
 ### current/*.md
 - Classification: KEEP
 - Priority: High
-- Current: `current/player.md`、`current/gm.md`、`current/harem.md` が現在状態の正本として整理されている。
+- Current: `current/player.md`、`current/gm.md`、`current/relationships.md` が現在状態の正本として整理されている。
 - LIRIA v1での扱い: そのまま維持する。
 - Risk: 項目が増えすぎると current 層が肥大化し、hotset や archive の役割を侵食する。
 - Next Action: current は `今効いている情報` のみに保ち、長文履歴は archive へ送る原則を維持する。

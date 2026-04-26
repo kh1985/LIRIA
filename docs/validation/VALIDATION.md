@@ -185,7 +185,7 @@
 
 ## 壊れやすいポイント
 
-- `current/harem.md` と cast ファイルの AFFINITY 乖離
+- `current/relationships.md` と cast ファイルの AFFINITY 乖離
 - `current/player.md` の秘密管理と `current/gm.md` の知識スコープ台帳が食い違う
 - `suspected` のキャラが hidden proper noun を断定口調で話す
 - 日数カウントの進行だけで年齢ラベルを上げてしまう

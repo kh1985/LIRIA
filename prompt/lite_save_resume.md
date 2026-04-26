@@ -12,7 +12,7 @@ session 直下の `player.md`、`gm.md`、`harem.md` は旧構成の read-only f
 
 - `current/player.md`: 主人公の現在状態、外見、能力制約、仕事、生活拠点、装備、プレイヤー視点フック。
 - `current/gm.md`: GM内部の現在フェーズ、外圧、能力全設計、知識スコープ、脅威、勢力、成長監査、プレイヤー観測。
-- `current/harem.md`: ヒロイン状態、bond、AFFINITY、関係フック、ヒロイン知識スコープ、ヒロイン間ベクトル。
+- `current/relationships.md`: ヒロイン状態、bond、AFFINITY、関係フック、ヒロイン知識スコープ、ヒロイン間ベクトル。
 - `current/case.md`: active case と background case の正本。
 - `current/hotset.md`: 再開1ターン目のための温度と圧の抜粋。
 - `design/initial_answers.md`: 初期条件の正本。通常セーブで上書きしない。
@@ -31,7 +31,7 @@ legacy mirror を通常保存で同期しない。
 
 - `current/hotset.md` を最初に読む。なければ current 側から今回用の hotset を内部生成する。
 - hotset を正解手順書として扱わない。今動く圧、未確定情報、見える入口、放置で変わることの抜粋として読む。
-- `current/player.md`、`current/gm.md`、`current/harem.md`、`current/case.md` を正本として確認する。
+- `current/player.md`、`current/gm.md`、`current/relationships.md`、`current/case.md` を正本として確認する。
 - `current/case.md` があるなら、active case の `short goal`、`handles`、`progress condition`、`if ignored`、`next visible change` を優先する。
 - `indexes/cast_index.md` がある場合は、hotset の `今読む優先キャスト` と照合し、今回出る候補を二〜六人までに絞る。
 - 絞ったヒロインと重要NPCの `cast/heroine/*.md`、`cast/npc/*.md` だけを読む。全キャラを総読みしない。
@@ -80,7 +80,7 @@ legacy mirror を通常保存で同期しない。
 - Equipment / Tools。
 - 現在のフックのプレイヤー視点。
 
-`current/harem.md` から優先して引くもの:
+`current/relationships.md` から優先して引くもの:
 
 - 全ヒロインの現在値。
 - Heroine Crisis Role。
@@ -160,7 +160,7 @@ launcher が勝手に保存する機能ではない。
 
 セーブ時は、現在正史を揃える。
 
-- `current/player.md`、`current/gm.md`、`current/harem.md`、`current/case.md` を同じ時点にする。
+- `current/player.md`、`current/gm.md`、`current/relationships.md`、`current/case.md` を同じ時点にする。
 - `current/hotset.md` を再開1ターン目用に上書き再生成する。appendしない。
 - 完結した事件と進行中フックを混ぜない。
 - 進行中フックは最大三本まで。四本目以降は予備に落とす。

@@ -12,7 +12,7 @@
 
 1. `current/hotset.md`
 2. `current/case.md`
-3. Focused excerpts from `current/gm.md`, `current/player.md`, and `current/harem.md`
+3. Focused excerpts from `current/gm.md`, `current/player.md`, and `current/relationships.md`
 4. `indexes/cast_index.md` to narrow cast reads
 5. Relevant `cast/heroine/*.md` and `cast/npc/*.md`
 6. `indexes/decision_index.md` for resolved decisions

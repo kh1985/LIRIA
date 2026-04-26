@@ -167,7 +167,7 @@ LIRIA/
 │       ├── current/
 │       │   ├── player.md
 │       │   ├── gm.md
-│       │   ├── harem.md
+│       │   ├── relationships.md
 │       │   └── hotset.md
 │       ├── cast/
 │       │   ├── heroine/
@@ -240,9 +240,9 @@ flowchart TD
 | 主人公の Visual Character Sheet | `saves/<session_name>/current/player.md` |
 | 主人公のキャラID / 関係性 / 秘密 / 内面 | `saves/<session_name>/current/player.md` |
 | プレイヤー能力の現在仕様 / HP / 残回数 / Equipment / Tools | `saves/<session_name>/current/player.md` |
-| Relationship / Heroine Network 全体状態 / 嫉妬 / 関係フック | `saves/<session_name>/current/harem.md` |
-| Heroine Crisis Role | `saves/<session_name>/current/harem.md` |
-| AFFINITY / bond の current value | `saves/<session_name>/current/harem.md` |
+| Relationship / Heroine Network 全体状態 / 嫉妬 / 関係フック | `saves/<session_name>/current/relationships.md` |
+| Heroine Crisis Role | `saves/<session_name>/current/relationships.md` |
+| AFFINITY / bond の current value | `saves/<session_name>/current/relationships.md` |
 | ヒロイン個別の tone / Layer / fixed memory / 呼称 / Visual Character Sheet | `saves/<session_name>/cast/heroine/*.md` |
 | ヒロインのキャラID / 関係性 / 秘密 / 内面 | `saves/<session_name>/cast/heroine/*.md` と current の知識スコープ |
 | NPC 個別の tone / role / fixed memory | `saves/<session_name>/cast/npc/*.md` |
@@ -297,7 +297,7 @@ flowchart TD
 
 - `saves/<session_name>/player.md`
 - `saves/<session_name>/gm.md`
-- `saves/<session_name>/harem.md`
+- `saves/<session_name>/harem.md` (legacy read-only fallback)
 - `saves/<session_name>/villain_design.md`
 - repo ルートの cast ディレクトリ
 

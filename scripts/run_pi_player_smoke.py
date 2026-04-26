@@ -869,7 +869,7 @@ def write_scripted_session(
     )
 
     write(
-        session_path / "current" / "harem.md",
+        session_path / "current" / "relationships.md",
         f"""
         # Relationship Current State
 
@@ -1060,7 +1060,7 @@ def write_scripted_session(
         | Range / trigger | 触れた物、短い会話、手元の記録から発火 | 遠距離万能探索は不可 | `current/player.md` |
         | Daily uses / cooldown | 短時間に連発しない | 無理をすると頭痛、誤読、周囲の違和感 | `current/hotset.md` |
         | Trace / detection risk | 偶然が重なったような不自然さ | 組織や勘の鋭い相手に拾われる | `current/gm.md` |
-        | Relationship risk | 相手の秘密や迷いに踏み込みすぎる | 信頼を損なう可能性 | `current/harem.md` |
+        | Relationship risk | 相手の秘密や迷いに踏み込みすぎる | 信頼を損なう可能性 | `current/relationships.md` |
 
         ## Available Moves
 
@@ -1262,7 +1262,7 @@ def write_report(
         ## What This Checked
 
         - new: real session scaffold creation
-        - scripted turn save: Q&A, player, gm, harem, case, hotset, villain design, indexes, raw log
+        - scripted turn save: Q&A, player, gm, relationships, case, hotset, villain design, indexes, raw log
         - resume: prompt-only resume generation
         - integrity: scripts/check_session_integrity.sh
         - pre_compress: scripts/pre_compress_check.sh

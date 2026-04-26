@@ -122,7 +122,7 @@ GMはメタ語をNPC/ヒロインの台詞に入れず、必要な説明はGM相
 PI Playerによる検証では、以下を確認する。
 
 - Q&A結果が `design/initial_answers.md` に保存される
-- `current/player.md`, `current/gm.md`, `current/harem.md` に要約が分配される
+- `current/player.md`, `current/gm.md`, `current/relationships.md` に要約が分配される
 - Q1.5 Appearance Profile が `design/initial_answers.md` と `current/player.md` に保存される
 - Base Area Dossier / 初期生活圏台帳 が `design/initial_answers.md` と `current/gm.md` に保存され、土地描写の汎用化を防ぐ
 - 主人公 Visual Character Sheet が `current/player.md` に text-only で初期化される
@@ -136,7 +136,7 @@ PI Playerによる検証では、以下を確認する。
 - 通常会話、移動、余韻では選択補助を毎ターン固定メニュー化しない
 - 候補は `1`: 安全/生活、`2`: 関係/本音、`3`: 事件/能力/リスクの入口であり、成功・好意・真相を保証しない
 - ヒロイン昇格または漫画化対象化の時、ヒロイン Visual Character Sheet が `cast/heroine/` 側に入る
-- Heroine Crisis Role が `current/harem.md` に残る
+- Heroine Crisis Role が `current/relationships.md` に残る
 - Organization Doctrine / contact surface / weak joint が design 層に残り、current には必要な抜粋だけ入る
 - 漫画化、ヒロインPV、三面図などの自然文は作中行動ではなくGM相談/メタ命令として扱われる
 - Manga Export Candidates が `current/gm.md` に2〜3件まで出る

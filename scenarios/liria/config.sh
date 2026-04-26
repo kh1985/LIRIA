@@ -107,7 +107,7 @@ launcher が ${session_path} を作成済みなので、この session 配下だ
 
 標準保存先:
 - session guide: ${session_path}/README.md
-- current: ${session_path}/current/player.md, ${session_path}/current/gm.md, ${session_path}/current/harem.md, ${session_path}/current/case.md, ${session_path}/current/hotset.md, ${session_path}/current/mechanics_card.md
+- current: ${session_path}/current/player.md, ${session_path}/current/gm.md, ${session_path}/current/relationships.md, ${session_path}/current/case.md, ${session_path}/current/hotset.md, ${session_path}/current/mechanics_card.md
 - active checkpoints: ${session_path}/current/checkpoints/
 - cast: ${session_path}/cast/heroine/*.md, ${session_path}/cast/npc/*.md
 - design: ${session_path}/design/initial_answers.md, ${session_path}/design/story_reference.md, ${session_path}/design/story_spine.md, ${session_path}/design/organization_cast.md, ${session_path}/design/villain_design.md, ${session_path}/design/visual_pipeline.md, ${session_path}/design/manga_pipeline.md
@@ -135,7 +135,7 @@ LIRIA.md のルールで LIRIA を再開して。
 
 標準の正本（軽量再開で先に読む）:
 - session guide: ${session_path}/README.md
-- current: ${session_path}/current/player.md, ${session_path}/current/gm.md, ${session_path}/current/harem.md, ${session_path}/current/case.md, ${session_path}/current/hotset.md
+- current: ${session_path}/current/player.md, ${session_path}/current/gm.md, ${session_path}/current/relationships.md, ${session_path}/current/case.md, ${session_path}/current/hotset.md
 - cast: ${session_path}/cast/heroine/*.md, ${session_path}/cast/npc/*.md
 - indexes: ${session_path}/indexes/cast_index.md, ${session_path}/indexes/decision_index.md
 

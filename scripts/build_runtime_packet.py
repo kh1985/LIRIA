@@ -39,7 +39,7 @@ PLACEHOLDERS = {
 DEFAULT_READ_PRIORITIES = [
     "`current/hotset.md`",
     "`current/case.md`",
-    "`current/gm.md`, `current/player.md`, `current/harem.md` focused excerpts",
+    "`current/gm.md`, `current/player.md`, `current/relationships.md` focused excerpts; legacy `current/harem.md` is read-only fallback",
     "`indexes/cast_index.md`",
     "Relevant `cast/heroine/*.md` and `cast/npc/*.md`",
     "`indexes/decision_index.md`",

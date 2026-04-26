@@ -107,6 +107,32 @@ story_reference_has_content() {
   md_key_has_value "$file" 'reason|Q&A source|matched signals|LIRIA conversion|romance / sweetness|life / base|institution / record|organization / ideology|ability / rule|現代社会への変換|生活導線への変換|恋愛/ヒロインへの変換|能力/作用点への変換|関係組織への変換'
 }
 
+story_reference_has_selected_engine() {
+  local file="$1"
+  [[ -f "$file" ]] || return 1
+  awk '
+    /^##+[[:space:]]+Selected Reference Engines([[:space:]]|$)/ {
+      in_section=1
+      next
+    }
+    in_section && /^#+[[:space:]]+/ {
+      in_section=0
+    }
+    in_section && /^[[:space:]-]*engine[[:space:]]*[:：]/ {
+      has_engine=1
+    }
+    in_section && /^[[:space:]-]*source type[[:space:]]*[:：][[:space:]]*[^[:space:]]/ {
+      has_source_type=1
+    }
+    in_section && /^[[:space:]-]*(matched signals|LIRIA conversion)[[:space:]]*[:：][[:space:]]*[^[:space:]]/ {
+      has_conversion_signal=1
+    }
+    END {
+      exit(has_engine && has_source_type && has_conversion_signal ? 0 : 1)
+    }
+  ' "$file"
+}
+
 story_spine_has_content() {
   local file="$1"
   [[ -f "$file" ]] || return 1
@@ -343,7 +369,7 @@ check_current_specs() {
       grep -Ev '^[[:space:]]*(#|>)|:[[:space:]]*$|参照|素材|Summary|Coverage Check|Promotion Rule' || true
   )"
   if [[ -n "$organization_pressure" ]]; then
-    if [[ ! -f "$story_reference" ]] || ! md_key_has_value "$story_reference" 'engine'; then
+    if [[ ! -f "$story_reference" ]] || ! story_reference_has_selected_engine "$story_reference"; then
       warn "organization pressure active, but design/story_reference.md has no selected reference engine"
     fi
     if [[ -f "$story_reference" ]] && ! md_key_has_value "$story_reference" 'matched signals|romance / sweetness|institution / record|organization / ideology'; then

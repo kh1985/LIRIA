@@ -135,6 +135,7 @@ saves/
 - 生ログ保存: `bash scripts/save_rawlog.sh session_002`
 - 事前チェック: `bash scripts/pre_compress_check.sh session_002`
 - session 整合確認: `bash scripts/check_session_integrity.sh session_002`
+- repo 技術整合性チェック: `bash scripts/check_repo_integrity.sh`
 - prompt/session 軽量化監査: `python scripts/liria_prompt_auditor.py --session saves/session_002`
 - GM/Codex 内部用 manga export 雛形作成: `bash scripts/create_manga_export.sh session_002 heroine-teaser mizuki-smile`
 

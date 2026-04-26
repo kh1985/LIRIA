@@ -27,7 +27,7 @@
 | レイヤ | 役割 | 主ファイル |
 |---|---|---|
 | Launcher Layer | CLI 起動、scenario 選択、session 作成 / 再開 | `play.sh`, `scenarios/*/config.sh`, `*.command` |
-| Prompt Layer | GM の実行ルール | `GALGE.md`, `prompt/*.md`, `CORE.md` |
+| Prompt Layer | GM の実行ルール | `GALGE.md`, `prompt/*.md` |
 | Style Layer | 文体ルールと参考作品エンジン | `style/rules.md`, `style/reference.md`, `style/defaults/*` |
 | Story Reference Layer | 漫画/作品/ジャンル/実ログから抽出した抽象的な物語エンジン。固定作品リストではない | `prompt/story_reference.md`, `saves/session_XXX/design/story_reference.md` |
 | Story Design Layer | 物語が霧にならないための最小背骨と組織キャスト設計 | `saves/session_XXX/design/story_spine.md`, `saves/session_XXX/design/organization_cast.md`, `saves/session_XXX/design/villain_design.md` |
@@ -317,6 +317,6 @@ flowchart TD
 - NPC/ヒロインの台詞に GM、シナリオ、フラグ、イベント、好感度、判定などのメタ語を出さない
 - 画像だけでキャラID、関係性、秘密、内面を確定しない。`current/player.md` と `cast/heroine/*.md` を正本にする
 - manga export package は `scripts/create_manga_export.sh` で雛形を作ってよいが、プレイヤーに CLI を覚えさせる導線にはしない
-- `CORE.md`、`README.md`、architecture docs に live session state を置かない
+- `docs/maintenance/core_notes.md`、`README.md`、architecture docs に live session state を置かない
 - 既存の個人セッションは repo 外の legacy asset として扱い、本体の固定参照にしない
 - `bash scripts/check_session_integrity.sh <session_name>` で軽量チェックを回す

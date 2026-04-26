@@ -63,7 +63,7 @@
 - live cast の `saves/<session_name>/cast/` への移行
 - session 直下 mirror の削除と read-only fallback 化
 - 既存プレイ資産の current anchor 正規化
-- `CORE.md` の live state 除去
+- 旧 `CORE.md` の live state 除去と `docs/maintenance/core_notes.md` への移動
 - `.DS_Store` / `._*` の削除と `.gitignore` 追加
 
 ## ステータス早見表

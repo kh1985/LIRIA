@@ -10,7 +10,7 @@ LIRIA_AUTOSAVE_WATCH_ENABLED="${LIRIA_AUTOSAVE_WATCH_ENABLED:-1}"
 LIRIA_TRANSCRIPT_ENABLED="${LIRIA_TRANSCRIPT_ENABLED:-1}"
 
 LIRIA_BASE_NEW_SYSTEM_PROMPT_FILES=(
-  "GALGE.md"
+  "LIRIA.md"
   "prompt/core.md"
   "prompt/gm_policy.md"
   "prompt/core_newgame.md"
@@ -23,7 +23,7 @@ LIRIA_BASE_NEW_SYSTEM_PROMPT_FILES=(
 )
 
 LIRIA_BASE_RESUME_SYSTEM_PROMPT_FILES=(
-  "GALGE.md"
+  "LIRIA.md"
   "prompt/core.md"
   "prompt/gm_policy.md"
   "prompt/case_engine.md"
@@ -100,7 +100,7 @@ build_new_prompt() {
   local session_path="$2"
 
   cat <<EOF
-GALGE.md のルールで LIRIA を開始して。新しいゲームを始めたい。
+LIRIA.md のルールで LIRIA を開始して。新しいゲームを始めたい。
 
 今回の session は ${session_name}。
 launcher が ${session_path} を作成済みなので、この session 配下だけを新規ゲームの保存先として使うこと。
@@ -128,7 +128,7 @@ build_resume_prompt() {
   local session_path="$2"
 
   cat <<EOF
-GALGE.md のルールで LIRIA を再開して。
+LIRIA.md のルールで LIRIA を再開して。
 
 今回の session は ${session_name}。
 読み込み対象は ${session_path}。

@@ -17,7 +17,7 @@ LIRIA の正本定義:
 - `REQUIREMENTS.md`
 - `docs/architecture/MEMORY_MODEL.md`
 - `ARCHITECTURE.md`
-- `GALGE.md`
+- `LIRIA.md`
 - `prompt/*.md`
 - `scripts/*.sh`
 - `templates/session/**`

@@ -1,7 +1,7 @@
 # prompt/villain_engine
 
 このファイルは LIRIA v1 の villain engine 正本だ。
-ランチャーは `GALGE.md` とこのファイルを連結して system prompt を組み立てる。
+ランチャーは `LIRIA.md` とこのファイルを連結して system prompt を組み立てる。
 
 LIRIA は、恋愛・生活・事件を通して、プレイヤーのインナーと関係性が変化していく AI TRPG 型恋愛シミュレーションである。
 このファイルの役割は、戦う相手を作ることではない。

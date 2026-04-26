@@ -1,6 +1,6 @@
 # LIRIA Core Notes
 
-`GALGE.md` と `prompt/core.md` は実行時 prompt の正本。
+`LIRIA.md` と `prompt/core.md` は実行時 prompt の正本。
 このファイルは旧 `CORE.md` を改名した、保守・改修用の短い要約。
 `prompt/core.md` が core layer の正本なので、実行ルールを変える場合はそちらを更新する。
 

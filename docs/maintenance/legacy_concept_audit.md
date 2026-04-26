@@ -1,5 +1,9 @@
 # Legacy Concept Audit
 
+Note: This audit predates the `GALGE.md` -> `LIRIA.md` rename. Mentions of
+`GALGE.md` below describe the former prompt orchestrator name as historical
+context.
+
 ## 結論
 
 - 現時点で、LIRIA の中核 prompt / requirements / session template に「ヒロイン攻略報酬化」「AFFINITY 到達による自動解禁」「ハーレム構築の主目的化」「能力無双」「戦闘勝利報酬」「異世界・魔王討伐の標準化」「G 通貨や拠点投資の主目的化」といった危険な旧思想の残骸は見当たらない。むしろ現行正本の多くは、これらを明示的に否定している。

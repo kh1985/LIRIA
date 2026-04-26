@@ -1,7 +1,7 @@
 # prompt/combat
 
-このファイルは `GALGE.md` から切り出した combat layer の正本だ。
-ランチャーは `GALGE.md` とこのファイルを連結して system prompt を組み立てる。
+このファイルは `LIRIA.md` から切り出した combat layer の正本だ。
+ランチャーは `LIRIA.md` とこのファイルを連結して system prompt を組み立てる。
 
 LIRIA v1 における `combat` は、敵を倒して強くなる戦闘ゲームではない。
 恋愛・生活・事件を揺らす **Crisis / Danger / Confrontation / Escape / Protection / Consequence** の処理である。

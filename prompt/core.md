@@ -1,7 +1,7 @@
 # prompt/core
 
-このファイルは `GALGE.md` から切り出した core layer の正本だ。
-ランチャーは `GALGE.md` とこのファイルを連結して system prompt を組み立てる。
+このファイルは `LIRIA.md` から切り出した core layer の正本だ。
+ランチャーは `LIRIA.md` とこのファイルを連結して system prompt を組み立てる。
 GMの基本原則、相談モード、入力意味論、誘導耐性の正本は `prompt/gm_policy.md` だ。そちらを優先しろ。
 
 ## お前の正体

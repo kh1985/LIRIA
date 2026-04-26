@@ -1,7 +1,7 @@
 # prompt/save_resume
 
-このファイルは `GALGE.md` から切り出した save / resume の正本だ。
-ランチャーは `GALGE.md` とこのファイルを連結して system prompt を組み立てる。
+このファイルは `LIRIA.md` から切り出した save / resume の正本だ。
+ランチャーは `LIRIA.md` とこのファイルを連結して system prompt を組み立てる。
 session / save / cast path については、このファイルのルールが他 prompt 断片に残る旧 root cast 表記より優先される。
 
 ## プレイ再開の手順

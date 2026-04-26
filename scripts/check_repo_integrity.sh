@@ -132,7 +132,7 @@ check_required_files() {
     "ARCHITECTURE.md"
     "REQUIREMENTS.md"
     "TODO.md"
-    "GALGE.md"
+    "LIRIA.md"
     "play.sh"
     "liria"
     "scenarios/liria/config.sh"

@@ -8,7 +8,7 @@
 
 今回の推奨は以下。
 
-- root に残す: `README.md`, `CONCEPT.md`, `ARCHITECTURE.md`, `REQUIREMENTS.md`, `TODO.md`, `GALGE.md`, `play.sh`, `liria`, `.gitignore`
+- root に残す: `README.md`, `CONCEPT.md`, `ARCHITECTURE.md`, `REQUIREMENTS.md`, `TODO.md`, `LIRIA.md`, `play.sh`, `liria`, `.gitignore`
 - 第1弾で移動済み: `docs/legacy/CLEANUP_REPORT.md`, `docs/legacy/PROMPT_SPLIT_PLAN.md`, `docs/usage/startup.md`
 - 第2弾で移動済み: `docs/validation/INTEGRITY_CHECK.md`, `docs/architecture/MEMORY_MODEL.md`, `docs/validation/VALIDATION.md`
 - 第3弾で移動済み: `docs/maintenance/REQUIREMENTS_AUDIT.md`
@@ -29,7 +29,7 @@
 ./.gitignore
 ./ARCHITECTURE.md
 ./CONCEPT.md
-./GALGE.md
+./LIRIA.md
 ./README.md
 ./REQUIREMENTS.md
 ./TODO.md
@@ -69,7 +69,7 @@ Git 管理対象の root 直下ファイル。
 .gitignore
 ARCHITECTURE.md
 CONCEPT.md
-GALGE.md
+LIRIA.md
 README.md
 REQUIREMENTS.md
 TODO.md
@@ -87,7 +87,7 @@ play.sh
 | `ARCHITECTURE.md` | 実行構成と source of truth の根幹設計。README/TODOから参照あり |
 | `REQUIREMENTS.md` | 主要要件。READMEから参照あり |
 | `TODO.md` | 開発ロードマップ。README/ARCHITECTUREから参照あり |
-| `GALGE.md` | prompt orchestrator。`scenarios/liria/config.sh` と下位runnerから直接参照あり |
+| `LIRIA.md` | prompt orchestrator。`scenarios/liria/config.sh` と下位runnerから直接参照あり |
 | `play.sh` | メイン起動スクリプト |
 | `liria` | `play.sh menu` への短い入口 |
 | `prompt/` | 実行prompt正本。`scenarios/liria/config.sh` から参照あり |
@@ -143,7 +143,7 @@ play.sh
 | 長いpath | `saves/*/archive/logs/*_ai_persona_playtest.md` | 80〜90文字台。Git管理外ログなので問題は小さい | 掃除対象またはローカル保持 |
 | 空白入りファイル名 | なし | `find ... -name "* *"` では該当なし | 現状問題なし |
 | 同義/重複気味 | `README.md` と `docs/usage/startup.md` | 起動説明が重複 | READMEを正にして補助文書として保持 |
-| 同義/重複気味 | 旧 `CORE.md` と `GALGE.md` / `prompt/core.md` | 旧 `CORE.md` は実行正本ではなく保守要約 | `docs/maintenance/core_notes.md` へ移動済み |
+| 同義/重複気味 | 旧 `CORE.md` と `LIRIA.md` / `prompt/core.md` | 旧 `CORE.md` は実行正本ではなく保守要約 | `docs/maintenance/core_notes.md` へ移動済み |
 | 同義/重複気味 | `docs/legacy/PROMPT_SPLIT_PLAN.md` と現行 `prompt/` 構成 | 分割済み計画書 | docs/legacyで保持 |
 
 ## 参照更新が必要そうな箇所
@@ -163,7 +163,7 @@ play.sh
 
 `scripts/check_session_integrity.sh` は第2弾で `docs/architecture/MEMORY_MODEL.md`, `docs/validation/INTEGRITY_CHECK.md`, `docs/validation/VALIDATION.md` を見るよう更新済み。
 
-`GALGE.md` と `prompt/*.md` は `scenarios/liria/config.sh` と `scripts/run_ai_persona_playtest.py` に固定pathで並んでいるため、今回は移動候補にしない。
+`LIRIA.md` と `prompt/*.md` は `scenarios/liria/config.sh` と `scripts/run_ai_persona_playtest.py` に固定pathで並んでいるため、今回は移動候補にしない。
 
 ## 理想レイアウト案
 
@@ -175,7 +175,7 @@ LIRIA/
 ├── ARCHITECTURE.md
 ├── REQUIREMENTS.md
 ├── TODO.md
-├── GALGE.md
+├── LIRIA.md
 ├── play.sh
 ├── liria
 ├── prompt/

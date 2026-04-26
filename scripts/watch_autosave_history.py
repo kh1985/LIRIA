@@ -191,7 +191,7 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
 def is_bootstrap_record(record: HistoryRecord, session: str) -> bool:
     text = record.text
     return (
-        "GALGE.md のルール" in text
+        "LIRIA.md のルール" in text
         and f"今回の session は {session}" in text
         and (f"読み込み対象は saves/{session}" in text or f"launcher が saves/{session}" in text)
     )
@@ -213,7 +213,7 @@ def is_countable_player_input(text: str) -> bool:
     if not stripped:
         return False
     lowered = stripped.lower()
-    if "GALGE.md のルール" in stripped or "今回の session は" in stripped:
+    if "LIRIA.md のルール" in stripped or "今回の session は" in stripped:
         return False
     if lowered in {"q", "quit", "exit"}:
         return False

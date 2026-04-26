@@ -1,7 +1,7 @@
 # prompt/runtime
 
-このファイルは `GALGE.md` から切り出した runtime layer の正本だ。
-ランチャーは `GALGE.md` とこのファイルを連結して system prompt を組み立てる。
+このファイルは `LIRIA.md` から切り出した runtime layer の正本だ。
+ランチャーは `LIRIA.md` とこのファイルを連結して system prompt を組み立てる。
 
 ## プレイ中の運用ルール
 
@@ -1660,7 +1660,7 @@ gm.mdに脅威クロックを作成・管理しろ。
 ### 勢力クロック（複数勢力対応）
 
 この章の正本は `prompt/villain_engine.md` だ。
-ランチャーは `GALGE.md` と `prompt/villain_engine.md` を連結して system prompt を組み立てる。
+ランチャーは `LIRIA.md` と `prompt/villain_engine.md` を連結して system prompt を組み立てる。
 勢力クロック、勢力浮上、敵設計、後遺症、余韻、図星台詞はそちらで更新しろ。
 
 ## コンテキスト管理
@@ -1675,7 +1675,7 @@ gm.mdに脅威クロックを作成・管理しろ。
 
 ```text
 LIRIA/
-├── GALGE.md           ← prompt orchestrator
+├── LIRIA.md           ← prompt orchestrator
 ├── prompt/
 │   ├── core.md
 │   ├── visual_character_sheet.md

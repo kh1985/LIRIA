@@ -25,7 +25,7 @@ MARKETING_DEFAULT_PERSONA = Path(
 )
 MAX_TURNS = 1000
 NEW_SYSTEM_PROMPT_FILES = [
-    "GALGE.md",
+    "LIRIA.md",
     "prompt/core.md",
     "prompt/gm_policy.md",
     "prompt/core_newgame.md",
@@ -37,7 +37,7 @@ NEW_SYSTEM_PROMPT_FILES = [
     "prompt/save_resume.md",
 ]
 RESUME_SYSTEM_PROMPT_FILES = [
-    "GALGE.md",
+    "LIRIA.md",
     "prompt/core.md",
     "prompt/gm_policy.md",
     "prompt/case_engine.md",

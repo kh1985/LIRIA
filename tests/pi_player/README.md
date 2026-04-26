@@ -95,10 +95,10 @@ bash scripts/run_ai_persona_playtest.sh session_ai_playtest_other --turns 8 --pe
 bash scripts/run_pi_player_smoke.sh
 ```
 
-デフォルトでは、存在する場合に以下の人格YAMLを読む。
+デフォルトでは、リポジトリ内の Kenji 人格YAMLを読む。
 
 ```text
-/Users/kenjihachiya/Desktop/work/development/marketing/character/output/gal-sim-testers/01_ishikawa_ryota.yaml
+personas/kenji_style_player.yaml
 ```
 
 別人格を使う場合:

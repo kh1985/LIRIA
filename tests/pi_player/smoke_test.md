@@ -201,8 +201,8 @@ bash scripts/pre_compress_check.sh "$SMOKE_SESSION"
 bash scripts/run_pi_player_smoke.sh
 ```
 
-デフォルトでは `/Users/kenjihachiya/Desktop/work/development/marketing/character/output/gal-sim-testers/01_ishikawa_ryota.yaml` を読む。
-存在しない環境では `prompt/pi_player.md` の Default Persona 相当へ fallback する。
+デフォルトではリポジトリ内の `personas/kenji_style_player.yaml` を読む。
+別人格を使う場合は `--persona /path/to/persona.yaml` を明示する。
 
 複数ターン試走では、`--turns N` で本命プレイ前に少し長めの破綻検知を行う。
 

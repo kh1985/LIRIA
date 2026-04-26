@@ -20,10 +20,7 @@ from textwrap import dedent
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_PERSONA = Path(
-    "/Users/kenjihachiya/Desktop/work/development/marketing/character/"
-    "output/gal-sim-testers/01_ishikawa_ryota.yaml"
-)
+DEFAULT_PERSONA = ROOT / "personas" / "kenji_style_player.yaml"
 
 
 @dataclass(frozen=True)
@@ -59,6 +56,19 @@ def main() -> int:
         run(["bash", "play.sh", "liria", "new", session_name, "--prompt-only"])
         turns = build_scripted_turns(args.turns)
         write_scripted_session(session_path, session_name, persona, turns)
+
+        if args.dry_run:
+            print(f"PI Player smoke dry-run: {session_name}")
+            print(f"persona: {persona.name} ({persona.occupation})")
+            print(f"turns: {len(turns)}")
+            if args.cleanup:
+                shutil.rmtree(session_path)
+                cleanup_generated_prompts()
+                print(f"cleaned up: saves/{session_name}")
+            else:
+                print(f"session kept for review: saves/{session_name}")
+            return 0
+
         resume = run(["bash", "play.sh", "liria", "resume", session_name, "--prompt-only"])
         integrity = run(["bash", "scripts/check_session_integrity.sh", session_name])
         pre_compress = run(["bash", "scripts/pre_compress_check.sh", session_name])
@@ -105,8 +115,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--persona",
         type=Path,
-        default=DEFAULT_PERSONA if DEFAULT_PERSONA.exists() else None,
-        help="Optional persona YAML/text file. Defaults to the marketing character tester if present.",
+        default=DEFAULT_PERSONA,
+        help="Optional persona YAML/text file. Defaults to personas/kenji_style_player.yaml.",
     )
     parser.add_argument(
         "--cleanup",
@@ -118,6 +128,11 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=1,
         help="Number of scripted PI Player turns to save before resume/pre_compress. Default: 1.",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Create the session and scripted save, but skip resume/pre_compress checks.",
     )
     args = parser.parse_args()
     if args.turns < 1 or args.turns > 20:

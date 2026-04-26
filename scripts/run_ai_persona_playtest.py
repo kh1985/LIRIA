@@ -19,10 +19,6 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCAL_DEFAULT_PERSONA = ROOT / "personas" / "kenji_style_player.yaml"
-MARKETING_DEFAULT_PERSONA = Path(
-    "/Users/kenjihachiya/Desktop/work/development/marketing/character/"
-    "output/gal-sim-testers/01_ishikawa_ryota.yaml"
-)
 MAX_TURNS = 1000
 NEW_SYSTEM_PROMPT_FILES = [
     "LIRIA.md",
@@ -123,11 +119,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--persona",
         type=Path,
-        default=default_persona_path(),
-        help=(
-            "Persona YAML/text file. Defaults to personas/kenji_style_player.yaml "
-            "if present, otherwise the marketing tester persona if present."
-        ),
+        default=LOCAL_DEFAULT_PERSONA,
+        help="Persona YAML/text file. Defaults to personas/kenji_style_player.yaml.",
     )
     parser.add_argument(
         "--turns",
@@ -156,14 +149,6 @@ def parse_args() -> argparse.Namespace:
 
 def default_session_name() -> str:
     return "session_ai_playtest_" + datetime.now().strftime("%Y%m%d_%H%M%S")
-
-
-def default_persona_path() -> Path | None:
-    if LOCAL_DEFAULT_PERSONA.exists():
-        return LOCAL_DEFAULT_PERSONA
-    if MARKETING_DEFAULT_PERSONA.exists():
-        return MARKETING_DEFAULT_PERSONA
-    return None
 
 
 def resolve_persona_path(path: Path) -> Path:

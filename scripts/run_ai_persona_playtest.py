@@ -199,23 +199,27 @@ def prepare_session(*, session_name: str, session_path: Path, session_mode: str)
     if not relationships_path.exists() and (session_path / "current/harem.md").exists():
         relationships_path = session_path / "current/harem.md"
 
-    required_paths = [
-        session_path / "session.json",
-        session_path / "current/player.md",
-        session_path / "current/gm.md",
-        relationships_path,
-        session_path / "current/hotset.md",
-        session_path / "design/initial_answers.md",
-    ]
-    missing = [display_path(path) for path in required_paths if not path.exists()]
-    if missing:
-        raise SystemExit("existing session is not a valid scaffold:\n- " + "\n- ".join(missing))
-
     case_path = session_path / "current/case.md"
     if not case_path.exists():
         template = ROOT / "templates/session/current/case.md"
         if template.exists():
             case_path.write_text(template.read_text(encoding="utf-8"), encoding="utf-8")
+
+    required_paths = [
+        session_path / "session.json",
+        session_path / "current/player.md",
+        session_path / "current/gm.md",
+        relationships_path,
+        case_path,
+        session_path / "current/hotset.md",
+        session_path / "design/initial_answers.md",
+        session_path / "design/story_reference.md",
+        session_path / "design/story_spine.md",
+        session_path / "design/organization_cast.md",
+    ]
+    missing = [display_path(path) for path in required_paths if not path.exists()]
+    if missing:
+        raise SystemExit("existing session is not a valid scaffold:\n- " + "\n- ".join(missing))
 
 
 def read_liria_prompt(prompt_mode: str) -> str:
@@ -260,14 +264,17 @@ def build_play_prompt(
             "- scripted smoke のように同じ検査パターンを繰り返さない。",
             "- AIプレイヤー人格やprompt内の例文に出てくる固有名詞、旧セッションの人物名、旧拠点名を、現在sessionの正本として流用しない。",
             "- prompt内の例文は構造説明であり、職業、小物、導入パターン、事件構造をそのまま現在sessionの正本として流用しない。",
-            "- 最初のきっかけは、Q1-Q6 / Q1.5 / Optional Avoid Notes に相当する `生活導線 + 初期圧 + 小物や信号 + 社会の窓口 + ヒロイン/NPCの利害` から新しく合成する。",
-            "- Q6の答えから内部的に organization pressure scale / organization cast pre-generation / minimal story spine を作り、重要NPCや関係組織を薄い霧にしない。",
+            "- Turn 001 のプレイヤー初期回答を Q0-Q6 / Q1.5 / Optional Avoid Notes 相当として扱い、GM応答前に内部で `Initial Story Assembly` を通す。",
+            "- `Initial Story Assembly` では、生活導線、恋愛/ヒロイン、能力、制度/記録、組織、場所、インナー、避けたいモチーフの signal を拾う。",
+            "- その中で `Light Story Reference Pass` を必ず行う。selection signals を抽出し、reference engine を 1-3 個だけ選び、固有作品名、キャラ、名場面、台詞、展開を本文や正本設定へ持ち込まない。",
+            "- Light Story Reference Pass の結果は、内部的に `design/story_reference.md` の selected engines / LIRIA conversion、`design/story_spine.md` の Main Question / Reveal Ladder / Pressure Direction / Heroine Tie、`design/organization_cast.md` の major figures、`current/case.md` の active case へ分配した前提でログを書く。",
+            "- AI Persona Playtest では save files を直接編集しない。ただし raw log の Save Notes には、後で人間が session state へ反映できる形で Initial Story Assembly の成果を短く残す。",
             "- 開始地点や遠出先には、短い Base Area Dossier / Location Dossier を内部で作り、地域名、実在アンカー、土地の質感、主人公の接点、シーン小物、汎用化回避を本文に反映する。",
             "- 直近ログや例文に寄った `クリーニング店` `白い上着` `預かり札` `白い軽バン` `失踪だけで始まる導入` は、プレイヤーが明示しない限り避ける。",
             "- `怜` `真凛` `澪` `月読堂` は旧inner-galge由来または例文由来の名前として扱い、新規playtestでは使わない。必要ならLIRIA v1用に新規キャラ名と新規拠点名を作る。",
             "- 1ターンごとに Player 入力と GM 応答を書く。",
             "- GM応答には、地の文、ヒロイン/NPCの自律反応、生活感、事件の外圧を入れる。",
-            "- Save Notes には active case の `visible problem / short goal / handles / progress condition / if ignored / next visible change` が分かる短い要約を入れる。",
+            "- Save Notes には active case の `visible problem / visible request / short goal / handles / progress condition / if ignored / next visible change`、story spine の `Main Question / Pressure Direction / Heroine Tie`、organization cast の主要人物候補、relationships の Heroine Crisis Role が分かる短い要約を入れる。",
             "- 謎を増やす時は、既存の手がかり、人物、場所、記録、関係のどれに繋がるかを本文で分かるようにする。",
             "- 敵幹部、関係組織の主要人物、ルート鍵NPC、scene lead NPCを出す時は、内部的に Major Figure Dossier を作る。role、public face、belief、contradiction、wants this scene、knows/suspects/unknown、can/cannot、speech rule を持たせる。",
             "- 重要NPCに抽象語を喋らせる場合は、2文以内に具体物、人物、手続きへ戻す。プレイヤーが `意味が分からない` と感じる霧の会話にしない。",

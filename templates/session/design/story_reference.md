@@ -2,6 +2,7 @@
 
 > Story Reference Layer の session 用採用メモ。
 > 参照作品の固有名詞や展開を保存する場所ではなく、採用した抽象エンジンと変換方針だけを短く残す。
+> fast profile の new では `Light Story Reference Pass` 由来の短い selection / conversion だけを残す。
 
 ## Selected Reference Engines
 

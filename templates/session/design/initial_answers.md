@@ -98,6 +98,7 @@
 - avoid motifs
 
 ## Generated Seeds
+- `Initial Story Assembly`
 - `player profile`
 - `appearance profile`
 - `inner summary`

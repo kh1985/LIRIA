@@ -19,6 +19,39 @@
 `current/gm.md` には重複して長く書かない。
 `current/hotset.md` には、再開に必要な active case の最小抜粋だけを書く。
 
+## Light Story Reference Pass
+
+fast profile では `prompt/story_reference.md` 全文を通常起動に入れない。
+それでも新規開始時は、Q6 後の `Initial Story Assembly` で最低限の story reference 接続を必ず行う。
+
+この pass で行うこと:
+
+1. Q0-Q6 / Optional Avoid Notes から `selection signals` を抽出する。
+   - 生活導線、恋愛 / ヒロイン、能力、制度 / 記録、組織、場所、インナー、避けたいモチーフを見る。
+2. Reference Engine を 1-3 個だけ選ぶ。
+   - 既存 stock を使ってもよいが、固有作品名、キャラ、名場面、台詞、展開は使わない。
+   - 合わなければ session-derived engine を作ってよい。
+3. 採用 engine を LIRIA へ変換する。
+   - 現代社会、生活導線、恋愛 / ヒロイン、能力、関係組織、場所の手触りへ落とす。
+4. `design/story_reference.md` に採用メモを短く残す。
+   - selection signals、candidate shortlist、selected engine、LIRIA conversion、avoid direct imitation を残す。
+5. `design/story_spine.md` に薄い背骨を作る。
+   - Main Question / Reveal Ladder / Pressure Direction / Heroine Tie を最低限作る。
+6. 組織や外圧がある場合、`design/organization_cast.md` に主要人物候補を 3-5 人作る。
+   - 現場担当、交渉担当、理念担当、内部矛盾担当、ヒロイン生活圏担当の役割を分ける。
+7. `current/case.md` に、最初に触れる人・物・場所・記録・期限・if ignored・next visible change を落とす。
+
+この pass は固定プロットを作る工程ではない。
+初回シーンが、抽象語ではなく「誰が、何で困っていて、最初に何へ触れるか」を持って始まるための配線である。
+
+### Initial Story Assembly から case を作る時の契約
+
+- `current/case.md` には、今触れる足場だけを短く置く。
+- Reference Engine 名、元作品の固有名詞、黒幕の全体像、長い真相説明、固定章立てを case に入れるな。
+- active case があるなら、`visible problem / visible request / short goal / handles / progress condition / if ignored / next visible change` を空にするな。
+- `handles` は 2-5 個に絞り、物、人、場所、記録、関係、能力反応の入口にする。
+- ヒロインや重要NPCの利害は `relationship stake` に短く置き、好意確定や攻略報酬にしない。
+
 ## Case Card Format
 
 `current/case.md` は、active case を最大1件、background case を最大2件まで持つ。
@@ -146,6 +179,7 @@
 GMは各シーン開始前に `current/case.md` を確認する。
 
 - active case があるなら、本文中に `short goal` か `handles` のどれかを自然に出す
+- case は `story_spine` の実行表ではなく、今プレイヤーが触れる足場である。story_spine の抽象語をそのまま本文へ出すな
 - 新しい謎を足す時は、既存 case の `handles` か `next visible change` に接続する
 - 接続できない謎は、今は出さないか background case に落とす
 - プレイヤーが迷っている時は、新しい謎を足さず、`visible problem / handles / progress condition` を短く返す

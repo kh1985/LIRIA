@@ -82,12 +82,26 @@ section_count() {
   ' "$file"
 }
 
+md_key_has_value() {
+  local file="$1"
+  local key_regex="$2"
+  [[ -f "$file" ]] || return 1
+  grep -Eq "^[[:space:]-]*(${key_regex})[[:space:]]*[:：][[:space:]]*[^[:space:]]" "$file"
+}
+
+active_case_has_content() {
+  local file="$1"
+  [[ -f "$file" ]] || return 1
+  md_key_has_value "$file" 'title|visible problem|visible request|short goal|progress condition|if ignored|next visible change|relationship stake'
+}
+
 check_current_specs() {
   local base="$1"
   local player="${base}/current/player.md"
   local gm="${base}/current/gm.md"
   local relationships="${base}/current/relationships.md"
   local case_file="${base}/current/case.md"
+  local initial_answers="${base}/design/initial_answers.md"
   local villain="${base}/design/villain_design.md"
   local story_reference="${base}/design/story_reference.md"
   local story_spine="${base}/design/story_spine.md"
@@ -95,6 +109,7 @@ check_current_specs() {
   local hotset="${base}/current/hotset.md"
   local cast_index="${base}/indexes/cast_index.md"
   local npc_dir="${base}/cast/npc"
+  local playtest_proposal_hint="If this came from AI Persona Playtest, run: python3 scripts/extract_playtest_save_candidates.py $(basename "$base")"
 
   if [[ -f "$player" ]]; then
     local required_player=(
@@ -150,6 +165,16 @@ check_current_specs() {
     warn "relationships.md missing Heroine Crisis Role"
   fi
 
+  local heroine_sheet_count=0
+  if [[ -d "${base}/cast/heroine" ]]; then
+    heroine_sheet_count="$(find "${base}/cast/heroine" -maxdepth 1 -type f -name '*.md' ! -name '.gitkeep' 2>/dev/null | wc -l | tr -d ' ')"
+  fi
+  local heroine_signal
+  heroine_signal="$(grep -Eh '初期ヒロイン|ヒロイン候補|heroine candidate|Heroine Tie|恋愛対象|Active Heroines' "$gm" "$case_file" "$hotset" 2>/dev/null | grep -Ev '^[[:space:]]*(#|>)|:[[:space:]]*$|Q5|テンプレ|候補$' || true)"
+  if [[ -n "$heroine_signal" && "${heroine_sheet_count:-0}" -eq 0 ]] && ! grep -Eq 'bond:[[:space:]]*[0-9]|AFFINITY:[[:space:]]*[0-9]|現在の関係フック:[[:space:]]*[^[:space:]]' "$relationships" 2>/dev/null; then
+    warn "heroine candidate appears active, but cast/heroine/*.md or current/relationships.md has no reflected heroine state. ${playtest_proposal_hint}"
+  fi
+
   if [[ -f "$case_file" ]]; then
     if ! grep -Eq 'Active Case' "$case_file"; then
       warn "case.md missing Active Case section"
@@ -166,8 +191,31 @@ check_current_specs() {
     if ! grep -Eq 'if ignored|放置' "$case_file"; then
       warn "case.md missing if ignored"
     fi
+    if active_case_has_content "$case_file"; then
+      for field in 'visible problem' 'visible request' 'short goal' 'progress condition' 'if ignored' 'next visible change'; do
+        if ! md_key_has_value "$case_file" "$field"; then
+          warn "active case appears initialized, but case.md has empty ${field}. ${playtest_proposal_hint}"
+        fi
+      done
+      if ! grep -Eq '^[[:space:]]*-[[:space:]]*(person|object|place|record|relationship|ability reaction)[[:space:]]*:[[:space:]]*[^[:space:]]' "$case_file"; then
+        warn "active case appears initialized, but case.md handles have no concrete person/object/place/record/relationship/ability reaction. ${playtest_proposal_hint}"
+      fi
+    fi
   else
     warn "missing case card: ${case_file}"
+  fi
+
+  local q6_completed=0
+  if md_key_has_value "$initial_answers" '最初に揺れる日常の面|GMによる incident seed / initial pressure 解釈|visible request|organization pressure scale|minimal story spine'; then
+    q6_completed=1
+  fi
+  if [[ "$q6_completed" -eq 1 ]]; then
+    if ! md_key_has_value "$story_spine" 'この話が主人公とヒロインに問うこと'; then
+      warn "Q6 appears completed, but design/story_spine.md Main Question is empty. ${playtest_proposal_hint}"
+    fi
+    if ! md_key_has_value "$story_reference" 'matched signals|LIRIA conversion'; then
+      warn "Q6 appears completed, but design/story_reference.md has no Light Story Reference Pass conversion. ${playtest_proposal_hint}"
+    fi
   fi
 
   if [[ -f "$cast_index" ]] && grep -Eq '未命名|gm current 参照|current 参照' "$cast_index"; then
@@ -183,9 +231,9 @@ check_current_specs() {
   fi
 
   local major_npc_pressure
-  major_npc_pressure="$(grep -Eh '外部面談相手|配置確認の相手|敵幹部|主要人物|上位存在|scene lead|回収員|現場調整|社名空欄の外部面談' "$gm" "$case_file" "$hotset" 2>/dev/null || true)"
+  major_npc_pressure="$(grep -Eh '外部面談相手|配置確認の相手|敵幹部|主要人物|重要NPC|上位存在|scene lead|回収員|現場調整|社名空欄の外部面談|名刺|台詞|話した|名乗った' "$gm" "$case_file" "$hotset" 2>/dev/null || true)"
   if [[ -n "$major_npc_pressure" && "${npc_sheet_count:-0}" -eq 0 ]]; then
-    warn "important NPC / organization contact appears active, but cast/npc/*.md has no NPC sheet"
+    warn "important NPC / organization contact appears active, but cast/npc/*.md has no NPC sheet. ${playtest_proposal_hint}"
   fi
 
   local organization_pressure
@@ -194,20 +242,20 @@ check_current_specs() {
       grep -Ev '^[[:space:]]*(#|>)|:[[:space:]]*$|参照|素材|Summary|Coverage Check|Promotion Rule' || true
   )"
   if [[ -n "$organization_pressure" ]]; then
-    if [[ ! -f "$story_reference" ]] || ! grep -Eq 'engine:[[:space:]]*[^[:space:]]' "$story_reference"; then
+    if [[ ! -f "$story_reference" ]] || ! md_key_has_value "$story_reference" 'engine'; then
       warn "organization pressure active, but design/story_reference.md has no selected reference engine"
     fi
-    if [[ -f "$story_reference" ]] && ! grep -Eq 'Selection Signals|romance / sweetness|institution / record' "$story_reference"; then
+    if [[ -f "$story_reference" ]] && ! md_key_has_value "$story_reference" 'matched signals|romance / sweetness|institution / record|organization / ideology'; then
       warn "organization pressure active, but design/story_reference.md has no selection signals"
     fi
-    if [[ -f "$story_reference" ]] && ! grep -Eq 'Candidate Shortlist|candidate:' "$story_reference"; then
+    if [[ -f "$story_reference" ]] && ! grep -Eq '^[[:space:]-]*selected:[[:space:]]*yes([[:space:]]|$)' "$story_reference"; then
       warn "organization pressure active, but design/story_reference.md has no candidate shortlist"
     fi
-    if [[ ! -f "$story_spine" ]] || ! grep -Eq 'この話.*:[[:space:]]*[^[:space:]]|if ignored:[[:space:]]*[^[:space:]]|visible first sign:[[:space:]]*[^[:space:]]' "$story_spine"; then
-      warn "organization pressure active, but design/story_spine.md is missing story spine fields"
+    if [[ ! -f "$story_spine" ]] || ! md_key_has_value "$story_spine" 'この話が主人公とヒロインに問うこと' || ! md_key_has_value "$story_spine" 'visible first sign|if ignored|next visible move'; then
+      warn "organization pressure active, but design/story_spine.md is missing story spine fields. ${playtest_proposal_hint}"
     fi
-    if [[ ! -f "$organization_cast" ]] || ! grep -Eq 'organization:[[:space:]]*[^[:space:]]|role in organization:[[:space:]]*[^[:space:]]|pressure method:[[:space:]]*[^[:space:]]' "$organization_cast"; then
-      warn "organization pressure active, but design/organization_cast.md is missing major figure fields"
+    if [[ ! -f "$organization_cast" ]] || ! md_key_has_value "$organization_cast" 'role in organization' || ! md_key_has_value "$organization_cast" 'public face' || ! md_key_has_value "$organization_cast" 'pressure method'; then
+      warn "organization pressure active, but design/organization_cast.md is missing major figure fields. ${playtest_proposal_hint}"
     fi
   fi
 

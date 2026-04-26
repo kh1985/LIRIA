@@ -211,6 +211,7 @@ def build_findings(lines: list[str], *, expected_turns: int | None, turn_count: 
             [r"次|まだ|だが|しかし|その時|電話|通知|足音|視線|沈黙|返事はない|終わっていない"],
             "次に再開したくなる未解決の引きがあるか。",
         ),
+        check_tool_log_leakage(lines),
         check_choice_scaffold(lines),
     ]
 
@@ -261,8 +262,41 @@ def check_turn_count(lines: list[str], *, expected_turns: int | None, turn_count
     )
 
 
+def check_tool_log_leakage(lines: list[str]) -> Finding:
+    leakage = grep_lines(
+        lines,
+        [
+            r"\bRan python\b",
+            r"\bpython(?:3)?\s+-\s*<<",
+            r"\bAUTOSAVE_DONE=\d\b",
+            r"^diff --git\b",
+            r"^@@\s+-\d",
+            r"^\+\+\+\s+[ab]/",
+            r"^---\s+[ab]/",
+            r"^\*\*\* Begin Patch$",
+            r"^\*\*\* End Patch$",
+            r"^(?:\$|%)\s*(?:bash|python3?|git|sed|rg|cat|ls|mkdir|cp|mv|rm|chmod)\b",
+            r"^(?:bash|python3?|git|sed|rg|cat|ls|mkdir|cp|mv|rm|chmod)\s+(?:scripts/|play\.sh|[-\w./]+)",
+        ],
+        limit=8,
+    )
+    if leakage:
+        return Finding(
+            label="ツールログ漏れ",
+            status="warn",
+            evidence=leakage,
+            note="物語本文に `Ran python`、shell command、AUTOSAVE_DONE、diff/patch 出力などの実行ログが混ざっていないか。",
+        )
+    return Finding(
+        label="ツールログ漏れ",
+        status="ok",
+        evidence=["赤信号なし"],
+        note="ツール実行ログや差分出力らしい行は自動抽出されませんでした。",
+    )
+
+
 def check_choice_scaffold(lines: list[str]) -> Finding:
-    numbered = grep_lines(lines, [r"^[1-4][.．]\s"], limit=12)
+    numbered = grep_lines(lines, [r"^[0-9]+[.．]\s"], limit=12)
     handoffs = grep_lines(lines, [r"^→\s*どうする[？?]"], limit=5)
     if not numbered:
         if handoffs:
@@ -280,7 +314,9 @@ def check_choice_scaffold(lines: list[str]) -> Finding:
         )
 
     turn_count = len(grep_lines(lines, [r"^###\s*Turn\s+\d+"], limit=None))
-    choice_four = grep_lines(lines, [r"^4[.．]\s*自由入力"], limit=3)
+    choice_blocks = collect_choice_blocks(lines)
+    choice_four = grep_lines(lines, [r"^4\.\s*自由入力\s*$"], limit=3)
+    five_or_more = grep_lines(lines, [r"^(?:0|5|6|7|8|9|[1-9]\d+)[.．]\s"], limit=3)
     risky = grep_lines(
         lines,
         [r"^[1-3][.．].*(好感度|惚れ|成功|解決|暴く|確定|親密になる|身体的親密)"],
@@ -290,8 +326,24 @@ def check_choice_scaffold(lines: list[str]) -> Finding:
 
     evidence = numbered[:3]
     warnings: list[str] = []
+    malformed_blocks: list[str] = []
+    for start_line, numbers, block_lines in choice_blocks:
+        if numbers != [1, 2, 3, 4]:
+            malformed_blocks.append(f"line {start_line}: choice numbers are {','.join(str(number) for number in numbers)}")
+            evidence.extend(block_lines[:4])
+            continue
+        if not re.match(r"^4\.\s*自由入力\s*$", block_lines[-1]):
+            malformed_blocks.append(f"line {start_line}: final choice must be exactly `4. 自由入力`")
+            evidence.append(block_lines[-1])
+    if numbered and not choice_blocks:
+        warnings.append("1から始まる選択ブロックが見当たらない")
+    if malformed_blocks:
+        warnings.extend(malformed_blocks[:3])
+    if five_or_more:
+        warnings.append("5以上または0の選択肢番号が見つかった")
+        evidence.extend(five_or_more)
     if not choice_four:
-        warnings.append("4. 自由入力が見当たらない")
+        warnings.append("`4. 自由入力` が見当たらない")
     if turn_count and choice_block_count >= max(3, int(turn_count * 0.7)):
         warnings.append("番号つき選択補助が多すぎる可能性")
     if risky:
@@ -310,8 +362,34 @@ def check_choice_scaffold(lines: list[str]) -> Finding:
         label="選択補助",
         status="ok",
         evidence=choice_four[:1] or evidence,
-        note="選択補助は `1-3` 候補 + `4. 自由入力` として使われている。",
+        note="選択補助は `1,2,3,4` のみ、末尾 `4. 自由入力` として使われている。",
     )
+
+
+def collect_choice_blocks(lines: list[str]) -> list[tuple[int, list[int], list[str]]]:
+    blocks: list[tuple[int, list[int], list[str]]] = []
+    index = 0
+    choice_line = re.compile(r"^([0-9]+)[.．]\s+")
+    while index < len(lines):
+        stripped = lines[index].strip()
+        match = choice_line.match(stripped)
+        if not match or int(match.group(1)) != 1:
+            index += 1
+            continue
+
+        start_line = index + 1
+        numbers: list[int] = []
+        block_lines: list[str] = []
+        while index < len(lines):
+            stripped = lines[index].strip()
+            match = choice_line.match(stripped)
+            if not match:
+                break
+            numbers.append(int(match.group(1)))
+            block_lines.append(trim(stripped))
+            index += 1
+        blocks.append((start_line, numbers, block_lines))
+    return blocks
 
 
 def check_case_clarity(lines: list[str]) -> Finding:
@@ -436,7 +514,7 @@ def candidate_source_lines(lines: list[str]) -> list[str]:
             continue
         if re.match(r"^(Player|User|プレイヤー)[:：]", stripped):
             continue
-        if re.match(r"^[1-4][.．]\s", stripped):
+        if re.match(r"^[0-9]+[.．]\s", stripped):
             continue
         if stripped == "→ どうする？":
             continue

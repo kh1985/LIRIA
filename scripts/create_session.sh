@@ -59,11 +59,13 @@ cp -R "${TEMPLATE_DIR}/." "${SESSION_DIR}/"
 
 mkdir -p \
   "${SESSION_DIR}/current" \
+  "${SESSION_DIR}/current/checkpoints" \
   "${SESSION_DIR}/cast/heroine" \
   "${SESSION_DIR}/cast/npc" \
   "${SESSION_DIR}/design" \
   "${SESSION_DIR}/indexes" \
   "${SESSION_DIR}/archive/chapters" \
+  "${SESSION_DIR}/archive/checkpoints" \
   "${SESSION_DIR}/archive/events" \
   "${SESSION_DIR}/archive/logs"
 
@@ -73,7 +75,7 @@ cat > "${SESSION_DIR}/session.json" <<EOF
   "session_name": "${SESSION_NAME}",
   "scenario_id": "${SCENARIO_ID}",
   "created_at": "${CREATED_AT}",
-  "layout_version": 2,
+  "layout_version": 3,
   "source_of_truth": {
     "current": "current/",
     "cast": "cast/",

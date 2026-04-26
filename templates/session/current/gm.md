@@ -19,6 +19,7 @@
 
 ## First Daily Disturbance
 > Q6 で選ばれた、最初に揺れる日常の面。本文では「事件タイプ」として説明せず、生活上の小さな乱れとして出す。
+> 依頼 / 相談 / 持ち込みがある場合、見える依頼の正本は `current/case.md` の `visible request` に置く。
 
 ## Incident Seeds
 
@@ -105,7 +106,7 @@
 
 ## 自動セーブ管理 / Autosave Counter
 - 方針: 10シーンごと
-- 実行補助: 通常シーン終了時に `bash scripts/autosave_turn.sh <session_name>` を使う
+- 実行補助: 通常シーン終了時は内部カウントのみ。10/10到達時だけ `bash scripts/autosave_turn.sh <session_name>` を使う。実ファイル同期が必要な時だけ `bash scripts/scene_tick.sh <session_name>` を使ってよい
 - 前回保存からのシーン数: 0/10
 - 最終保存:
 - 次回自動保存:

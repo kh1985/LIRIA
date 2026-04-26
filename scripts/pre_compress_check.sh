@@ -184,6 +184,7 @@ check "能力" "${CURRENT}/hotset.md" "能力"
 warn_check "Appearance Profile 抜粋" "${CURRENT}/hotset.md" "Appearance Profile"
 warn_check "Visual Character Sheet 抜粋" "${CURRENT}/hotset.md" "Visual Character Sheet"
 warn_check "Organization Doctrine 抜粋" "${CURRENT}/hotset.md" "Organization Doctrine"
+warn_check "mechanics_card 存在" "${CURRENT}/mechanics_card.md" "mechanics|Mechanic|能力|道具|制約"
 echo ""
 
 # --- design ---
@@ -204,8 +205,10 @@ echo ""
 # --- indexes ---
 echo "■ indexes（索引）"
 check "event_index 存在" "${INDEXES}/event_index.md" "event"
+warn_check "event_index ルータ" "${INDEXES}/event_index.md" "Archive Router|Latest Anchors|Checkpoint Sidecars|archive/checkpoints"
 check "decision_index 存在" "${INDEXES}/decision_index.md" "決定"
 warn_check "cast_index 存在" "${INDEXES}/cast_index.md" "cast|キャスト|ヒロイン"
+warn_check "cast_index 読込優先列" "${INDEXES}/cast_index.md" "優先して読む時"
 echo ""
 
 # --- 生ログ ---

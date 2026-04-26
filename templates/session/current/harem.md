@@ -8,6 +8,20 @@
 
 > Q4 は全体のヒロイン生成バイアスであり、1 人目だけに限定しない。ただし全ヒロインを同じ型にはしない。
 
+## Heroine Contrast Matrix
+> 新ヒロイン生成・NPCからの昇格・再登場時の被り防止欄。2人目以降は、既存ヒロイン平均との差分を最低2軸以上ここに固定してから本文へ出す。
+
+- 名前:
+  - archetype / surface:
+  - personality axis:
+  - social position / life base:
+  - distance style:
+  - crisis role:
+  - intimacy texture:
+  - protagonist hook:
+  - contrast with existing heroines:
+  - avoid overlap:
+
 ## Shared Channels
 
 ## Sensitive Knowledge

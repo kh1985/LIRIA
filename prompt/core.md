@@ -49,12 +49,14 @@ GMの基本原則、相談モード、入力意味論、誘導耐性の正本は
 ## Visual Character Sheet 連携
 
 漫画化・画像生成用の Visual Character Sheet の正本は `prompt/visual_character_sheet.md` だ。
+通常プレイでは常時読まない。キャラシート、立ち絵、画像生成、漫画化、外見 continuity の相談が来た時だけ参照しろ。
 対象は主人公とヒロインだけ。モブ、名前付きNPC、cast NPC、重要NPCには作らない。
 実際の画像生成はしない。まず text-only の固定資料と、image gen skill に渡せる prompt anchor / model sheet prompt を保存する。
 
 ## Manga Export 連携
 
 自然文の漫画化依頼、ヒロインPV、三面図、立ち絵、キャラシート依頼の正本は `prompt/manga_export.md` だ。
+通常プレイでは常時読まない。プレイヤーが漫画化・PV・画像生成・export を明示した時だけ参照しろ。
 これらは作中行動ではなく GM相談 / メタ命令として扱い、作中時間を止める。
 通常は、いきなり画像生成せず、まず `exports/<session_name>/manga/<YYYYMMDD>/<HHMMSS>_<type>_<slug>/` 向けの manga export package / prompt package を作る。
 ただし、プレイヤーが「漫画を出して」「画像も生成して」「このシーンを出して」のように実生成まで明示した場合は、package作成と image gen skill / tool への投入を一連の内部手順として扱ってよい。

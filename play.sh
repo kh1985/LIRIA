@@ -10,6 +10,9 @@ PROMPT_ONLY=0
 CODEX_INSTRUCTIONS_FILE=""
 CLAUDE_SYSTEM_PROMPT_FILE=""
 GENERATED_PROMPT_FILES=()
+RUNTIME_PACKET_TEXT=""
+AUTOSAVE_WATCHER_PID=""
+TRANSCRIPT_PATH=""
 
 usage() {
   cat <<'EOF'
@@ -559,6 +562,76 @@ build_system_prompt() {
   done
 }
 
+append_runtime_packet_to_user_prompt() {
+  if [[ "${MODE}" != "resume" ]]; then
+    return
+  fi
+  if [[ "${LIRIA_RUNTIME_PACKET_ENABLED:-0}" != "1" ]]; then
+    return
+  fi
+
+  local builder="${SCENARIO_WORKDIR}/scripts/build_runtime_packet.py"
+  local session_dir="${SCENARIO_WORKDIR}/saves/${SESSION_NAME}"
+
+  if [[ ! -f "${builder}" ]]; then
+    echo "runtime packet builder not found: ${builder}"
+    exit 1
+  fi
+
+  if ! RUNTIME_PACKET_TEXT="$(python "${builder}" --session "${session_dir}")"; then
+    echo "failed to build runtime packet for ${session_dir}"
+    exit 1
+  fi
+
+  USER_PROMPT+=$'\n\n'
+  USER_PROMPT+="${RUNTIME_PACKET_TEXT}"
+}
+
+start_autosave_watcher() {
+  if [[ "${MODE}" != "new" && "${MODE}" != "resume" ]]; then
+    return
+  fi
+  if [[ "${LIRIA_AUTOSAVE_WATCH_ENABLED:-0}" != "1" ]]; then
+    return
+  fi
+  if [[ -z "${SESSION_NAME}" || -z "${ENGINE_COMMAND:-}" ]]; then
+    return
+  fi
+
+  local watcher="${SCENARIO_WORKDIR}/scripts/watch_autosave_history.py"
+  if [[ ! -f "${watcher}" ]]; then
+    return
+  fi
+
+  python "${watcher}" \
+    --session "${SESSION_NAME}" \
+    --engine "${ENGINE_COMMAND}" \
+    --parent-pid "$$" \
+    >/dev/null 2>&1 &
+  AUTOSAVE_WATCHER_PID="$!"
+}
+
+transcript_path_for_launch() {
+  if [[ "${MODE}" != "new" && "${MODE}" != "resume" ]]; then
+    return
+  fi
+  if [[ "${LIRIA_TRANSCRIPT_ENABLED:-0}" != "1" ]]; then
+    return
+  fi
+  if [[ -z "${SESSION_NAME}" ]]; then
+    return
+  fi
+  if ! command -v script >/dev/null 2>&1; then
+    return
+  fi
+
+  local logs_dir="${SCENARIO_WORKDIR}/saves/${SESSION_NAME}/archive/logs"
+  local timestamp
+  timestamp="$(date +%Y%m%d_%H%M%S)"
+  mkdir -p "${logs_dir}"
+  TRANSCRIPT_PATH="${logs_dir}/live_${timestamp}_${ENGINE_COMMAND}.log"
+}
+
 write_codex_instructions_file() {
   local codex_dir="${SCENARIO_WORKDIR}/.codex/generated"
   CODEX_INSTRUCTIONS_FILE="${codex_dir}/${SCENARIO_ID}-${MODE}.instructions.md"
@@ -616,6 +689,11 @@ print_prompt_only_summary() {
   echo "scenario: ${SCENARIO_ID}"
   echo "mode: ${MODE}"
   echo "session: ${SESSION_NAME}"
+  if [[ "${LIRIA_RUNTIME_PACKET_ENABLED:-0}" == "1" ]]; then
+    echo "runtime packet: enabled"
+  else
+    echo "runtime packet: disabled"
+  fi
   echo "generated prompt/instructions files:"
   for path in "${GENERATED_PROMPT_FILES[@]}"; do
     echo "- $(display_path "${path}")"
@@ -660,6 +738,11 @@ launch_claude() {
   fi
   claude_cmd+=(--append-system-prompt "${SYSTEM_PROMPT}" "${USER_PROMPT}")
 
+  transcript_path_for_launch
+  if [[ -n "${TRANSCRIPT_PATH}" ]]; then
+    exec script -q "${TRANSCRIPT_PATH}" "${claude_cmd[@]}"
+  fi
+
   exec "${claude_cmd[@]}"
 }
 
@@ -668,6 +751,11 @@ launch_codex() {
 
   write_codex_instructions_file
   codex_cmd+=(-c "model_instructions_file=\"${CODEX_INSTRUCTIONS_FILE}\"" "${USER_PROMPT}")
+
+  transcript_path_for_launch
+  if [[ -n "${TRANSCRIPT_PATH}" ]]; then
+    exec script -q "${TRANSCRIPT_PATH}" "${codex_cmd[@]}"
+  fi
 
   exec "${codex_cmd[@]}"
 }
@@ -703,6 +791,7 @@ main() {
   esac
 
   build_system_prompt
+  append_runtime_packet_to_user_prompt
 
   cd "${SCENARIO_WORKDIR}"
 
@@ -713,6 +802,7 @@ main() {
   fi
 
   resolve_engine_command
+  start_autosave_watcher
 
   case "${ENGINE_COMMAND}" in
     claude)

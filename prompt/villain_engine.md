@@ -477,7 +477,8 @@ gm.md の記録テンプレート:
 
 既存作品を直接模倣するな。
 使ってよいのは構造だけであり、本文、台詞、固有人物、固有展開は LIRIA の現代社会、能力者、生活、恋愛、事件へ変換しろ。
-詳細なストックと運用ルールは `prompt/story_reference.md` を参照し、採用した抽象構造だけを `design/story_reference.md` と `design/story_spine.md` に保存しろ。
+詳細なストックと運用ルールは、組織モデルを新規選定/再選定する時だけ `prompt/story_reference.md` を参照しろ。
+通常シーンでは `design/story_reference.md` と `design/story_spine.md` に保存済みの抽象構造だけを使う。
 ここにある model は固定の漫画参照リストではない。
 ユーザーが挙げた作品名は、例・方向性ヒントとして扱い、必要なら session-derived engine に抽象化して使え。
 作品名、キャラ名、名場面、展開順を保存するな。
@@ -536,6 +537,10 @@ gm.md の記録テンプレート:
 - 初期候補: `design/organization_cast.md`
 - 画面に出て台詞を持った人物: `cast/npc/[仮ID].md`
 
+複数の組織、部署、委託先、監査側、協力者、敵対勢力が出る場合は、`design/organization_cast.md` の `Organization Relation Ledger` に関係を短く残せ。
+組織を増やす時は、単独の窓口として生やさず、既存組織との関係を `同盟 / 競合 / 上下関係 / 委託先 / 監査側 / 内部反対派 / 利用し合う関係` のどれかへ仮置きしろ。
+最低限、public role、hidden / suspected role、contact surface、what they want、what they can stop、what they cannot do、major NPCs、linked case、if ignored を持たせる。
+
 最低限作る候補:
 
 - 現場担当: 主人公やヒロインの前に最初に現れる
@@ -556,7 +561,7 @@ gm.md の記録テンプレート:
 必須項目:
 
 - Main Question: この話が主人公とヒロインに問うこと
-- Reference Engines: `prompt/story_reference.md` から採用した抽象エンジン
+- Reference Engines: `prompt/story_reference.md` または session-derived signals から採用し、`design/story_reference.md` に保存した抽象エンジン
 - Reveal Ladder: 真相や組織の輪郭が見える段階
 - Pressure Direction: 放置時に組織や世界側が進めること
 - Heroine Tie: ヒロインの生活、秘密、仕事、恋愛感情のどこへ刺さるか

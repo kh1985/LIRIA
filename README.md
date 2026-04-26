@@ -64,12 +64,15 @@ AI人格に実プレイ風ログを生成させる試走は `bash scripts/run_ai
 saves/
 └── session_002/
     ├── session.json
+    ├── README.md
     ├── current/
     │   ├── player.md
     │   ├── gm.md
     │   ├── harem.md
     │   ├── case.md
-    │   └── hotset.md
+    │   ├── hotset.md
+    │   ├── mechanics_card.md
+    │   └── checkpoints/
     ├── cast/
     │   ├── heroine/
     │   └── npc/
@@ -83,11 +86,12 @@ saves/
     │   └── event_index.md
     └── archive/
         ├── chapters/
+        ├── checkpoints/
         ├── events/
         └── logs/
 ```
 
-`current/*` が現在状態、`current/case.md` が進行中の事件/依頼/違和感の短い設計図、`cast/*` が session ごとの人物設定、`design/*` が長期設計と画像生成/漫画化連携方針、`indexes/*` が索引、`archive/*` が履歴です。`hotset.md` は再開用の軽量 cache であり、正本ではありません。
+`current/*` が現在状態、`current/case.md` が進行中の事件/依頼/違和感の短い設計図、`current/mechanics_card.md` が能力・道具・制約の軽量カード、`cast/*` が session ごとの人物設定、`design/*` が長期設計と画像生成/漫画化連携方針、`indexes/*` が索引、`archive/*` が履歴です。`hotset.md` は再開用の軽量 cache であり、正本ではありません。
 
 ## テンプレートとローカルデータ
 
@@ -98,14 +102,23 @@ saves/
 
 ## 補助コマンド
 
-- 通常シーン終了時の自動カウント/10シーン生ログ保存: `bash scripts/autosave_turn.sh session_002`
+- 通常起動は軽量 prompt profile: `bash play.sh resume`
+- 全専門prompt込みで起動: `LIRIA_PROMPT_PROFILE=full bash play.sh resume`
+- 10シーン到達時の自動カウント/生ログ保存: `bash scripts/autosave_turn.sh session_002`
 - 生ログ保存: `bash scripts/save_rawlog.sh session_002`
 - 実プレイ生ログ分析: `bash scripts/analyze_play_log.sh path/to/raw_log.md`
 - AI人格 実プレイ風ログ生成: `bash scripts/run_ai_persona_playtest.sh session_ai_playtest_001 --turns 8`
 - Kenji人格 実プレイ風ログ生成: `bash scripts/run_ai_persona_playtest.sh session_kenji_ai_test_001 --turns 1000`
 - 事前チェック: `bash scripts/pre_compress_check.sh session_002`
 - session 整合確認: `bash scripts/check_session_integrity.sh session_002`
+- prompt/session 軽量化監査: `python scripts/liria_prompt_auditor.py --session saves/session_002`
 - GM/Codex 内部用 manga export 雛形作成: `bash scripts/create_manga_export.sh session_002 heroine-teaser mizuki-smile`
+
+### Prompt profile
+
+既定の `fast` profile は、通常プレイに必要な core / GM policy / case / runtime / combat / villain / romance / save-resume を読みます。Visual Character Sheet、Manga Export、Story Reference の専門 prompt は起動時には読まず、画像生成・漫画化・物語参照の相談や実行が必要になった時だけ on-demand で扱います。
+
+`LIRIA_PROMPT_PROFILE=full` は、上記の専門 prompt も起動時から読み込む検証・設計用 profile です。重い sidecar である `design/story_reference.md`, `design/story_spine.md`, `design/organization_cast.md`, `design/visual_pipeline.md`, `design/manga_pipeline.md` はどちらの profile でも正本ですが、通常の save/resume では `current/hotset.md`, `current/case.md`, `indexes/cast_index.md`, `indexes/decision_index.md` を優先します。`current/mechanics_card.md`, `indexes/event_index.md`, checkpoints は、能力処理・continuity照合・圧縮前点検など必要な場面だけ開く運用にします。
 
 `analyze_play_log.sh` は、実プレイ風ログを保存可否で判定するためではなく、本命プレイ後または試走ログの品質を人間が見返しやすくするためのレビュー補助です。保存分配や resume の整合確認は `pre_compress_check.sh` や `check_session_integrity.sh` が担当します。
 

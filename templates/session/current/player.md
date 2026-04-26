@@ -18,20 +18,9 @@
 
 ## Visual Character Sheet
 - model sheet status: none
-- front view notes:
-- side view notes:
-- back view notes:
-- height / body type:
-- hairstyle:
-- face impression:
-- default outfit:
-- color palette:
-- signature gestures:
-- expression set:
-- continuity locks:
-- image prompt anchor:
-- negative prompt / avoid:
-- generated asset references:
+- current appearance lock:
+- image prompt anchor: （prompt-ready 以上の時だけ）
+- generated asset references: （image-generated の時だけ）
 
 ## Inner
 

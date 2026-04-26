@@ -6,8 +6,16 @@
 - id:
 - title:
 - phase:
+- linked branch:
+- linked organization:
+- contact surface:
 - visible problem:
+- visible request:
 - short goal:
+- who acts next:
+- reveal step:
+- due / trigger:
+- severity:
 - handles:
   - person:
   - object:
@@ -24,7 +32,14 @@
 ## Background Cases
 - id:
   - title:
+  - linked branch:
+  - linked organization:
+  - contact surface:
   - pressure:
+  - who acts next:
+  - reveal step:
+  - due / trigger:
+  - severity:
   - if ignored:
   - next ping:
 

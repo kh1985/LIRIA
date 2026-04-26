@@ -14,6 +14,7 @@
 
 ## Active Case 抜粋
 > 正本は `current/case.md`。ここには再開1ターン目に必要な足場だけ置く。
+> 次の1-2シーンに効かない項目は空欄でよい。hotsetを第2のgm.mdにしない。
 
 - case_id:
 - short goal:
@@ -22,6 +23,7 @@
 - next visible change:
 
 ## 主人公の再開スナップショット
+> 直後の描写・能力使用・危機に関係する項目だけ埋める。
 - Appearance Profile:
 - Visual Character Sheet:
   - model sheet status:
@@ -35,15 +37,18 @@
 - Equipment / Tools:
 
 ## 組織・外圧スナップショット
+> 直後に接触面や圧が出る時だけ埋める。長期設計は `design/*` を正本にする。
 - Organization Doctrine:
 - contact surface:
 - 今動いている外圧:
 - weak joint / 弱い継ぎ目:
 
 ## ヒロイン危機役割
+> 再開直後に危機・同行・分担がある時だけ抜粋する。
 - Heroine Crisis Role:
 
 ## 台詞境界
+> 直後に秘密・メタ語・知識境界が事故りそうな時だけ抜粋する。
 - Anti-Meta:
 - Knowledge Boundary:
 

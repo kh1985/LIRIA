@@ -70,6 +70,16 @@ consider_dir() {
   done < <(find "${dir}" -type f \( -name '*.jsonl' -o -name '*.json' \) -print0 2>/dev/null || true)
 }
 
+search_liria_live_logs() {
+  local file
+
+  [[ -d "${SAVE_DIR}" ]] || return 0
+
+  while IFS= read -r -d '' file; do
+    consider_file "${file}" "liria live transcript"
+  done < <(find "${SAVE_DIR}" -maxdepth 1 -type f -name 'live_*.log' -print0 2>/dev/null || true)
+}
+
 search_claude_logs() {
   consider_dir "${CLAUDE_HOME}/projects" "claude projects"
   consider_dir "${CLAUDE_HOME}/sessions" "claude sessions"
@@ -94,19 +104,58 @@ search_history_fallbacks() {
   esac
 }
 
+filter_history_by_session() {
+  local input="$1"
+  local output="$2"
+  local session_id="$3"
+
+  python - "$input" "$output" "$session_id" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+source = Path(sys.argv[1])
+target = Path(sys.argv[2])
+session_id = sys.argv[3]
+count = 0
+
+with source.open("r", encoding="utf-8", errors="replace") as src, target.open("w", encoding="utf-8") as dst:
+    for line in src:
+        raw = line.rstrip("\n")
+        if not raw:
+            continue
+        try:
+            obj = json.loads(raw)
+        except json.JSONDecodeError:
+            continue
+        found = obj.get("session_id") or obj.get("sessionId")
+        if found == session_id:
+            dst.write(raw + "\n")
+            count += 1
+
+if count == 0:
+    target.unlink(missing_ok=True)
+    sys.exit(2)
+PY
+}
+
 case "${ENGINE_FILTER}" in
   claude)
+    search_liria_live_logs
     search_claude_logs
     ;;
   codex)
+    search_liria_live_logs
     search_codex_logs
     ;;
   auto|"")
+    search_liria_live_logs
     search_claude_logs
     search_codex_logs
     ;;
   *)
     echo "⚠ unknown ENGINE=${ENGINE_FILTER}; searching both Claude and Codex logs"
+    search_liria_live_logs
     search_claude_logs
     search_codex_logs
     ;;
@@ -127,10 +176,25 @@ if [[ -n "${LATEST_FILE}" ]]; then
   esac
 
   OUTLOG="${OUTFILE%.md}.${ext}"
-  cp "${LATEST_FILE}" "${OUTLOG}"
-  echo "✓ 生ログを保存しました: ${OUTLOG}"
-  echo "  ソース: ${LATEST_SOURCE}"
-  echo "  ファイル: ${LATEST_FILE}"
+  if [[ -n "${LIRIA_ACTIVE_ENGINE_SESSION_ID:-}" && "${LATEST_SOURCE}" == *"history"* ]]; then
+    OUTLOG="${OUTFILE%.md}.jsonl"
+    if filter_history_by_session "${LATEST_FILE}" "${OUTLOG}" "${LIRIA_ACTIVE_ENGINE_SESSION_ID}"; then
+      echo "✓ 生ログを保存しました: ${OUTLOG}"
+      echo "  ソース: ${LATEST_SOURCE} filtered by session"
+      echo "  セッションID: ${LIRIA_ACTIVE_ENGINE_SESSION_ID}"
+      echo "  ファイル: ${LATEST_FILE}"
+    else
+      cp "${LATEST_FILE}" "${OUTLOG}"
+      echo "⚠ セッションIDで絞り込めなかったため、履歴全体を保存しました: ${OUTLOG}"
+      echo "  ソース: ${LATEST_SOURCE}"
+      echo "  ファイル: ${LATEST_FILE}"
+    fi
+  else
+    cp "${LATEST_FILE}" "${OUTLOG}"
+    echo "✓ 生ログを保存しました: ${OUTLOG}"
+    echo "  ソース: ${LATEST_SOURCE}"
+    echo "  ファイル: ${LATEST_FILE}"
+  fi
 else
   cat <<EOF
 

@@ -30,6 +30,7 @@
 - title:
 - phase:
 - visible problem:
+- visible request:
 - short goal:
 - handles:
 - progress condition:
@@ -67,6 +68,23 @@
 
 同じ phase で説明だけを何シーンも続けるな。
 2シーン続けて `last delta` が空なら、次のシーンでは必ず `progress / pressure / choice / aftermath` のどれかを発生させろ。
+
+## Visible Request Gate
+
+初回の `entry / offered` では、真相は隠してよい。
+ただし、依頼や相談として成立する見える情報は隠すな。
+
+最低限、本文か事件カードに以下を短く出せ。
+
+- 依頼人 / 相談者
+- 当事者の最低限の属性、または名前を伏せる理由
+- 困っている手続き / 物 / 場所 / 記録
+- 放置すると止まる生活、仕事、関係、期限
+- 主人公に最初に頼む行動
+- 今すぐ触れる handles 2-4個
+
+原因、黒幕、能力の本質、組織の全体像は隠してよい。
+依頼の主語、困りごと、頼む行動まで隠すな。
 
 ## Handles
 

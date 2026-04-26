@@ -76,8 +76,12 @@
 
 ## Q6: First Daily Disturbance
 - 最初に揺れる日常の面
-- 例: 目の前の相手、拠点/近所、仕事/お金/信用、社会の窓口、通知/落とし物/記録、お任せ
+- 例: 言いにくい相談、いつもの場所/近所の変化、私生活/仕事の用事、街や地域で同じ話が出る、離れた街や複数県から同じ話が来る、お任せ
+- 具体物/書類/場所/記録:
+- 放置時に止まる生活/仕事/関係/期限:
+- 主人公に頼まれる最初の行動:
 - GMによる incident seed / initial pressure 解釈
+- visible request
 - story reference selection
 - organization pressure scale
 - organization cast pre-generation
@@ -107,6 +111,7 @@
 - `ability/action point summary`
 - `incident seed`
 - `initial unease seed`
+- `visible request`
 - `organization pressure scale`
 - `story reference selection`
 - `organization cast pre-generation`

@@ -168,6 +168,9 @@ check_current_specs() {
   if [[ -f "$cast_index" ]] && grep -Eq '未命名|gm current 参照|current 参照' "$cast_index"; then
     warn "cast_index has unresolved NPC reference; important or recurring NPCs should be promoted to cast/npc/*.md"
   fi
+  if [[ -f "$cast_index" ]] && ! grep -Eq '優先して読む時' "$cast_index"; then
+    warn "cast_index missing read-priority column; add 名前 / ファイル / 現在地 / 主な役割 / 優先して読む時"
+  fi
 
   local npc_sheet_count=0
   if [[ -d "$npc_dir" ]]; then
@@ -181,7 +184,10 @@ check_current_specs() {
   fi
 
   local organization_pressure
-  organization_pressure="$(grep -Eh 'Organization Doctrine|関係組織|外圧|organization pressure|organization_cast|勢力クロック|contact surface|現場担当|回収員|現場調整' "$gm" "$case_file" "$hotset" "$villain" "$organization_cast" 2>/dev/null || true)"
+  organization_pressure="$(
+    grep -Eh 'Organization Doctrine|関係組織|外圧|organization pressure|organization_cast|勢力クロック|contact surface|現場担当|回収員|現場調整' "$gm" "$case_file" "$hotset" "$villain" "$organization_cast" 2>/dev/null |
+      grep -Ev '^[[:space:]]*(#|>)|:[[:space:]]*$|参照|素材|Summary|Coverage Check|Promotion Rule' || true
+  )"
   if [[ -n "$organization_pressure" ]]; then
     if [[ ! -f "$story_reference" ]] || ! grep -Eq 'engine:[[:space:]]*[^[:space:]]' "$story_reference"; then
       warn "organization pressure active, but design/story_reference.md has no selected reference engine"
@@ -240,6 +246,10 @@ check_session_scaffold() {
   done
 
   [[ -f "${base}/session.json" ]] || warn "missing session metadata: ${base}/session.json"
+  [[ -f "${base}/README.md" ]] || warn "missing session guide: ${base}/README.md"
+  [[ -f "${base}/current/mechanics_card.md" ]] || warn "missing mechanics card: ${base}/current/mechanics_card.md"
+  [[ -d "${base}/current/checkpoints" ]] || warn "missing active checkpoint directory: ${base}/current/checkpoints"
+  [[ -d "${base}/archive/checkpoints" ]] || warn "missing archived checkpoint directory: ${base}/archive/checkpoints"
   [[ -f "${base}/design/initial_answers.md" ]] || error "missing initial answers source of truth: ${base}/design/initial_answers.md"
   [[ -f "${base}/design/story_reference.md" ]] || warn "missing story reference design: ${base}/design/story_reference.md"
   [[ -f "${base}/design/story_spine.md" ]] || warn "missing story spine design: ${base}/design/story_spine.md"

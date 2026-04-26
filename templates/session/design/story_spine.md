@@ -40,9 +40,49 @@
 
 - related organization:
   - doctrine link:
+  - linked case:
+  - linked branch:
   - contact surface:
+  - contact NPC / role:
   - weak joint:
   - important NPC link:
+
+## Branch State
+
+- current active branch:
+  - id:
+  - status: seed | active | paused | merging | retiring | closed
+  - linked case:
+  - linked organization:
+  - contact surface:
+  - activation trigger:
+  - why this is active now:
+  - short goal visible to player:
+  - who acts next:
+  - next reveal step:
+  - due / trigger:
+  - severity:
+- background branches:
+  - branch:
+    - id:
+    - status: seed | active | paused | merging | retiring | closed
+    - linked case:
+    - linked organization:
+    - activation trigger:
+    - if ignored:
+    - next visible move:
+    - due / trigger:
+    - severity:
+- merge / retire:
+  - merge into:
+  - retire when:
+  - preserve evidence / relationships:
+- branch switch rule:
+  - when player actively touches another organization / place / major NPC:
+  - what must stay consistent with existing organizations / NPCs:
+- invariants:
+  - must remain true:
+  - cannot be contradicted:
 
 ## End Choice Seeds
 

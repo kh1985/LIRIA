@@ -8,8 +8,39 @@
 
 - organization:
 - pressure scale:
+- posture:
+- last move:
+- next move:
+- escalation:
+- player knowledge:
+- offscreen limit:
 - required major figures:
 - current major figures:
+
+## Organization Relation Ledger
+
+- organization:
+  - public role:
+  - hidden / suspected role:
+  - relation to existing organizations:
+  - contact surface:
+  - contact NPC / role:
+  - posture:
+  - last move:
+  - next move:
+  - escalation:
+  - player knowledge:
+  - offscreen limit:
+  - what they want:
+  - what they protect:
+  - what they can stop:
+  - what they cannot do:
+  - major NPCs:
+  - leverage against them:
+  - leverage they hold:
+  - linked case:
+  - linked branch:
+  - if ignored:
 
 ## Major Figures
 

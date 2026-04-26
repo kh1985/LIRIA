@@ -1044,14 +1044,70 @@ def write_scripted_session(
     )
 
     write(
+        session_path / "current" / "mechanics_card.md",
+        """
+        # mechanics card
+
+        ## Purpose
+
+        PI Player smoke 用の能力・道具・制約の軽量カード。長い説明は `current/player.md` と `design/*` を正本にする。
+
+        ## Core Constraints
+
+        | Mechanic | Current Rule | Cost / Limit | Source |
+        |---|---|---|---|
+        | Primary ability | 縁寄せ。人や物に残る縁を短く寄せ、次の接点を作る | 自動成功ではない。痕跡と関係リスクが残る | `current/player.md` |
+        | Range / trigger | 触れた物、短い会話、手元の記録から発火 | 遠距離万能探索は不可 | `current/player.md` |
+        | Daily uses / cooldown | 短時間に連発しない | 無理をすると頭痛、誤読、周囲の違和感 | `current/hotset.md` |
+        | Trace / detection risk | 偶然が重なったような不自然さ | 組織や勘の鋭い相手に拾われる | `current/gm.md` |
+        | Relationship risk | 相手の秘密や迷いに踏み込みすぎる | 信頼を損なう可能性 | `current/harem.md` |
+
+        ## Available Moves
+
+        | Move | What It Does | Constraint |
+        |---|---|---|
+        | 接点を寄せる | 次に会う場所、連絡、物証の入口を近づける | 具体物や相手の残した痕跡が必要 |
+        | 違和感を読む | 嘘や迷いの輪郭を薄く掴む | 確定情報ではなく suspected 止まり |
+        | 道具で補う | 便利屋の土地勘、白いバン、連絡網で動く | 痕跡と職務リスクが残る |
+
+        ## Disabled Or Risky Moves
+
+        | Move | Why It Is Restricted | Current Workaround |
+        |---|---|---|
+        | 真相直読 | 事件を即解決してしまう | handle を1つ得るだけにする |
+        | 遠隔必中 | 主人公が無力にも万能にもなりすぎる | 生活導線、物、人物を介す |
+        """,
+    )
+
+    write(
         session_path / "indexes" / "event_index.md",
         f"""
-        # Event Index
+        # event index
 
-        - event index: PI Player auto smoke events
-        - {today} smoke-001: 新規開始Q&Aを保存。現代+能力者、代々木便利屋、Appearance Profile、Ability Constraint Profileを確定。
-        - {today} smoke-002: 深夜の依頼人・瑞希がスマホ返却拒否の依頼を持ち込む。
-        - {today} smoke-003: 主人公はスマホを覗かず、依頼内容と受け渡し場所を聞く。能力は未使用。
+        ## Latest Anchors
+
+        | ID | When | Summary | Tags | Source |
+        |---|---|---|---|---|
+        | smoke_q_and_a | {today} | 新規開始Q&Aを保存。現代+能力者、代々木便利屋、Appearance Profile、Ability Constraint Profileを確定 | Q&A, smoke, setup | `design/initial_answers.md` |
+        | smoke_mizuki_request | {today} | 深夜の依頼人・瑞希がスマホ返却拒否の依頼を持ち込む | 瑞希, 依頼, スマホ | `current/case.md` |
+        | smoke_first_choice | {today} | 主人公はスマホを覗かず、依頼内容と受け渡し場所を聞く。能力は未使用 | 選択, 能力未使用 | `current/gm.md` |
+
+        ## Archive Router
+
+        | ID | When | Summary | Tags | Archive |
+        |---|---|---|---|---|
+        | smoke_future_archive | later | 保存価値の高い実ログだけをここから archive/events/ へ送る | smoke, archive | `archive/events/` |
+
+        ## Checkpoint Sidecars
+
+        | ID | Status | Summary | Path |
+        |---|---|---|---|
+        | smoke_checkpoint_stub | inactive | smoke中に濃い場面が出た時だけ作る | `current/checkpoints/` |
+
+        ## Operating Notes
+
+        - 再開時は index だけ先に見て、必要なイベントだけ掘る。
+        - full prose はこのファイルに置かず、必要なら `archive/events/` または checkpoint sidecar へ逃がす。
         {format_event_turns(turns, today)}
         """,
     )
@@ -1073,14 +1129,69 @@ def write_scripted_session(
         """,
     )
     write(
+        session_path / "cast" / "heroine" / "mizuki.md",
+        """
+        # 瑞希
+
+        ## Role
+        - 深夜の依頼人。heroine candidate。
+        - Heroine Crisis Role: civilian / support。
+
+        ## Relationship
+        - bond: 1
+        - AFFINITY: 1
+        - 主人公への呼び方:
+
+        ## Voice
+        - 依頼時は警戒と遠慮が混じる。
+        - スマホや記録の話題では、言い切る前に少し言葉が止まる。
+
+        ## Knowledge
+        - known: 自分の依頼内容、スマホ返却拒否の事情の一部
+        - suspected: 相談窓口や相手側に何かおかしさがある
+        - unknown: 主人公の能力の本質、組織の全体像
+        """,
+    )
+    write(
+        session_path / "cast" / "npc" / "welfare_npo_contact.md",
+        """
+        # 福祉系NPO現場担当
+
+        ## Role
+        - 関係組織のcontact surface候補。
+        - 初回は組織全体ではなく、相談窓口や現場の個人として出す。
+
+        ## Voice
+        - 丁寧だが、答えにくい質問では制度の言葉に逃げる。
+
+        ## Knowledge
+        - known: 窓口の手続き、相談者対応の建前
+        - suspected: 内部で記録の扱いにズレがある
+        - unknown: 主人公側の能力と真意
+        """,
+    )
+    write(
         session_path / "indexes" / "cast_index.md",
         """
-        # Cast Index
+        # cast_index
 
-        - cast index / キャスト index
-        - protagonist: 主人公。代々木の便利屋兼調査補助。Appearance Profile / Visual Character Sheetあり。
-        - 瑞希: 深夜の依頼人。heroine candidate。bond 1、AFFINITY 1、Heroine Crisis Role: civilian / support。
-        - 福祉系NPO現場担当: 名前不明。関係組織のcontact surfaceとして今後登場予定。
+        ## heroine
+
+        | 名前 | ファイル | 現在地 | 主な役割 | 優先して読む時 |
+        |---|---|---|---|---|
+        | 瑞希 | `cast/heroine/mizuki.md` | 代々木周辺 | 深夜の依頼人。heroine candidate。bond 1、AFFINITY 1 | 依頼、スマホ、返却拒否、民間人保護、初期ロマンス |
+
+        ## npc
+
+        | 名前 | ファイル | 現在地 | 主な役割 | 優先して読む時 |
+        |---|---|---|---|---|
+        | 福祉系NPO現場担当 | `cast/npc/welfare_npo_contact.md` | 未確定 | 関係組織のcontact surface候補 | NPO、相談窓口、外部面談、組織接触 |
+
+        ## 未ファイル化 / gm.md管理
+
+        | 名前 | 役割 | 備考 |
+        |---|---|---|
+        | 主人公 | 代々木の便利屋兼調査補助 | `current/player.md` が正本 |
         """,
     )
 

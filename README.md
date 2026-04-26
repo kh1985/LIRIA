@@ -142,11 +142,25 @@ saves/
 - 全専門prompt込みで起動: `LIRIA_PROMPT_PROFILE=full bash play.sh resume`
 - 10シーン到達時の自動カウント/生ログ保存: `bash scripts/autosave_turn.sh session_002`
 - 生ログ保存: `bash scripts/save_rawlog.sh session_002`
+- 通常プレイ newgame の保存反映候補生成: `python3 scripts/extract_newgame_state_candidates.py session_002`
+- 通常プレイ newgame の空テンプレだけ安全反映: `python3 scripts/extract_newgame_state_candidates.py session_002 --apply-safe`
 - 事前チェック: `bash scripts/pre_compress_check.sh session_002`
 - session 整合確認: `bash scripts/check_session_integrity.sh session_002`
 - repo 技術整合性チェック: `bash scripts/check_repo_integrity.sh`
 - prompt/session 軽量化監査: `python scripts/liria_prompt_auditor.py --session saves/session_002`
 - GM/Codex 内部用 manga export 雛形作成: `bash scripts/create_manga_export.sh session_002 heroine-teaser mizuki-smile`
+
+### 通常プレイ newgame の復旧
+
+通常プレイで Q&A と初回シーンが終わったのに `design/initial_answers.md`、`design/story_reference.md`、`design/story_spine.md`、`design/organization_cast.md`、`current/case.md`、`current/player.md`、`current/relationships.md`、`current/hotset.md` が空テンプレのままなら、ログから候補を復元します。
+
+1. 生ログを保存する: `bash scripts/save_rawlog.sh session_002`
+2. proposal を作る: `python3 scripts/extract_newgame_state_candidates.py session_002`
+3. proposal の `Proposed Updates` を確認する
+4. 空テンプレだけ反映する: `python3 scripts/extract_newgame_state_candidates.py session_002 --apply-safe`
+5. 整合確認する: `bash scripts/check_session_integrity.sh session_002`
+
+`--apply-safe` は、対象ファイルが空テンプレまたは未初期化に見える場合だけ書き込みます。書き込み前には `archive/checkpoints/pre_newgame_apply_YYYYMMDD_HHMMSS/` にバックアップを作り、既に人間が編集した内容があるファイルはスキップします。`cast/heroine/*.md` と `cast/npc/*.md` は自動作成せず、必要なら proposal を見て別途昇格します。
 
 ### Prompt profile
 

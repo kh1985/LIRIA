@@ -308,7 +308,9 @@ Q6 の後、必要な時だけ聞く。
 
 ## Q&A後の内部生成
 
-Q0-Q6 と Q1.5、任意の避けたい導入 / 小物メモを受けて、GM は以下を内部生成しろ。
+Q0-Q6 と Q1.5、任意の避けたい導入 / 小物メモを受けて、GM は以下を生成し、初回シーン前に実ファイルへ反映しろ。
+Q0-Q6 / Q1.5 / Optional Avoid Notes の原始回答は内部メモで済ませず、必ず `design/initial_answers.md` に正本として書く。
+要約や補完を作る場合でも、プレイヤーの raw answer と GM 補完を混ぜて不明にするな。
 
 ### Initial Story Assembly（初回シーン前の必須工程）
 
@@ -323,13 +325,17 @@ Q6 完了後、初回シーンを出す前に必ず実行する。
    - 組織 / 外圧: 担当者、委託先、管理者、会社、行政、地域窓口
    - 場所: 駅、店、職場、住居、病院、学校、管理会社、役所、帰宅導線
    - インナー: 惹かれ、怒り、避けたいもの、素が出る瞬間
-2. `Light Story Reference Pass` を呼び、selection signals と reference engine を 1-3 個に絞る。
-3. 採用 engine を、現代社会、生活導線、恋愛 / ヒロイン、能力、関係組織へ変換する。
-4. `design/story_reference.md`, `design/story_spine.md`, `design/organization_cast.md`, `current/case.md` へ短く分配する。
-5. 初回シーンは、抽象語ではなく、最初に触れる人・物・場所・記録・期限・ヒロインの利害を持って始める。
+2. Q0-Q6 / Q1.5 / Optional Avoid Notes の raw answer を `design/initial_answers.md` へ保存する。
+3. `Light Story Reference Pass` を呼び、selection signals と reference engine を 1-3 個に絞る。
+4. 採用 engine を、現代社会、生活導線、恋愛 / ヒロイン、能力、関係組織へ変換する。
+5. `Initial Story Assembly` と `Light Story Reference Pass` の結果を内部だけで終わらせず、実ファイルへ反映する。
+6. `design/story_reference.md`, `design/story_spine.md`, `design/organization_cast.md`, `current/case.md`, `current/player.md`, `current/gm.md`, `current/relationships.md`, `current/hotset.md` へ短く分配する。
+7. 初回シーンは、抽象語ではなく、最初に触れる人・物・場所・記録・期限・ヒロインの利害を持って始める。
+8. 上記ファイルが空テンプレートのままなら、初回シーンへ入るな。最低限の実内容を埋めてから `→ どうする？` で渡せ。
 
 この工程はプレイヤーへ長々と説明しない。
 必要なのは、初回シーンが霧にならず、かつ保存・再開できる状態で始まることだ。
+空欄や見出しだけのテンプレートは「準備完了」とみなさない。
 
 - `player profile`
   - 名前、年齢感、社会的立場、口調、生活の輪郭
@@ -400,7 +406,9 @@ Q6 完了後、初回シーンを出す前に必ず実行する。
   - `title`, `phase`, `visible problem`, `short goal`, `handles`, `progress condition`, `if ignored`, `relationship stake`
   - `handles` は物、人、場所、記録、関係、能力使用の入口にする。抽象語だけにするな
 - `initial save targets`
-  - どの項目を `design/initial_answers.md` と `current/*.md` に分配するか
+  - raw answer は `design/initial_answers.md` に保存する
+  - Story Reference / Story Spine / Organization Cast / Initial Case / Player / GM / Relationships / Hotset の初期値を、`design/story_reference.md`, `design/story_spine.md`, `design/organization_cast.md`, `current/case.md`, `current/player.md`, `current/gm.md`, `current/relationships.md`, `current/hotset.md` に分配する
+  - どの保存先も、初回シーン前に最低1-3行の実内容を持たせる。空テンプレートのまま開始しない
 
 ## 能力 / 作用点の内部設計
 

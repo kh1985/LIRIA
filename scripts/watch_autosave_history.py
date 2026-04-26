@@ -16,6 +16,7 @@ import re
 import subprocess
 import sys
 import time
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -90,7 +91,7 @@ def watch(args: argparse.Namespace, log: Any) -> None:
                     active_session_id = record.session_id
                     seen.add(key)
                     log_line(log, f"fallback-bound to {active_source} session_id={active_session_id}")
-                    if is_countable_player_input(record.text):
+                    if is_countable_player_input(record.text, ROOT / "saves" / args.session):
                         result = run_autosave_turn(args.session, args.engine, active_session_id)
                         log_line(log, f"tick from fallback input: {shorten(record.text)}")
                         for line in result.splitlines():
@@ -101,7 +102,7 @@ def watch(args: argparse.Namespace, log: Any) -> None:
                 continue
 
             seen.add(key)
-            if not is_countable_player_input(record.text):
+            if not is_countable_player_input(record.text, ROOT / "saves" / args.session):
                 log_line(log, f"skip meta/input: {shorten(record.text)}")
                 continue
 
@@ -208,27 +209,189 @@ def is_safe_fallback_record(record: HistoryRecord) -> bool:
     return False
 
 
-def is_countable_player_input(text: str) -> bool:
+SETUP_QA_LABEL_RE = re.compile(
+    r"(?im)(?:^|\n)\s*(?:[#>*-]\s*)?"
+    r"(?:q|a|question|answer|質問|回答)\s*"
+    r"(?:[0-6]|1[.．]5)(?:\s*[:：]|\s+)"
+)
+SETUP_QA_RANGE_RE = re.compile(r"(?i)\bq\s*0\s*[-~〜－–—]\s*q?\s*6\b")
+
+
+def is_countable_player_input(text: str, session_dir: Path | None = None) -> bool:
     stripped = text.strip()
     if not stripped:
         return False
-    lowered = stripped.lower()
+    normalized = unicodedata.normalize("NFKC", stripped)
+    lowered = normalized.casefold()
     if "LIRIA.md のルール" in stripped or "今回の session は" in stripped:
         return False
     if lowered in {"q", "quit", "exit"}:
         return False
-    if re.match(r"^\(?\s*gm(?:\s|$)", lowered):
+    if is_setup_qa_input(normalized, lowered):
+        return False
+    if is_meta_consultation_input(normalized, lowered):
+        return False
+    if re.match(r"^\(?\s*gm(?:\s|$|[:：]|相談|に|へ)", lowered):
         return False
     meta_prefixes = (
         "セーブ",
+        "自動セーブ",
         "保存",
+        "ロード",
+        "復旧",
+        "復元",
+        "リカバリ",
+        "巻き戻し",
         "今日はここまで",
         "続きはまた",
         "また今度",
         "ここで終わる",
         "やめる",
+        "save",
+        "autosave",
+        "load",
+        "restore",
+        "recover",
+        "recovery",
+        "rollback",
     )
-    return not stripped.startswith(meta_prefixes)
+    if lowered.startswith(meta_prefixes):
+        return False
+    if session_dir is not None and not has_real_scene_state(session_dir):
+        return False
+    return True
+
+
+def is_setup_qa_input(normalized: str, lowered: str) -> bool:
+    if SETUP_QA_LABEL_RE.search(normalized):
+        return True
+    if SETUP_QA_RANGE_RE.search(normalized):
+        return True
+    setup_markers = (
+        "q0-q6",
+        "q0~q6",
+        "q0〜q6",
+        "q1.5",
+        "optional avoid notes",
+        "appearance profile",
+        "visual character sheet",
+        "initial story assembly",
+        "初期回答",
+        "初期設定",
+        "避けたい導入",
+        "任意の避けたい",
+        "小物メモ",
+        "主人公の外見",
+        "外見プロフィール",
+    )
+    return any(marker in lowered for marker in setup_markers)
+
+
+def is_meta_consultation_input(normalized: str, lowered: str) -> bool:
+    consultation_terms = (
+        "相談",
+        "確認",
+        "質問",
+        "打ち合わせ",
+        "方針",
+        "できますか",
+        "したい",
+        "してほしい",
+        "お願い",
+        "help",
+        "consult",
+        "?",
+        "？",
+    )
+    save_recovery_terms = (
+        "セーブ",
+        "自動セーブ",
+        "保存",
+        "ロード",
+        "復旧",
+        "復元",
+        "リカバリ",
+        "巻き戻し",
+        "save",
+        "autosave",
+        "load",
+        "restore",
+        "recover",
+        "recovery",
+        "rollback",
+    )
+    manga_terms = (
+        "漫画化",
+        "マンガ化",
+        "manga",
+        "漫画出力",
+        "漫画候補",
+        "コマ割り",
+        "one-page",
+        "画像生成",
+        "イラスト",
+        "立ち絵",
+        "三面図",
+        "キャラシート",
+        "model sheet",
+        "scene-card",
+        "pv",
+    )
+    manga_actions = (
+        *consultation_terms,
+        "作って",
+        "して",
+        "生成",
+        "出力",
+        "描いて",
+        "見たい",
+        "候補",
+        "パッケージ",
+        "export",
+    )
+    if "gm" in lowered and any(term in lowered for term in consultation_terms):
+        return True
+    if any(term in lowered for term in save_recovery_terms) and any(term in lowered for term in consultation_terms):
+        return True
+    if any(term in lowered for term in manga_terms) and any(term in lowered for term in manga_actions):
+        return True
+    return False
+
+
+def has_real_scene_state(session_dir: Path) -> bool:
+    case_path = session_dir / "current" / "case.md"
+    case_text = read_text(case_path)
+    if not case_text:
+        return False
+    scene_fields = (
+        "id",
+        "title",
+        "phase",
+        "visible problem",
+        "visible request",
+        "short goal",
+        "who acts next",
+        "next visible change",
+        "relationship stake",
+        "last delta",
+    )
+    return any(has_filled_markdown_field(case_text, field) for field in scene_fields)
+
+
+def has_filled_markdown_field(text: str, field: str) -> bool:
+    pattern = re.compile(rf"(?im)^[^\S\n]*-[^\S\n]*{re.escape(field)}:[^\S\n]*(.*)$")
+    for match in pattern.finditer(text):
+        value = match.group(1).strip()
+        if value and value not in {"-", "なし", "未設定", "n/a", "N/A"}:
+            return True
+    return False
+
+
+def read_text(path: Path) -> str:
+    try:
+        return path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return ""
 
 
 def run_autosave_turn(session: str, engine: str, engine_session_id: str) -> str:

@@ -95,6 +95,81 @@ active_case_has_content() {
   md_key_has_value "$file" 'title|visible problem|visible request|short goal|progress condition|if ignored|next visible change|relationship stake'
 }
 
+initial_answers_has_content() {
+  local file="$1"
+  [[ -f "$file" ]] || return 1
+  md_key_has_value "$file" '拠点|職業/生活手段|職業|収入源|仕事規模|身長|体型|基本服装|髪型|顔つき|惹かれるもの|怒るもの|避けたいもの|能力あり/なし|能力名|概要|好きなタイプ|好み|NG属性|苦手|初期ヒロインあり/なし|初期ヒロイン|最初に揺れる日常の面|具体物/書類/場所/記録|放置時に止まる生活/仕事/関係/期限|主人公に頼まれる最初の行動|入口|日常の揺れ|visible request|organization pressure scale|minimal story spine'
+}
+
+story_reference_has_content() {
+  local file="$1"
+  [[ -f "$file" ]] || return 1
+  md_key_has_value "$file" 'reason|Q&A source|matched signals|LIRIA conversion|romance / sweetness|life / base|institution / record|organization / ideology|ability / rule|現代社会への変換|生活導線への変換|恋愛/ヒロインへの変換|能力/作用点への変換|関係組織への変換'
+}
+
+story_spine_has_content() {
+  local file="$1"
+  [[ -f "$file" ]] || return 1
+  md_key_has_value "$file" 'この話が主人公とヒロインに問うこと|visible first sign|first concrete lead|if ignored|next visible move|heroine / candidate|life stake|emotional stake|related organization|short goal visible to player'
+}
+
+organization_cast_has_content() {
+  local file="$1"
+  [[ -f "$file" ]] || return 1
+  md_key_has_value "$file" 'organization|pressure scale|last move|next move|required major figures|current major figures|role in organization|public face|belief|contradiction|pressure method|concrete tools|現場担当|交渉担当|理念を信じる担当'
+}
+
+session_log_files_exist() {
+  local base="$1"
+  local logs_dir="${base}/archive/logs"
+  [[ -d "$logs_dir" ]] || return 1
+  find "$logs_dir" -maxdepth 1 -type f \( -name 'raw_*' -o -name 'live_*' \) 2>/dev/null | grep -q .
+}
+
+session_has_playtest_logs() {
+  local base="$1"
+  local logs_dir="${base}/archive/logs"
+  [[ -d "$logs_dir" ]] || return 1
+  find "$logs_dir" -maxdepth 1 -type f -name '*ai_persona_playtest*' 2>/dev/null | grep -q .
+}
+
+session_log_matches() {
+  local base="$1"
+  local pattern="$2"
+  local logs_dir="${base}/archive/logs"
+  local file
+  [[ -d "$logs_dir" ]] || return 1
+  while IFS= read -r -d '' file; do
+    if grep -aEiq "$pattern" "$file" 2>/dev/null; then
+      return 0
+    fi
+  done < <(find "$logs_dir" -maxdepth 1 -type f \( -name 'raw_*' -o -name 'live_*' -o -name 'autosave_watcher_*.log' \) -print0 2>/dev/null)
+  return 1
+}
+
+session_logs_have_first_scene() {
+  local base="$1"
+  session_log_matches "$base" '(^|[[:space:]])(### Turn 00?1|## Play Log|## Scripted Test Inputs)|→[[:space:]]*どうする|どうする[？?]|初回シーン|最初のシーン|scene[[:space:]]*0?1|シーン[[:space:]]*0?1'
+}
+
+session_logs_have_qa_answers() {
+  local base="$1"
+  session_log_matches "$base" '新しいゲームを始めたい|## New Game Q&A|New Game Q&A|まず Q0|### Q[0-6]|### Q1\.5|Q1\.5[:：]|Optional Avoid|避けたい始まり|tick from input:|(^|[[:space:]])[-*][[:space:]]*Q0[:：][[:space:]]*[^[:space:]]|(^|[[:space:]])[-*][[:space:]]*Q1[:：][[:space:]]*[^[:space:]]|(^|[[:space:]])[-*][[:space:]]*Q1\.5[:：][[:space:]]*[^[:space:]]|(^|[[:space:]])[-*][[:space:]]*Q4[:：][[:space:]]*[^[:space:]]|(^|[[:space:]])[-*][[:space:]]*Q5[:：][[:space:]]*[^[:space:]]|(^|[[:space:]])[-*][[:space:]]*Q6[:：][[:space:]]*[^[:space:]]'
+}
+
+session_proposal_hint() {
+  local base="$1"
+  local session
+  session="$(basename "$base")"
+  if session_has_playtest_logs "$base"; then
+    printf 'If this came from AI Persona Playtest, run: python3 scripts/extract_playtest_save_candidates.py %s' "$session"
+  elif session_log_files_exist "$base"; then
+    printf 'For normal play, generate proposal: python3 scripts/extract_newgame_state_candidates.py %s ; safe apply empty templates: python3 scripts/extract_newgame_state_candidates.py %s --apply-safe' "$session" "$session"
+  else
+    printf 'If this came from AI Persona Playtest, run: python3 scripts/extract_playtest_save_candidates.py %s' "$session"
+  fi
+}
+
 check_current_specs() {
   local base="$1"
   local player="${base}/current/player.md"
@@ -109,7 +184,33 @@ check_current_specs() {
   local hotset="${base}/current/hotset.md"
   local cast_index="${base}/indexes/cast_index.md"
   local npc_dir="${base}/cast/npc"
-  local playtest_proposal_hint="If this came from AI Persona Playtest, run: python3 scripts/extract_playtest_save_candidates.py $(basename "$base")"
+  local proposal_hint
+  proposal_hint="$(session_proposal_hint "$base")"
+
+  local first_scene_in_logs=0
+  local qa_answers_in_logs=0
+  if session_logs_have_first_scene "$base"; then
+    first_scene_in_logs=1
+  fi
+  if session_logs_have_qa_answers "$base"; then
+    qa_answers_in_logs=1
+  fi
+
+  if [[ "$first_scene_in_logs" -eq 1 ]] && ! active_case_has_content "$case_file"; then
+    warn "first scene appears in raw/live logs, but current/case.md is still template/empty. ${proposal_hint}"
+  fi
+  if [[ "$qa_answers_in_logs" -eq 1 ]] && ! initial_answers_has_content "$initial_answers"; then
+    warn "Q&A answers appear in session logs, but design/initial_answers.md is still template/empty. ${proposal_hint}"
+  fi
+  if [[ "$first_scene_in_logs" -eq 1 ]] && ! story_reference_has_content "$story_reference"; then
+    warn "first scene appears in raw/live logs, but design/story_reference.md is still template/empty. ${proposal_hint}"
+  fi
+  if [[ "$first_scene_in_logs" -eq 1 ]] && ! story_spine_has_content "$story_spine"; then
+    warn "first scene appears in raw/live logs, but design/story_spine.md is still template/empty. ${proposal_hint}"
+  fi
+  if [[ "$first_scene_in_logs" -eq 1 ]] && ! organization_cast_has_content "$organization_cast"; then
+    warn "first scene appears in raw/live logs, but design/organization_cast.md is still template/empty. ${proposal_hint}"
+  fi
 
   if [[ -f "$player" ]]; then
     local required_player=(
@@ -172,7 +273,7 @@ check_current_specs() {
   local heroine_signal
   heroine_signal="$(grep -Eh '初期ヒロイン|ヒロイン候補|heroine candidate|Heroine Tie|恋愛対象|Active Heroines' "$gm" "$case_file" "$hotset" 2>/dev/null | grep -Ev '^[[:space:]]*(#|>)|:[[:space:]]*$|Q5|テンプレ|候補$' || true)"
   if [[ -n "$heroine_signal" && "${heroine_sheet_count:-0}" -eq 0 ]] && ! grep -Eq 'bond:[[:space:]]*[0-9]|AFFINITY:[[:space:]]*[0-9]|現在の関係フック:[[:space:]]*[^[:space:]]' "$relationships" 2>/dev/null; then
-    warn "heroine candidate appears active, but cast/heroine/*.md or current/relationships.md has no reflected heroine state. ${playtest_proposal_hint}"
+    warn "heroine candidate appears active, but cast/heroine/*.md or current/relationships.md has no reflected heroine state. ${proposal_hint}"
   fi
 
   if [[ -f "$case_file" ]]; then
@@ -194,11 +295,11 @@ check_current_specs() {
     if active_case_has_content "$case_file"; then
       for field in 'visible problem' 'visible request' 'short goal' 'progress condition' 'if ignored' 'next visible change'; do
         if ! md_key_has_value "$case_file" "$field"; then
-          warn "active case appears initialized, but case.md has empty ${field}. ${playtest_proposal_hint}"
+          warn "active case appears initialized, but case.md has empty ${field}. ${proposal_hint}"
         fi
       done
       if ! grep -Eq '^[[:space:]]*-[[:space:]]*(person|object|place|record|relationship|ability reaction)[[:space:]]*:[[:space:]]*[^[:space:]]' "$case_file"; then
-        warn "active case appears initialized, but case.md handles have no concrete person/object/place/record/relationship/ability reaction. ${playtest_proposal_hint}"
+        warn "active case appears initialized, but case.md handles have no concrete person/object/place/record/relationship/ability reaction. ${proposal_hint}"
       fi
     fi
   else
@@ -211,10 +312,10 @@ check_current_specs() {
   fi
   if [[ "$q6_completed" -eq 1 ]]; then
     if ! md_key_has_value "$story_spine" 'この話が主人公とヒロインに問うこと'; then
-      warn "Q6 appears completed, but design/story_spine.md Main Question is empty. ${playtest_proposal_hint}"
+      warn "Q6 appears completed, but design/story_spine.md Main Question is empty. ${proposal_hint}"
     fi
     if ! md_key_has_value "$story_reference" 'matched signals|LIRIA conversion'; then
-      warn "Q6 appears completed, but design/story_reference.md has no Light Story Reference Pass conversion. ${playtest_proposal_hint}"
+      warn "Q6 appears completed, but design/story_reference.md has no Light Story Reference Pass conversion. ${proposal_hint}"
     fi
   fi
 
@@ -233,7 +334,7 @@ check_current_specs() {
   local major_npc_pressure
   major_npc_pressure="$(grep -Eh '外部面談相手|配置確認の相手|敵幹部|主要人物|重要NPC|上位存在|scene lead|回収員|現場調整|社名空欄の外部面談|名刺|台詞|話した|名乗った' "$gm" "$case_file" "$hotset" 2>/dev/null || true)"
   if [[ -n "$major_npc_pressure" && "${npc_sheet_count:-0}" -eq 0 ]]; then
-    warn "important NPC / organization contact appears active, but cast/npc/*.md has no NPC sheet. ${playtest_proposal_hint}"
+    warn "important NPC / organization contact appears active, but cast/npc/*.md has no NPC sheet. ${proposal_hint}"
   fi
 
   local organization_pressure
@@ -252,10 +353,10 @@ check_current_specs() {
       warn "organization pressure active, but design/story_reference.md has no candidate shortlist"
     fi
     if [[ ! -f "$story_spine" ]] || ! md_key_has_value "$story_spine" 'この話が主人公とヒロインに問うこと' || ! md_key_has_value "$story_spine" 'visible first sign|if ignored|next visible move'; then
-      warn "organization pressure active, but design/story_spine.md is missing story spine fields. ${playtest_proposal_hint}"
+      warn "organization pressure active, but design/story_spine.md is missing story spine fields. ${proposal_hint}"
     fi
     if [[ ! -f "$organization_cast" ]] || ! md_key_has_value "$organization_cast" 'role in organization' || ! md_key_has_value "$organization_cast" 'public face' || ! md_key_has_value "$organization_cast" 'pressure method'; then
-      warn "organization pressure active, but design/organization_cast.md is missing major figure fields. ${playtest_proposal_hint}"
+      warn "organization pressure active, but design/organization_cast.md is missing major figure fields. ${proposal_hint}"
     fi
   fi
 

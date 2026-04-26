@@ -1,0 +1,7 @@
+personas:
+  - name: kenji_style
+    path: personas/kenji_style_player.yaml
+    turns: 8
+  - name: cautious
+    path: personas/cautious_player.yaml
+    turns: 6

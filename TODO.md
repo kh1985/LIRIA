@@ -531,7 +531,7 @@
 
 #### 次フェーズ: AI Player Harness
 **優先度: 中**
-**状態: 未実装・設計TODO**
+**状態: 最小Harness着手**
 
 目的:
 - PI Player smoke と AI Persona Playtest の次段として、複数personaによる実プレイ風検証を安全に回す
@@ -539,10 +539,10 @@
 - AIプレイヤーを最終的な面白さ判定者にせず、人間レビューのためのQA補助として扱う
 
 やること:
-- 複数personaを指定できる設定形式を作る
-- personaごとに turn数を指定し、20〜100ターン程度の長めの実プレイ風 raw log を生成できるようにする
-- 生成した raw log を `scripts/analyze_play_log.sh` に渡す標準導線を作る
-- persona別 report を出し、慎重型、好奇心型、恋愛寄り、事件寄りなどの傾向差を見られるようにする
+- 複数personaを指定できる設定形式を作る（最小実装: `tests/ai_player_harness/sample.yaml`）
+- personaごとに turn数を指定し、20〜100ターン程度の長めの実プレイ風 raw log を生成できるようにする（最小実装: config item の `turns`）
+- 生成した raw log を `scripts/analyze_play_log.sh` に渡す標準導線を作る（最小実装: 下位 `run_ai_persona_playtest.py` の既存分析を利用）
+- persona別 report を出し、慎重型、好奇心型、恋愛寄り、事件寄りなどの傾向差を見られるようにする（最小実装: `saves/_harness_reports/ai_player_harness_*.md`）
 - 将来的に `save/resume`、`pre_compress_check.sh`、`check_session_integrity.sh` との接続を検討する
 - report には GM破綻、ヒロイン自律性、恋愛/生活/事件の絡み、能力/装備の便利すぎ、Knowledge Boundary違反、漫画化候補を含める
 

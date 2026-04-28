@@ -9,12 +9,17 @@ LIRIA_RUNTIME_PACKET_ENABLED=0
 LIRIA_AUTOSAVE_WATCH_ENABLED="${LIRIA_AUTOSAVE_WATCH_ENABLED:-1}"
 LIRIA_TRANSCRIPT_ENABLED="${LIRIA_TRANSCRIPT_ENABLED:-1}"
 
+LIRIA_HEROINE_INCIDENT_GATE_PROMPT_FILES=(
+  "prompt/heroine_incident_gate.md"
+)
+
 LIRIA_BASE_NEW_SYSTEM_PROMPT_FILES=(
   "LIRIA.md"
   "prompt/core.md"
   "prompt/gm_policy.md"
   "prompt/core_newgame.md"
   "prompt/case_engine.md"
+  "${LIRIA_HEROINE_INCIDENT_GATE_PROMPT_FILES[@]}"
   "prompt/runtime.md"
   "prompt/combat.md"
   "prompt/villain_engine.md"
@@ -27,6 +32,7 @@ LIRIA_BASE_RESUME_SYSTEM_PROMPT_FILES=(
   "prompt/core.md"
   "prompt/gm_policy.md"
   "prompt/case_engine.md"
+  "${LIRIA_HEROINE_INCIDENT_GATE_PROMPT_FILES[@]}"
   "prompt/runtime.md"
   "prompt/combat.md"
   "prompt/villain_engine.md"
@@ -51,6 +57,7 @@ LIRIA_FAST_RESUME_SYSTEM_PROMPT_FILES=(
 LIRIA_LITE_NEW_SYSTEM_PROMPT_FILES=(
   "prompt/lite_core.md"
   "prompt/lite_case_engine.md"
+  "${LIRIA_HEROINE_INCIDENT_GATE_PROMPT_FILES[@]}"
   "prompt/lite_runtime.md"
   "prompt/lite_save_resume.md"
   "prompt/core_newgame.md"
@@ -59,6 +66,7 @@ LIRIA_LITE_NEW_SYSTEM_PROMPT_FILES=(
 LIRIA_LITE_RESUME_SYSTEM_PROMPT_FILES=(
   "prompt/lite_core.md"
   "prompt/lite_case_engine.md"
+  "${LIRIA_HEROINE_INCIDENT_GATE_PROMPT_FILES[@]}"
   "prompt/lite_runtime.md"
   "prompt/lite_save_resume.md"
 )

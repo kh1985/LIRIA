@@ -13,6 +13,34 @@
   - source: design/story_reference.md
   - how it is converted into LIRIA:
 
+## Heroine-Driven Incident Gate
+
+> Concrete Story Arc の前に通す。主人公ひとりで処理できる事件なら、恋愛RPGイベントとして組み直す。
+
+- heroine daily life:
+- daily life at risk:
+- why normal windows fail:
+- why protagonist can enter:
+- shared action:
+- kyun point:
+
+## Concrete Story Arc
+
+> GM設計用。本文へ core truth / end choice を直書きしない。固定脚本ではなく、分岐しても霧にならないための芯。
+
+- core truth:
+- why now:
+- surface case:
+- main antagonistic pressure:
+- key objects / places / records:
+- clue chain:
+- NPC intent:
+- midpoint reveal:
+- end choice:
+- if ignored:
+- romance / inner stake:
+- flexible branches:
+
 ## Reveal Ladder
 
 1. visible first sign:

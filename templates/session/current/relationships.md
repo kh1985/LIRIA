@@ -36,6 +36,7 @@
   - AFFINITY:
   - 現在地:
   - 現在の関係フック:
+  - active event premise: daily life / daily life at risk / shared action / kyun point
   - Heroine Crisis Role: frontline / support / civilian / wildcard
   - 危機時に取りやすい行動:
 

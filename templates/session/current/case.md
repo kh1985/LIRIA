@@ -1,6 +1,7 @@
 # Case State
 
 > 固定ストーリーではなく、今動いている事件 / 依頼 / 違和感を短いカードで管理する。長文ログを置かない。
+> story_spine の全体弧ではなく、プレイヤーが今触れる可視スライスだけを書く。
 
 ## Active Case
 - id:
@@ -8,9 +9,17 @@
 - phase:
 - linked branch:
 - linked organization:
+- arc source:
 - contact surface:
 - visible problem:
 - visible request:
+- heroine-driven incident gate (visible current slice, not full arc):
+  - heroine daily life:
+  - daily life at risk:
+  - why normal windows fail:
+  - why protagonist can enter:
+  - shared action:
+  - kyun point:
 - short goal:
 - who acts next:
 - reveal step:

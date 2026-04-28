@@ -466,35 +466,9 @@ list_sessions() {
 }
 
 CLEANUP_CANDIDATE_NAMES=()
-CLEANUP_PROTECTED_NAMES=()
-CLEANUP_PROTECTED_REASONS=()
-CLEANUP_UNKNOWN_NAMES=()
-CLEANUP_UNKNOWN_REASONS=()
 CLEANUP_BLOCKED_NAMES=()
 CLEANUP_BLOCKED_REASONS=()
 CLEANUP_SELECTION=()
-
-cleanup_is_protected_session() {
-  case "$1" in
-    kaneko1|kaneko2|kaneko3)
-      return 0
-      ;;
-    *)
-      return 1
-      ;;
-  esac
-}
-
-cleanup_is_candidate_name() {
-  case "$1" in
-    session_*|skill_probe)
-      return 0
-      ;;
-    *)
-      return 1
-      ;;
-  esac
-}
 
 cleanup_name_is_unsafe() {
   local name="$1"
@@ -510,10 +484,6 @@ cleanup_tracked_files_for() {
 
 cleanup_collect_sessions() {
   CLEANUP_CANDIDATE_NAMES=()
-  CLEANUP_PROTECTED_NAMES=()
-  CLEANUP_PROTECTED_REASONS=()
-  CLEANUP_UNKNOWN_NAMES=()
-  CLEANUP_UNKNOWN_REASONS=()
   CLEANUP_BLOCKED_NAMES=()
   CLEANUP_BLOCKED_REASONS=()
 
@@ -533,12 +503,6 @@ cleanup_collect_sessions() {
       continue
     fi
 
-    if cleanup_is_protected_session "${name}"; then
-      CLEANUP_PROTECTED_NAMES+=("${name}")
-      CLEANUP_PROTECTED_REASONS+=("protected")
-      continue
-    fi
-
     tracked_files="$(cleanup_tracked_files_for "${rel_path}")"
     if [[ -n "${tracked_files}" ]]; then
       CLEANUP_BLOCKED_NAMES+=("${name}")
@@ -547,14 +511,6 @@ cleanup_collect_sessions() {
     fi
 
     if [[ ! -f "${dir}/session.json" ]]; then
-      CLEANUP_UNKNOWN_NAMES+=("${name}")
-      CLEANUP_UNKNOWN_REASONS+=("missing session.json")
-      continue
-    fi
-
-    if ! cleanup_is_candidate_name "${name}"; then
-      CLEANUP_UNKNOWN_NAMES+=("${name}")
-      CLEANUP_UNKNOWN_REASONS+=("not a cleanup candidate")
       continue
     fi
 
@@ -571,26 +527,6 @@ cleanup_print_category() {
     echo
     return
   fi
-}
-
-cleanup_print_protected_sessions() {
-  cleanup_print_category "保護中:" "${#CLEANUP_PROTECTED_NAMES[@]}"
-  [[ "${#CLEANUP_PROTECTED_NAMES[@]}" -eq 0 ]] && return
-  local i
-  for (( i=0; i<${#CLEANUP_PROTECTED_NAMES[@]}; i++ )); do
-    echo "  - saves/${CLEANUP_PROTECTED_NAMES[i]}  reason: ${CLEANUP_PROTECTED_REASONS[i]}"
-  done
-  echo
-}
-
-cleanup_print_unknown_sessions() {
-  cleanup_print_category "要確認:" "${#CLEANUP_UNKNOWN_NAMES[@]}"
-  [[ "${#CLEANUP_UNKNOWN_NAMES[@]}" -eq 0 ]] && return
-  local i
-  for (( i=0; i<${#CLEANUP_UNKNOWN_NAMES[@]}; i++ )); do
-    echo "  - saves/${CLEANUP_UNKNOWN_NAMES[i]}  reason: ${CLEANUP_UNKNOWN_REASONS[i]}"
-  done
-  echo
 }
 
 cleanup_print_blocked_sessions() {
@@ -615,8 +551,6 @@ cleanup_print_sessions() {
   fi
   echo
 
-  cleanup_print_protected_sessions
-  cleanup_print_unknown_sessions
   cleanup_print_blocked_sessions
 }
 
@@ -698,18 +632,8 @@ cleanup_delete_block_reason() {
     return 0
   fi
 
-  if cleanup_is_protected_session "${name}"; then
-    echo "protected"
-    return 0
-  fi
-
   rel_path="saves/${name}"
   path="${ROOT_DIR}/${rel_path}"
-
-  if [[ "${rel_path}" == "saves/.gitkeep" ]]; then
-    echo "protected"
-    return 0
-  fi
 
   if [[ ! -d "${path}" ]]; then
     echo "not a directory"
@@ -732,12 +656,7 @@ cleanup_delete_block_reason() {
   fi
 
   if [[ ! -f "${path}/session.json" ]]; then
-    echo "missing session.json"
-    return 0
-  fi
-
-  if ! cleanup_is_candidate_name "${name}"; then
-    echo "not a cleanup candidate"
+    echo "not a session"
     return 0
   fi
 

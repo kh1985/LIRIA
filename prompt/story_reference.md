@@ -3,6 +3,7 @@
 このファイルは LIRIA の Story Reference Layer 正本である。
 参照作品の固有名詞、台詞、キャラ、展開を再現するための資料ではない。
 使ってよいのは、物語が動く抽象構造だけである。
+例文や stock の具体物・職業・導入・台詞は構造理解用であり、本文へコピーしない。
 
 重要:
 ここにある Reference Engine は、固定の漫画リストではない。
@@ -57,6 +58,8 @@ GMは、ユーザーが「今回はこの作品群を参考にして」と明示
 6. `design/story_reference.md` に採用理由を短く保存する。
 7. `design/story_spine.md` に Main Question と Reveal Ladder を作る。
 
+具体物、出来事、職業、最初の接触は、新規開始Q&A、主人公の生活、ヒロインの日常、能力、恋愛の好みから卓ごとに再生成する。
+
 ## Reference Selection Policy
 
 作品候補を選ぶ時は、作品名からではなく、Q&A と実ログから `selection signals` を作る。
@@ -64,6 +67,7 @@ GMは、ユーザーが「今回はこの作品群を参考にして」と明示
 ### Step 1: Signals
 
 次の信号を拾う。
+ここに並ぶ語は selection signal であり、事件の小物カタログではない。採用時は必ず Q&A と現在卓の生活へ再翻訳する。
 
 - `romance / sweetness`
   - 正妻感、同居、嫉妬、独占欲、秘密、視線、沈黙、未遂、身分差、 forbidden love、大人の女、官能、帰る場所
@@ -133,6 +137,15 @@ LIRIA は恋愛シミュレーションである。
 - ability source -> 条件、代償、痕跡、誤解、関係リスク
 - place source -> 店、道、土地、気候、食べ物、古い物、地域の噂
 
+抽象 engine は、選んだ時点で `design/story_spine.md` の Concrete Story Arc へ短く具体化する。
+全文プロットや台詞は作らず、core truth / end choice はプレイヤー向け本文へ露出しない。
+
+- abstract theme -> core truth
+- relationship structure -> NPC intent
+- suspense structure -> clue chain
+- reversal structure -> midpoint reveal
+- ethical conflict -> end choice
+
 ### Step 5: Save
 
 `design/story_reference.md` には、次を保存する。
@@ -172,6 +185,7 @@ LIRIA は恋愛シミュレーションである。
 新規開始Q&Aや実プレイログから、より適切な構造が見えた場合は、session-derived engine を作ってよい。
 作品候補の研究棚は `references/story_media_stock.md` に置く。
 これは毎回読み込む prompt ではなく、必要時に 1-3 個だけ抽象化して使うための外部カタログである。
+以下の stock は例の具体語を流用せず、life-first / heroine-first に変換して使え。
 
 ### Institution Secret Engine
 
@@ -189,13 +203,9 @@ LIRIA変換:
 
 作るべき圧:
 
-- 書類
-- 照会
-- 監査
-- 予約
-- 紹介停止
-- 契約解除
-- 音声/映像/ログの食い違い
+- ヒロインの仕事、資格、通院、家族、住まいが止まりかける
+- 主人公の信用、事業、紹介、生活手続きに確認が入る
+- 通常窓口では解けない記録や担当者の食い違いが出る
 
 ### Inherited Wound Engine
 
@@ -213,12 +223,9 @@ LIRIA変換:
 
 作るべき圧:
 
-- 昔の約束
-- 古い鍵
-- 手紙
-- 先代の知人
-- 土地に残った噂
-- 継がなかったもの
+- ヒロインや主人公が継がなかった役目、場所、約束が生活へ戻ってくる
+- 家族、先代、地域の知人が、現在の関係や恋愛距離を揺らす
+- 土地や店の記憶が、今の居場所と選択を問う
 
 ### Ideological Organization Engine
 
@@ -262,7 +269,7 @@ LIRIA変換:
 - 例外
 - クールダウン
 - 観測者
-- 触れてはいけない物
+- ヒロインが守る日常にだけ出る禁止条件
 - 破ると残る痕跡
 
 ### Charismatic Contact Engine
@@ -339,5 +346,5 @@ LIRIA conversion:
 現代社会、恋愛、生活、能力、関係組織へどう変換するか。
 
 do not imitate:
-真似してはいけない固有要素、展開、キャラ、台詞。
+真似してはいけない固有要素、具体物、職業、導入、展開、キャラ、台詞。
 ```
